@@ -5,20 +5,24 @@
 #include<string>
 #include<iostream>
 
+using namespace std;
+
 class Lexer {
 
 public:
-	Lexer(InputStream &is, std::ostream &os) :
-			line(0), location(0), input(is), output(os) {
+	Lexer(InputStream &is, ostream &os) :
+			input(is), output(os) {
 	}
 	virtual ~Lexer();
 	void scan();
+	void print(string token, string token_type);
+	bool isSingleByteLiteral(char ch);
+	bool isDoubleByteLiteral(string str);
+	bool isKeyword(string str);
 
 private:
-	int line;
-	int location;
 	InputStream &input;
-	std::ostream &output;
+	ostream &output;
 };
 
 #endif /* SRC_LEXER_H_ */

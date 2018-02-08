@@ -12,6 +12,12 @@ char InputStream::read() {
 
 	char ch;
 	if (myStream >> std::noskipws >> ch) {
+		if (ch == '\n') {
+			lineNum++;
+			location = 1;
+		} else {
+			location++;
+		}
 		return ch;
 	} else {
 		return '\0';
@@ -40,4 +46,16 @@ bool InputStream::match(char ch) {
 	} else {
 		return false;
 	}
+}
+
+std::string InputStream::getFileName() {
+	return fileName;
+}
+
+int InputStream::getLocation() {
+	return (peeked) ? (location - 1) : location;
+}
+
+int InputStream::getLineNumber() {
+	return lineNum;
 }

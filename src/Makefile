@@ -3,8 +3,8 @@ NAME:=spike1
 TARGET:=../$(NAME)
 
 # Some reasonably strict and therefore supportive compilation flags to get us started
-#CFLAGS:=-Wall -ansi -pedantic -Werror -Wformat -g
-CFLAGS:=-g
+CFLAGS:=-Wall -ansi -pedantic -Werror -Wformat -g
+#CFLAGS:=-g
 CPPFLAGS:=$(CFLAGS)
 LDFLAGS:=
 

@@ -25,17 +25,7 @@ int main(int argc, char **argv) {
 					InputStream(fileStream, filename);
 
 	Lexer lex(input, cout);
-	char ch;
-	while (input >> ch) {
-
-		if (ch == '/' && input.peek() == '/') {
-			input.read();
-			while (input.read() != '\n')
-				;
-			continue;
-		}
-		cout << ch;
-	}
+	lex.scan();
 
 	if (filename != "<stdin>") {
 		fileStream.close();
