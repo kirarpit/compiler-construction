@@ -1,24 +1,29 @@
-#include<ByteStream.h>
+#include <InputStream.h>
 #include<iostream>
 
-ByteStream::~ByteStream() {
+InputStream::~InputStream() {
 }
 
-char ByteStream::read() {
+char InputStream::read() {
 	if (peeked) {
 		peeked = false;
 		return myChar;
 	}
 
 	char ch;
-	if (myStream >>std::noskipws>> ch) {
+	if (myStream >> std::noskipws >> ch) {
 		return ch;
 	} else {
 		return '\0';
 	}
 }
 
-char ByteStream::peek() {
+char InputStream::operator>>(char &ch) {
+	ch = read();
+	return ch;
+}
+
+char InputStream::peek() {
 	if (peeked) {
 		return myChar;
 	}
@@ -28,7 +33,7 @@ char ByteStream::peek() {
 	return myChar;
 }
 
-bool ByteStream::match(char ch) {
+bool InputStream::match(char ch) {
 	if (ch == peek()) {
 		peeked = false;
 		return true;
