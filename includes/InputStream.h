@@ -8,8 +8,8 @@ class InputStream {
 
 public:
 	InputStream(std::istream &s, std::string str) :
-			myStream(s), fileName(str), peeked(false), myChar('\0'), location(1), lineNum(
-					1) {
+			myStream(s), fileName(str), peeked(false), myChar('\0'), location(
+					1), prev_location(0), lineNum(1), eof_flag(false) {
 	}
 	virtual ~InputStream();
 	char read();
@@ -19,6 +19,7 @@ public:
 	std::string getFileName();
 	int getLineNumber();
 	int getLocation();
+	bool is_eof();
 
 private:
 	std::istream &myStream;
@@ -26,7 +27,9 @@ private:
 	bool peeked;
 	char myChar;
 	int location;
+	int prev_location;
 	int lineNum;
+	bool eof_flag;
 };
 
 #endif /* INCLUDES_INPUTSTREAM_H_ */

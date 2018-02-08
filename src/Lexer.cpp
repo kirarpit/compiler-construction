@@ -11,8 +11,9 @@ void Lexer::scan() {
 
 		if (ch == '/' && input.peek() == '/') { //comments check
 			input.read();
-			while (input.read() != '\n' && input.read() != '\0')
-				;
+			while (input.peek() != '\n' && !input.is_eof()) {
+				input.read();
+			}
 			continue;
 		}
 
@@ -24,6 +25,7 @@ void Lexer::scan() {
 					token.push_back(input.read());
 				}
 			}
+
 			print(token, "Literal");
 		}
 
@@ -66,7 +68,7 @@ void Lexer::scan() {
 		}
 	}
 
-	print("", "EOF");
+	print("e", "EOF");
 }
 
 bool Lexer::isSingleByteLiteral(char ch) {
@@ -96,7 +98,7 @@ bool Lexer::isKeyword(string token) {
 			"struct", "switch", "true", "unsigned", "var", "void", "while" };
 
 	string *begin = keywords;
-	string *end = keywords + 11;
+	string *end = keywords + 20;
 
 	if (find(begin, end, token) != end) {
 		return true;

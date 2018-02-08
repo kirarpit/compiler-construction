@@ -14,14 +14,18 @@ char InputStream::read() {
 	if (myStream >> std::noskipws >> ch) {
 		if (ch == '\n') {
 			lineNum++;
+			prev_location = location;
 			location = 1;
 		} else {
-			location++;
+			prev_location = location++;
 		}
 		return ch;
-	} else {
+	} else if (!eof_flag) {
+		prev_location = location++;
+		eof_flag = true;
 		return '\0';
-	}
+	} else
+		return '\0';
 }
 
 char InputStream::operator>>(char &ch) {
@@ -53,9 +57,16 @@ std::string InputStream::getFileName() {
 }
 
 int InputStream::getLocation() {
-	return (peeked) ? (location - 1) : location;
+	return (peeked) ? prev_location : location;
 }
 
 int InputStream::getLineNumber() {
-	return lineNum;
+	if (peeked && peek() == '\n') {
+		return lineNum - 1;
+	} else
+		return lineNum;
+}
+
+bool InputStream::is_eof() {
+	return eof_flag;
 }
