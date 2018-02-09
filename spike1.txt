@@ -1,0 +1,378 @@
+SPIKE1 - LEXICAL ANALYSIS - VERSION spike1-11
+
+((s1.0)) Key dates
+
+  ((s1.0.1)) spike1 is due on Friday February 9, 2018 at 5pm.
+
+  ((s1.0.2)) The spike1 code turn-in mechanism will be similar to the
+             spike0 process, and any significant changes will be
+             detailed in class.
+
+((s1.1)) The primary task of spike1 is to write a standalone program
+'spike1' -- in C, C++, or Java -- that reads from a filename supplied
+on the command line, or from standard input, breaks the input up into
+lexical tokens precisely as defined in this specification, and writes
+the location and position of each token to standard output, in a
+specific format detailed below.
+
+((s1.2)) This task is described by a 'spec package', which is a zip
+file named 'spike1-' plus a version number, such as 'spike1-10.zip'.
+
+  ((s1.2.1.1)) A spike1 spec package with a larger version number
+               supercedes any with a smaller version number.
+
+  ((s1.2.1.2)) See (s1.9) below for details of any spec package
+               revisions.
+
+  ((s1.2.2)) Files in the spike1 spec package include:
+
+   ((s1.2.2.1)) spike1.txt: This file.  Everything in spike1.txt is
+                normative for the spike1 task.
+
+   ((s1.2.2.2)) implementation-notes.txt: Some suggestions and
+                discussion about implementation choices.  Everything
+                in implementation-notes.txt is advisory for spike1.
+
+   ((s1.2.2.3)) tests/*.(lexi|lexo): Files containing legal test input
+                (.lexi files) according to the specification below
+                (s1.3), and their corresponding required outputs
+                (.lexo files).
+
+    ((s1.2.2.3.1)) Note that the '.lexo' files provide the EXACT
+                   BYTE-FOR-BYTE required output for the corresponding
+                   '.lexi'.  What your spike0 program sends to
+                   standard output MUST match the contents of the .out
+                   file _exactly_ or it is incorrect.
+
+      ((s1.2.2.3.1.1)) As a result, if your spike1 outputs any prompts
+                   or debug messages -- or anything else, except the
+                   required output -- to standard output IT WILL FAIL
+                   TESTING!
+
+      ((s1.2.2.3.1.2)) Note this specification says nothing about any
+                   output -- or the lack thereof -- sent to standard
+                   error.  Any and all output sent to standard error
+                   will be ignored during testing and therefore cannot
+                   affect the test results.
+
+    ((s1.2.2.3.2)) Note also there are _many_ aspects of the spike1
+                   token specification that the provided examples do
+                   not test!  You are expected to develop additional
+                   .lexi/.lexo files of your own!
+
+((s1.3)) This section describe the spike1 tokens, first providing
+general overall rules, and then the details of the tokens, grouped
+into several categories for purposes of exposition.  The following
+section (s1.4) describes additional details of token processing, and
+(s1.5) describes the overall flow of the spike1 program.
+
+((s1.3.1)) General lexical analysis rules:
+
+((s1.3.1.1)) The guidance in this section (s1.3.1) applies unless
+explicitly overriden in any specific case.
+
+((s1.3.1.1.1)) RULE 1: WHITESPACE IS A TOKEN DELIMITER BUT IS OFTEN OPTIONAL
+((s1.3.1.1.1.1)) Whitespace can be required to separate adjacent
+keywords and/or identifiers, or in general to force an interpretation
+as multiple shorter tokens rather than one longer one, but is
+otherwise optional.  An input like "iffy" is an identifier, while "if
+fy" is the keyword 'if' followed by an identifier 'fy'.  Also, "if-fy"
+and "if - fy" and " if -fy" all generate the same three tokens --
+keyword 'if', followed by '-', followed by identifier 'fy'.
+Similarly, "!=" yields one '!=' token, but "! =" yields two, '!' then
+'='.
+
+((s1.3.1.1.2)) RULE 2: THE LONGEST TOKEN STARTING HERE WINS
+((s1.3.1.1.2.1)) In all cases, the lexical analzyer shall recognize
+the longest token that it can, starting from the current position.
+As examples:
+
+   "dodo" is identifier 'dodo', not keyword 'do' then keyword 'do'
+   "awhile" is identifier 'awhile', not identifier 'a' then keyword 'while'
+   ">=" is the two byte token '>=', not '>' then '='
+   "3.1" is the number token '3.1, not number '3' then '.' then number '1'
+
+((s1.3.1.1.3)) RULE 3: SPIKE1 IS NOT C, NOR C++, NOR JAVA
+((s1.3.1.1.3.1)) This is more of a helpful reminder than anything
+else.  The spike1 lexical analysis rules are its and its alone.
+Implementors are cautioned that there are several aspects where the
+spike1 lexical analysis differs from each of the mentioned languages.
+As just a few examples: Certain tokens like '<<<' and '<<=' do not
+exist in spike1, exactly what counts as a number is specific to
+spike1, and the set of spike1 legal keywords does not exactly match
+that of any of those languages.
+
+((s1.3.2)) Lexical categories
+
+((s1.3.2.1)) For purposes of this exposition, spike1 has five
+categories of lexical tokens, each described below: Literal tokens
+(s1.3.2.1.1), Keyword (s1.3.2.1.2), Identifier (s1.3.2.1.3), Number
+(s1.3.2.1.4), and Internal (s1.3.2.1.5).
+
+((s1.3.2.1.1)) LITERAL TOKENS.  These are a set of fixed byte
+sequences each of which corresponds to precisely one token.  In
+spike1, all literal tokens are one or two bytes long, they never begin
+with an alphanumeric character, and they are printed literally in the
+token output.
+
+((s1.3.2.1.1.1)) The spike1 literal tokens, with suggested but
+optional names, are:
+
+Name:opnpar      Value: "("
+Name:clspar      Value: ")"
+Name:opnbrk      Value: "["
+Name:clsbrk      Value: "]"
+Name:opnbrc      Value: "{"
+Name:clsbrc      Value: "}"
+Name:dot         Value: "."
+Name:comma       Value: ","
+Name:semi        Value: ";"
+Name:colon       Value: ":"
+Name:coloncolon  Value: "::"
+Name:bang        Value: "!"
+Name:quest       Value: "?"
+Name:equal       Value: "="
+Name:equalequal  Value: "=="
+Name:notequal    Value: "!="
+Name:leftshift   Value: "<<"
+Name:rightshift  Value: ">>"
+Name:gtr         Value: ">"
+Name:lss         Value: "<"
+Name:gtrequal    Value: ">="
+Name:lssequal    Value: "<="
+Name:and         Value: "&"
+Name:andand      Value: "&&"
+Name:or          Value: "|"
+Name:oror        Value: "||"
+Name:xor         Value: "^"
+Name:star        Value: "*"
+Name:mod         Value: "%"
+Name:slash       Value: "/"
+Name:plus        Value: "+"
+Name:minus       Value: "-"
+Name:plusplus    Value: "++"
+Name:minusminus  Value: "--"
+
+
+((s1.3.2.1.2)) KEYWORD TOKENS.  These are a set of fixed byte
+sequences each of which corresponds to precisely one token.  In
+spike1, all keyword tokens consist solely of lowercase alphabetic
+characters, and they are printed literally in the token output.
+
+((s1.3.2.1.2.1)) The spike1 keyword tokens are:
+
+    bool
+    break
+    case
+    continue
+    default
+    do
+    else
+    false
+    float
+    if
+    return
+    signed
+    static
+    struct
+    switch
+    true
+    unsigned
+    var
+    void
+    while
+
+((s1.3.2.1.3)) IDENTIFIER TOKENS.  An identifier token is anything
+that (1) begins with an upper or lowercase alphabetic character or
+'_', and (2) contains only alphanumeric characters plus underscore
+'_', and (3) cannot be interpreted as a keyword token.  Identifiers
+are not allowed to exceed 1024 bytes in length, although
+implementations are expected to handle identifiers that are shorter
+than that efficiently.  
+
+((s1.3.2.1.3.1)) Examples that are single identifiers could include:
+i, foo, BAR, True, fa1se, _happy_and_you_know_it, return_, double, _.
+
+((s1.3.2.1.3.2)) Examples that are not single identifiers could
+include: return, 6_2_and_even, happy-and-you-know-it, var, $foo.
+
+((s1.3.2.1.4)) NUMBER TOKENS.  spike1 supports only decimal numbers.
+A spike1 number token is anything that (1) begins with a decimal
+digit, and (2) contains only decimal digits plus up to one '.'.
+Numbers are not allowed to exceed 1024 bytes in length, although
+implementations are expected to handle numbers that are shorter than
+that efficiently.
+
+((s1.3.2.1.4.1)) Examples that are single numbers could include: 0.,
+0., 1, 1.0, 12, 3.1415926, 0880.
+
+((s1.3.2.1.4.2)) Examples that are not single numbers could include:
+-1, +2, 1.3.2.1.4.2, 0xdeadbeef, 1e10.
+
+((s1.3.2.1.5)) INTERNAL TOKENS.  spike1 has a small set of tokens used
+for special 'internal' purposes.  Implementors may add additional
+internal tokens as they see fit, but two are explicitly required:
+
+((s1.3.2.1.5.1)) EOF Token: This token is generated when an
+end-of-file condition is detected on the input.
+
+((s1.3.2.1.5.2)) ILLCHR Token: This token is generated when an
+illegal character -- something that cannot be part of any token -- is
+detected in the input.  
+
+((s1.4)) ADDITIONAL DETAILS OF TOKEN PROCESSING
+
+((s1.4.1)) This section describes two additional functions performed
+during spike1 lexical analysis: Comment processing (s1.4.2), token
+locators (s1.4.3), and token printing (s1.4.4).
+
+((s1.4.2)) COMMENT PROCESSING. spike1 supports only single-line
+comments.  In the spirit of C++, Java, and related languages, in
+spike1 a single-line comment is introduced by '//', and extends from
+there to the nearest subsequent appearance of a newline character
+('\n'), or end-of-file, whichever comes first.
+
+((s1.4.2.1)) The detection and reading of a single-line comment does
+NOT generate a token; the leading // plus the rest of the line are
+simply discarded.
+
+((s1.4.2.2)) Note, however, that if a comment is terminated by
+end-of-file, an EOF token _is_ still generated.
+
+((s1.4.3)) TOKEN LOCATORS.  spike1 lexical analysis is required to
+note the exact location of every token that it recognizes.  A 'token
+locator' consists of three pieces of information about where a token
+was located: (1) The filename (in general, the file path), (2) the
+line number within that file, and (3) the byte number within that
+line.  
+
+((s1.4.3.1)) Line and byte numbering both begin at 1.  Line numbers
+increment, and byte numbers reset, on each occurence of the newline
+character '\n'.
+
+((s1.4.3.2)) Implementations may assume that no spike1 input can have
+more than four billion lines, nor any single line longer than four
+billion bytes.
+
+((s1.4.3.3)) For output purposes, a token locator is printed in the
+following format:
+
+  the file path
+  a colon ':'
+  the line number
+  a colon ':'
+  the byte number
+  a colon ':'
+
+((s1.4.3.3)) As an example, suppose a file s.lexi consists of the
+following three lines:
+---cut here---
+{
+
+ do!
+---cut here---
+
+((s1.4.3.3.1)) That file contains a total of four tokens, and the
+output of spike1 will be:
+
+s.lexi:1:1:{
+s.lexi:3:2:do
+s.lexi:3:4:!
+s.lexi:4:1:$EOF
+
+if it is run with 's.lexi' supplied as the command line argument.
+
+((s1.4.3.3.1.1)) Some points to note in this example:
+
+((s1.4.3.3.1.1.1)) the initial '{' token is located at line 1, byte 1
+                   of s.lexi
+
+((s1.4.3.3.1.1.2)) no tokens are found on line 2, while 
+
+((s1.4.3.3.1.1.3)) line 3 has two, 'do' starting at byte 2, and '!' at
+                   byte 4, and
+
+((s1.4.3.3.1.1.4)) because line 3 ended with a newline, the EOF is
+                   detected at 'line 4 byte 1'.  
+
+((s1.4.3.3.1.1.5)) In general, the EOF token is located at the first
+                   location that does not exist in an input file.  Had
+                   s.lexi ended immediately after the '!', the final
+                   token would have been located as 's.lexi:3:5:$EOF'.
+
+((s1.4.4)) TOKEN PRINTING.  As seen in (s1.4.3) above, token locators
+are printed in a specific format.  Strictly speaking, the token
+locator output ends after the third ':' is printed; the additional
+information on each output line of (s1.4.3.3.1) comes from printing
+the token itself.
+
+((s1.4.4.1)) The exact format of token printing depends on the lexical
+categories discussed in (s1.3.2) above, according to these rules:
+
+((s1.4.4.1.1)) LITERAL TOKENS are printed literally.  The first and
+third lines of output (s1.4.3.3.1) are examples.
+
+((s1.4.4.1.2)) KEYWORD TOKENS are also printed literally.  The second
+line of output in (s1.4.3.3.1) is an example.
+
+((s1.4.4.1.3)) IDENTIFIER TOKENS are printed with a '$id:' plus the
+identifier.  For example, if t.lexi contained just the three bytes
+'foo', spike1's output would be
+
+t.lexi:1:1:$id:foo
+t.lexi:1:4:$EOF
+
+((s1.4.4.1.4)) NUMBER TOKENS are printed with a '$num:' plus the text
+of the read number.  For example, if t.lexi contained just the five bytes
+'00.11', spike1's output would be
+
+t.lexi:1:1:$num:00.11
+t.lexi:1:6:$EOF
+
+((s1.4.4.1.4)) INTERNAL TOKENS are printed with a leading '$' plus the
+name of the token, plus -- if the token has a value -- another colon
+and the token value.  For example, if t.lexi contained just the single
+byte '`', spike1's output would be
+
+t.lexi:1:1:$illchr:`
+t.lexi:1:2:$EOF
+
+((s1.5)) Overall flow of the spike1 program
+
+((s1.5.1)) The spike1 program may be run with either zero or one
+command line argument.  If one command line argument is supplied, it
+is interpreted as a file path which is opened for reading.  If it
+cannot be opened for reading, spike1 exits with non-zero status.  If
+no command line argument is supplied, spike1 reads from standard
+input.
+
+((s1.5.2)) In either case, spike1 then enters a loop, reading a token
+and printing the token locator and token to standard output, until an
+end-of-file token has been read and printed.
+
+ ((s1.5.2.1)) If a file path was provided on the command line, that is
+ used as the file path for all tokens.  If input is being read from
+ standard input, the string '<stdin>' is used instead.  For example, a
+ command like 'echo -n 1 | ./spike1' will generate this output:
+
+<stdin>:1:1:$num:1
+<stdin>:1:2:$EOF
+
+((s1.5.3)) After the main loop is completed, the input file is closed
+if necessary, and spike1 exits with status 0.
+
+((s1.6)) Unused reserved
+
+((s1.7)) Unused reserved
+
+((s1.8)) Unused reserved
+
+((s1.9)) Spec revision history
+
+((s1.9.1)) Version spike1-10 released Wed Jan 31 08:42:22 2018 
+
+((s1.9.2)) Version spike1-11 released Wed Jan 31 17:53:23 2018 
+
+((s1.9.2.1)) Changes from version spike1-10: Test outputs in t5.lexo
+for illegal characters were off by one.
+
