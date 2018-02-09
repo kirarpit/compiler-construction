@@ -12,8 +12,10 @@ public:
 					1), prev_location(0), lineNum(1), eof_flag(false) {
 	}
 	virtual ~InputStream();
+
 	char read();
-	char operator>>(char &ch);
+	InputStream& operator>>(char &ch);
+	operator bool() const;
 	char peek();
 	bool match(char ch);
 	std::string getFileName();

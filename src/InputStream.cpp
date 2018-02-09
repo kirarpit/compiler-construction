@@ -4,6 +4,10 @@
 InputStream::~InputStream() {
 }
 
+InputStream::operator bool() const {
+	return !eof_flag;
+}
+
 char InputStream::read() {
 	if (peeked) {
 		peeked = false;
@@ -34,9 +38,9 @@ char InputStream::read() {
 	}
 }
 
-char InputStream::operator>>(char &ch) {
+InputStream& InputStream::operator>>(char &ch) {
 	ch = read();
-	return ch;
+	return *this;
 }
 
 char InputStream::peek() {
