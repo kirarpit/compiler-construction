@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 	InputStream input =
 			(filename == "<stdin>") ?
 					InputStream(cin, filename) :
-					InputStream(fileStream, filename);//any other way to do this?
+					InputStream(fileStream, filename);//any other better way to do this?
 
 	Lexer lex(input, cout);
 	lex.scan();

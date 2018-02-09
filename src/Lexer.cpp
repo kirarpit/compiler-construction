@@ -80,7 +80,7 @@ void Lexer::scan() {
 }
 
 bool Lexer::isSingleByteLiteral(char ch) {
-	if (strchr("()[]{}.,;:!?=!<>&|^*%/+-", ch)) {
+	if (strchr("()[]{}.,;:!?=<>&|^*%/+-", ch)) {
 		return true;
 	}
 	return false;
