@@ -1,6 +1,9 @@
 #include <Lexer.h>
 #include<iostream>
 #include<InputStream.h>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
 
 Lexer::~Lexer() {
 }

@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<main.h>
+#include<cstdlib>
 
 using namespace std;
 
