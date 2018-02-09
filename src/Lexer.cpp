@@ -68,7 +68,12 @@ void Lexer::scan() {
 		}
 	}
 
-	print("e", "EOF");
+	if (input.is_eof())
+		print("e", "EOF");
+	else
+		//possibly error occurred while reading some characters
+		//or read some garbage values outside comments
+		exit(1);
 }
 
 bool Lexer::isSingleByteLiteral(char ch) {
