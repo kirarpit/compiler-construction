@@ -65,8 +65,12 @@ bool InputStream::match(char ch) {
 	}
 }
 
-std::string InputStream::getFileName() {
-	return fileName;
+void InputStream::setStreamName(std::string name) {
+	streamName = name;
+}
+
+std::string InputStream::getStreamName() {
+	return streamName;
 }
 
 int InputStream::getLocation() {

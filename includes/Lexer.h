@@ -1,28 +1,38 @@
 #ifndef SRC_LEXER_H_
 #define SRC_LEXER_H_
 
-#include <InputStream.h>
+#include<InputStream.h>
+#include<Token.h>
 #include<string>
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
 class Lexer {
 
 public:
-	Lexer(InputStream &is, ostream &os) :
-			input(is), output(os) {
-	}
+	Lexer();
 	virtual ~Lexer();
-	void scan();
-	void print(string token, string token_type);
+
+	void scan(InputStream &input, ostream &output);
+
+	void setSingleByteLiterals(string literals);
+	void setDoubleByteLiterals(vector<string> literals);
+	void setKeywords(vector<string> keywords);
+
 	bool isSingleByteLiteral(char ch);
 	bool isDoubleByteLiteral(string str);
 	bool isKeyword(string str);
 
 private:
-	InputStream &input;
-	ostream &output;
+	string singleByteLiterals;
+	vector<string> doubleByteLiterals;
+	vector<string> keywords;
+
+	Token tokenizeLiteral(InputStream &input, char ch);
+	Token tokenizeNumber(InputStream &input, char ch);
+	Token tokenizeKeywordOrID(InputStream &input, char ch);
 };
 
 #endif /* SRC_LEXER_H_ */

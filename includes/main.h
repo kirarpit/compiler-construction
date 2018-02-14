@@ -10,5 +10,6 @@
 
 #include<InputStream.h>
 #include<Lexer.h>
+#include<Token.h>
 
 #endif /* INCLUDES_MAIN_H_ */

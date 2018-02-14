@@ -4,15 +4,147 @@
 #include<cstdlib>
 #include<cstring>
 #include<algorithm>
+#include<vector>
+
+Lexer::Lexer() {
+	string literals = "()[]{}.,;:!?=<>&|^*%/+-";
+	setSingleByteLiterals(literals);
+
+	vector<string> doubleLiterals;
+	doubleLiterals.push_back("::");
+	doubleLiterals.push_back("==");
+	doubleLiterals.push_back("!=");
+	doubleLiterals.push_back("<<");
+	doubleLiterals.push_back(">>");
+	doubleLiterals.push_back(">=");
+	doubleLiterals.push_back("<=");
+	doubleLiterals.push_back("&&");
+	doubleLiterals.push_back("||");
+	doubleLiterals.push_back("++");
+	doubleLiterals.push_back("--");
+	setDoubleByteLiterals(doubleLiterals);
+
+	vector<string> keywords;
+	keywords.push_back("bool");
+	keywords.push_back("break");
+	keywords.push_back("case");
+	keywords.push_back("continue");
+	keywords.push_back("default");
+	keywords.push_back("do");
+	keywords.push_back("else");
+	keywords.push_back("false");
+	keywords.push_back("float");
+	keywords.push_back("if");
+	keywords.push_back("return");
+	keywords.push_back("signed");
+	keywords.push_back("static");
+	keywords.push_back("struct");
+	keywords.push_back("switch");
+	keywords.push_back("true");
+	keywords.push_back("unsigned");
+	keywords.push_back("var");
+	keywords.push_back("void");
+	keywords.push_back("while");
+	setKeywords(keywords);
+}
 
 Lexer::~Lexer() {
 }
 
-void Lexer::scan() {
+void Lexer::setSingleByteLiterals(string literals) {
+	singleByteLiterals = literals;
+}
+
+void Lexer::setDoubleByteLiterals(vector<string> doubleLiterals) {
+	doubleByteLiterals = doubleLiterals;
+}
+
+void Lexer::setKeywords(vector<string> words) {
+	keywords = words;
+}
+
+bool Lexer::isSingleByteLiteral(char ch) {
+	if (singleByteLiterals.find(ch) != string::npos) {
+		return true;
+	}
+	return false;
+}
+
+bool Lexer::isDoubleByteLiteral(string str) {
+	if (find(doubleByteLiterals.begin(), doubleByteLiterals.end(), str)
+			!= doubleByteLiterals.end()) {
+		return true;
+	}
+	return false;
+}
+
+bool Lexer::isKeyword(string str) {
+	if (find(keywords.begin(), keywords.end(), str) != keywords.end()) {
+		return true;
+	}
+	return false;
+}
+
+Token Lexer::tokenizeLiteral(InputStream &input, char ch) {
+	string val = "";
+	val.push_back(ch);
+	int pos = input.getLocation() - 1;
+
+	if (isSingleByteLiteral(input.peek())) {
+		if (isDoubleByteLiteral(val + input.peek())) {
+			val.push_back(input.read());
+		}
+	}
+
+	Token token(input.getStreamName(), input.getLineNumber(), pos, "Literals",
+			val);
+	return token;
+}
+
+Token Lexer::tokenizeNumber(InputStream &input, char ch) {
+	string number = "";
+	number.push_back(ch);
+	int pos = input.getLocation() - 1;
+
+	bool dot_flag = false;
+	while (isdigit(input.peek()) || (input.peek() == '.' && !dot_flag)) {
+		if (input.peek() == '.')
+			dot_flag = true;
+
+		number += input.read();
+	}
+
+	Token token(input.getStreamName(), input.getLineNumber(), pos, "Number",
+			number);
+	return token;
+}
+
+Token Lexer::tokenizeKeywordOrID(InputStream &input, char ch) {
+	string val = "";
+	val.push_back(ch);
+	int pos = input.getLocation() - 1;
+
+	while (input.peek() == '_' || isalnum(input.peek())) {
+		val += input.read();
+	}
+	string tokenType;
+	if (isKeyword(val)) {
+		tokenType = "Keyword";
+	} else {
+		tokenType = "Identifier";
+	}
+
+	Token token(input.getStreamName(), input.getLineNumber(), pos, tokenType,
+			val);
+	return token;
+}
+
+void Lexer::scan(InputStream &input, ostream &output) {
 	char ch;
+	Token token;
 	while (input >> ch) {
 
-		if (ch == '/' && input.peek() == '/') { //comments check
+		if (ch == '/' && input.peek() == '/') {
 			input.read();
 			while (input.peek() != '\n' && !input.is_eof()) {
 				input.read();
@@ -21,43 +153,15 @@ void Lexer::scan() {
 		}
 
 		else if (isSingleByteLiteral(ch)) {
-			string token = "";
-			token.push_back(ch);
-			if (isSingleByteLiteral(input.peek())) {
-				if (isDoubleByteLiteral(token + input.peek())) {
-					token.push_back(input.read());
-				}
-			}
-
-			print(token, "Literal");
+			token = tokenizeLiteral(input, ch);
 		}
 
-		else if (isdigit(ch)) { //can't be literal, keyword, ID or internal
-			string number = "";
-			number += ch;
-			bool dot_flag = false;
-			while (isdigit(input.peek()) || (input.peek() == '.' && !dot_flag)) {
-				if (input.peek() == '.')
-					dot_flag = true;
-
-				number += input.read();
-			}
-			print(number, "Number");
+		else if (isdigit(ch)) {
+			token = tokenizeNumber(input, ch);
 		}
 
 		else if (ch == '_' || isalnum(ch)) {
-			string token = "";
-			token += ch;
-			while (input.peek() == '_' || isalnum(input.peek())) {
-				token += input.read();
-			}
-			string token_type;
-			if (isKeyword(token)) {
-				token_type = "Keyword";
-			} else {
-				token_type = "Identifier";
-			}
-			print(token, token_type);
+			token = tokenizeKeywordOrID(input, ch);
 		}
 
 		else if (isspace(ch)) {
@@ -65,75 +169,18 @@ void Lexer::scan() {
 		}
 
 		else {
-			string token = "";
-			token.push_back(ch);
-			print(token, "ILLCHR");
+			string val = "";
+			val.push_back(ch);
+			token = Token(input.getStreamName(), input.getLineNumber(),
+					input.getLocation(), "ILLCHR", val);
 		}
+
+		output << token.print();
 	}
 
-	if (input.is_eof())
-		print("e", "EOF");
-	else
-		//possibly error occurred while reading some characters
-		//or read some garbage values outside comments
+	if (input.is_eof()) {
+		token = Token(input.getStreamName(), input.getLineNumber(),
+				input.getLocation() - 1, "EOF", "");
+	} else
 		exit(1);
-}
-
-bool Lexer::isSingleByteLiteral(char ch) {
-	if (strchr("()[]{}.,;:!?=<>&|^*%/+-", ch)) {
-		return true;
-	}
-	return false;
-}
-
-bool Lexer::isDoubleByteLiteral(string token) {
-	string mylist[] = { "::", "==", "!=", "<<", ">>", ">=", "<=", "&&", "||",
-			"++", "--" };
-
-	string *begin = mylist;
-	string *end = mylist + 11;
-
-	if (find(begin, end, token) != end) {
-		return true;
-	}
-
-	return false;
-}
-
-bool Lexer::isKeyword(string token) {
-	string keywords[] = { "bool", "break", "case", "continue", "default", "do",
-			"else", "false", "float", "if", "return", "signed", "static",
-			"struct", "switch", "true", "unsigned", "var", "void", "while" };
-
-	string *begin = keywords;
-	string *end = keywords + 20;
-
-	if (find(begin, end, token) != end) {
-		return true;
-	}
-
-	return false;
-}
-
-void Lexer::print(string token, string token_type) {
-	output << input.getFileName();
-	output << ':';
-	output << input.getLineNumber();
-	output << ':';
-	output << input.getLocation() - token.length();
-	output << ':';
-
-	if (token_type == "Number") {
-		output << "$num:";
-	} else if (token_type == "EOF") {
-		output << "$EOF";
-	} else if (token_type == "ILLCHR") {
-		output << "$illchr:";
-	} else if (token_type == "Identifier") {
-		output << "$id:";
-	}
-
-	if (token_type != "EOF")
-		output << token;
-	output << endl;
 }

@@ -21,11 +21,12 @@ int main(int argc, char **argv) {
 
 	InputStream input =
 			(filename == "<stdin>") ?
-					InputStream(cin, filename) :
-					InputStream(fileStream, filename);//any other better way to do this?
+					InputStream(cin) : InputStream(fileStream); //any other better way to do this?
 
-	Lexer lex(input, cout);
-	lex.scan();
+	input.setStreamName(filename);
+
+	Lexer lex = Lexer();
+	lex.scan(input, cout);
 
 	if (filename != "<stdin>") {
 		fileStream.close();

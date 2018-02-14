@@ -46,7 +46,7 @@ $(PROGRAM):	$(CPPOBJ_FILES) $(COBJ_FILES)
 %.o:	%.cpp $(ALL_DEP)
 	g++ $(CPPFLAGS) $(INCLUDES) -c $< -o $@
 
-test:	$(PROGRAM) $(TEST_RESULTS)
+test:	$(PROGRAM) $(TEST_RESULTS) Makefile
 
 $(TEST_DIR)/%.lexo:	$(TEST_DIR)/%.lexi FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "

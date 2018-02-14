@@ -7,25 +7,29 @@
 class InputStream {
 
 public:
-	InputStream(std::istream &s, std::string str) :
-			myStream(s), fileName(str), peeked(false), myChar('\0'), location(
+	InputStream(std::istream &s) :
+			myStream(s), streamName("<stdin>"), peeked(false), myChar('\0'), location(
 					1), prev_location(0), lineNum(1), eof_flag(false) {
 	}
 	virtual ~InputStream();
 
 	char read();
-	InputStream& operator>>(char &ch);
-	operator bool() const;
 	char peek();
 	bool match(char ch);
-	std::string getFileName();
+
 	int getLineNumber();
 	int getLocation();
+
+	InputStream& operator>>(char &ch);
+	operator bool() const;
 	bool is_eof();
+
+	std::string getStreamName();
+	void setStreamName(std::string name);
 
 private:
 	std::istream &myStream;
-	std::string fileName;
+	std::string streamName;
 	bool peeked;
 	char myChar;
 	int location;
