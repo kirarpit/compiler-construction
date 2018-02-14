@@ -1,26 +1,31 @@
 #include "Token.h"
-
+#include<sstream>
 Token::~Token() {
 }
 
 std::string Token::print() {
-	std::string output;
-	output = filename + ":" + std::to_string(line) + ":"
-			+ std::to_string(position) + ":";
+	std::ostringstream output;
+
+	output << filename;
+	output << ':';
+	output << line;
+	output << ':';
+	output << position;
+	output << ':';
 
 	if (tokenType == "Number") {
-		output += "$num:";
+		output << "$num:";
 	} else if (tokenType == "EOF") {
-		output += "$EOF";
+		output << "$EOF";
 	} else if (tokenType == "ILLCHR") {
-		output += "$illchr:";
+		output << "$illchr:";
 	} else if (tokenType == "Identifier") {
-		output += "$id:";
+		output << "$id:";
 	}
 
 	if (value != "")
-		output += value;
-	output += '\n';
+		output << value;
+	output << '\n';
 
-	return output;
+	return output.str();
 }
