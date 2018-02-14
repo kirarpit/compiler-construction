@@ -141,7 +141,7 @@ Token Lexer::tokenizeKeywordOrID(InputStream &input, char ch) {
 
 void Lexer::scan(InputStream &input, ostream &output) {
 	char ch;
-	Token token;
+	Token token = Token();
 	while (input >> ch) {
 
 		if (ch == '/' && input.peek() == '/') {
@@ -172,7 +172,7 @@ void Lexer::scan(InputStream &input, ostream &output) {
 			string val = "";
 			val.push_back(ch);
 			token = Token(input.getStreamName(), input.getLineNumber(),
-					input.getLocation(), "ILLCHR", val);
+					input.getLocation() - 1, "ILLCHR", val);
 		}
 
 		output << token.print();
@@ -181,6 +181,7 @@ void Lexer::scan(InputStream &input, ostream &output) {
 	if (input.is_eof()) {
 		token = Token(input.getStreamName(), input.getLineNumber(),
 				input.getLocation() - 1, "EOF", "");
+		output << token.print();
 	} else
 		exit(1);
 }

@@ -1,5 +1,9 @@
 #include "Token.h"
 #include<sstream>
+
+Token::Token() {
+}
+
 Token::~Token() {
 }
 
