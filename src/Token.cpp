@@ -1,9 +1,6 @@
 #include "Token.h"
 #include<sstream>
 
-Token::Token() {
-}
-
 Token::~Token() {
 }
 
@@ -17,13 +14,13 @@ std::string Token::print() {
 	output << position;
 	output << ':';
 
-	if (tokenType == "Number") {
+	if (type == "Number") {
 		output << "$num:";
-	} else if (tokenType == "EOF") {
+	} else if (type == "EOF") {
 		output << "$EOF";
-	} else if (tokenType == "ILLCHR") {
+	} else if (type == "ILLCHR") {
 		output << "$illchr:";
-	} else if (tokenType == "Identifier") {
+	} else if (type == "Identifier") {
 		output << "$id:";
 	}
 

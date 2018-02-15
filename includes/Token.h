@@ -2,25 +2,26 @@
 #define SRC_TOKEN_H_
 
 #include<string>
+using namespace std;
 
 class Token {
 public:
-	Token();
-	Token(std::string filename, int line, int pos, std::string tokenType,
-			std::string val) :
-			filename(filename), line(line), position(pos), tokenType(tokenType), value(
+	Token() :
+			line(), position() {
+	}
+
+	Token(string filename, int line, int pos, string tokenType, string val) :
+			filename(filename), line(line), position(pos), type(tokenType), value(
 					val) {
 	}
 	virtual ~Token();
+	string print();
 
-	std::string print();
-
-private:
-	std::string filename;
+	string filename;
 	int line;
 	int position;
-	std::string tokenType;
-	std::string value;
+	string type;
+	string value;
 };
 
 #endif /* SRC_TOKEN_H_ */

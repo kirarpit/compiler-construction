@@ -17,14 +17,11 @@ public:
 
 	void scan(InputStream &input, ostream &output);
 
-	void setSingleByteLiterals(string literals);
-	void setDoubleByteLiterals(vector<string> literals);
-	void setKeywords(vector<string> keywords);
-
 	bool isSingleByteLiteral(char ch);
 	bool isDoubleByteLiteral(string str);
 	bool isKeyword(string str);
 
+	Token tokenInit(InputStream &input, string type, char ch);
 private:
 	string singleByteLiterals;
 	vector<string> doubleByteLiterals;

@@ -7,60 +7,23 @@
 #include<vector>
 
 Lexer::Lexer() {
-	string literals = "()[]{}.,;:!?=<>&|^*%/+-";
-	setSingleByteLiterals(literals);
+	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
-	vector<string> doubleLiterals;
-	doubleLiterals.push_back("::");
-	doubleLiterals.push_back("==");
-	doubleLiterals.push_back("!=");
-	doubleLiterals.push_back("<<");
-	doubleLiterals.push_back(">>");
-	doubleLiterals.push_back(">=");
-	doubleLiterals.push_back("<=");
-	doubleLiterals.push_back("&&");
-	doubleLiterals.push_back("||");
-	doubleLiterals.push_back("++");
-	doubleLiterals.push_back("--");
-	setDoubleByteLiterals(doubleLiterals);
+	string literals[] = { "::", "==", "!=", "<<", ">>", ">=", "<=", "&&", "||",
+			"++", "--" };
 
-	vector<string> keywords;
-	keywords.push_back("bool");
-	keywords.push_back("break");
-	keywords.push_back("case");
-	keywords.push_back("continue");
-	keywords.push_back("default");
-	keywords.push_back("do");
-	keywords.push_back("else");
-	keywords.push_back("false");
-	keywords.push_back("float");
-	keywords.push_back("if");
-	keywords.push_back("return");
-	keywords.push_back("signed");
-	keywords.push_back("static");
-	keywords.push_back("struct");
-	keywords.push_back("switch");
-	keywords.push_back("true");
-	keywords.push_back("unsigned");
-	keywords.push_back("var");
-	keywords.push_back("void");
-	keywords.push_back("while");
-	setKeywords(keywords);
+	vector<string> tempLiterals(std::begin(literals), std::end(literals));
+	doubleByteLiterals = tempLiterals;
+
+	string keys[] = { "bool", "break", "case", "continue", "default", "do",
+			"else", "false", "float", "if", "return", "signed", "static",
+			"struct", "switch", "true", "unsigned", "var", "void", "while" };
+
+	vector<string> tempKeywords(std::begin(keys), std::end(keys));
+	keywords = tempKeywords;
 }
 
 Lexer::~Lexer() {
-}
-
-void Lexer::setSingleByteLiterals(string literals) {
-	singleByteLiterals = literals;
-}
-
-void Lexer::setDoubleByteLiterals(vector<string> doubleLiterals) {
-	doubleByteLiterals = doubleLiterals;
-}
-
-void Lexer::setKeywords(vector<string> words) {
-	keywords = words;
 }
 
 bool Lexer::isSingleByteLiteral(char ch) {
@@ -85,63 +48,63 @@ bool Lexer::isKeyword(string str) {
 	return false;
 }
 
-Token Lexer::tokenizeLiteral(InputStream &input, char ch) {
+Token Lexer::tokenInit(InputStream &input, string type, char ch) {
 	string val = "";
-	val.push_back(ch);
-	int pos = input.getLocation() - 1;
+
+	if (ch) {
+		val.push_back(ch);
+	}
+
+	Token token(input.getStreamName(), input.getLineNumber(),
+			input.getLocation() - 1, type, val);
+
+	return token;
+}
+
+Token Lexer::tokenizeLiteral(InputStream &input, char ch) {
+	Token token = tokenInit(input, "Literals", ch);
 
 	if (isSingleByteLiteral(input.peek())) {
-		if (isDoubleByteLiteral(val + input.peek())) {
-			val.push_back(input.read());
+		if (isDoubleByteLiteral(token.value + input.peek())) {
+			token.value.push_back(input.read());
 		}
 	}
 
-	Token token(input.getStreamName(), input.getLineNumber(), pos, "Literals",
-			val);
 	return token;
 }
 
 Token Lexer::tokenizeNumber(InputStream &input, char ch) {
-	string number = "";
-	number.push_back(ch);
-	int pos = input.getLocation() - 1;
+	Token token = tokenInit(input, "Number", ch);
 
 	bool dot_flag = false;
 	while (isdigit(input.peek()) || (input.peek() == '.' && !dot_flag)) {
 		if (input.peek() == '.')
 			dot_flag = true;
 
-		number += input.read();
+		token.value += input.read();
 	}
 
-	Token token(input.getStreamName(), input.getLineNumber(), pos, "Number",
-			number);
 	return token;
 }
 
 Token Lexer::tokenizeKeywordOrID(InputStream &input, char ch) {
-	string val = "";
-	val.push_back(ch);
-	int pos = input.getLocation() - 1;
+	Token token = tokenInit(input, "", ch);
 
 	while (input.peek() == '_' || isalnum(input.peek())) {
-		val += input.read();
+		token.value += input.read();
 	}
-	string tokenType;
-	if (isKeyword(val)) {
-		tokenType = "Keyword";
+	if (isKeyword(token.value)) {
+		token.type = "Keyword";
 	} else {
-		tokenType = "Identifier";
+		token.type = "Identifier";
 	}
 
-	Token token(input.getStreamName(), input.getLineNumber(), pos, tokenType,
-			val);
 	return token;
 }
 
 void Lexer::scan(InputStream &input, ostream &output) {
 	char ch;
-	Token token = Token();
+	Token token;
 	while (input >> ch) {
 
 		if (ch == '/' && input.peek() == '/') {
@@ -169,18 +132,14 @@ void Lexer::scan(InputStream &input, ostream &output) {
 		}
 
 		else {
-			string val = "";
-			val.push_back(ch);
-			token = Token(input.getStreamName(), input.getLineNumber(),
-					input.getLocation() - 1, "ILLCHR", val);
+			token = tokenInit(input, "ILLCHR", ch);
 		}
 
 		output << token.print();
 	}
 
 	if (input.is_eof()) {
-		token = Token(input.getStreamName(), input.getLineNumber(),
-				input.getLocation() - 1, "EOF", "");
+		token = tokenInit(input, "EOF", '\0');
 		output << token.print();
 	} else
 		exit(1);
