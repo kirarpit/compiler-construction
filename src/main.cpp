@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 	input.setStreamName(filename);
 
 	OutputStream &output = cout;
-
 	Lexer lex = Lexer(input);
 	CompilerState cs(input, output, lex);
 

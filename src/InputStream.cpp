@@ -23,6 +23,7 @@ char InputStream::read() {
 		} else {
 			prev_location = location++;
 		}
+
 		return ch;
 	} else if (myStream.eof()) { //end of file
 		if (!eof_flag) {
@@ -34,6 +35,7 @@ char InputStream::read() {
 	} else {
 		//error reading
 		prev_location = location++;
+		eof_flag = true;
 		return '\0';
 	}
 }
@@ -87,4 +89,29 @@ int InputStream::getLineNumber() {
 bool InputStream::is_eof() {
 	peek();
 	return eof_flag;
+}
+
+void InputStream::markLocation() {
+	markedInfo["location"] = location;
+	markedInfo["prev_location"] = prev_location;
+	markedInfo["lineNum"] = lineNum;
+	markedInfo["tellg"] = myStream.tellg();
+	markedInfo["eof"] = (eof_flag) ? 1 : 0;
+	markedInfo["peeked"] = (peeked) ? 1 : 0;
+	markedChar = myChar;
+}
+
+bool InputStream::setLocation() {
+	if (eof_flag)
+		return false;
+
+	location = markedInfo["location"];
+	prev_location = markedInfo["prev_location"];
+	lineNum = markedInfo["lineNum"];
+	myStream.seekg(markedInfo["tellg"]);
+	eof_flag = (markedInfo["eof"]) ? true : false;
+	peeked = (markedInfo["peeked"]) ? true : false;
+	myChar = markedChar;
+
+	return true;
 }

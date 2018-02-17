@@ -90,7 +90,44 @@ public:
 	~NodeAsgnExpr() {
 	}
 
-	void print(OutputStream &out);
+	void print(OutputStream &out) {
+	}
+	static Node* parse(CompilerState &cs);
+};
+
+class NodePostfixExpr: public NonTerminalNode {
+public:
+	NodePostfixExpr() {
+	}
+	~NodePostfixExpr() {
+	}
+
+	void print(OutputStream &out) {
+	}
+	static Node* parse(CompilerState &cs);
+};
+
+class NodeCondExpr: public NonTerminalNode {
+public:
+	NodeCondExpr() {
+	}
+	~NodeCondExpr() {
+	}
+
+	void print(OutputStream &out) {
+	}
+	static Node* parse(CompilerState &cs);
+};
+
+class NodeLogorExpr: public NonTerminalNode {
+public:
+	NodeLogorExpr() {
+	}
+	~NodeLogorExpr() {
+	}
+
+	void print(OutputStream &out) {
+	}
 	static Node* parse(CompilerState &cs);
 };
 

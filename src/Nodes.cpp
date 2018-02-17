@@ -29,7 +29,6 @@ void NodeSpike2::parse(CompilerState &cs) {
 
 Node* NodeExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-
 	Node *expr = new NodeExpr();
 
 	Node *asgnExpr = NodeAsgnExpr::parse(cs);
@@ -87,6 +86,98 @@ void NodeExpr::print(OutputStream &out) {
 }
 
 Node* NodeAsgnExpr::parse(CompilerState &cs) {
-	return new TerminalNode(cs.lexer.read());
+	Lexer &lex = cs.lexer;
+	bool errorFlag = false;
+	Node *asgnExpr = new NodeAsgnExpr();
+
+	lex.mark();
+	Node *postfixExpr = NodePostfixExpr::parse(cs);
+	if (postfixExpr && lex.peek().value == "=") {
+		asgnExpr->addNode(postfixExpr);
+		asgnExpr->addNode(new TerminalNode(lex.read()));
+
+		Node *nextAsgnExpr = NodeAsgnExpr::parse(cs);
+		if (nextAsgnExpr) {
+			asgnExpr->addNode(nextAsgnExpr);
+		} else {
+			errorFlag = true;
+		}
+	} else {
+		if (!lex.set())
+			return NULL;
+
+		Node *condExpr = NodeCondExpr::parse(cs);
+		if (condExpr) {
+			asgnExpr->addNode(condExpr);
+		} else {
+			errorFlag = true;
+		}
+	}
+
+	if (errorFlag) {
+		delete asgnExpr;
+		if (cs.reportError() > 9) {
+			exit(10);
+		}
+		return NULL;
+	}
+
+	return asgnExpr;
 }
 
+Node* NodeCondExpr::parse(CompilerState &cs) {
+	Lexer &lex = cs.lexer;
+	bool errorFlag = false;
+	Node *condExpr = new NodeCondExpr();
+
+	Node *logorExpr = NodeLogorExpr::parse(cs);
+	if (logorExpr) {
+		condExpr->addNode(logorExpr);
+	} else {
+		delete condExpr;
+		return NULL;
+	}
+
+	if (lex.peek().value == "?") {
+		condExpr->addNode(new TerminalNode(lex.read()));
+
+		Node *expr = NodeExpr::parse(cs);
+		if (expr) {
+			condExpr->addNode(expr);
+			if (lex.peek().value == ":") {
+				condExpr->addNode(new TerminalNode(lex.read()));
+
+				Node *nextCondExpr = NodeCondExpr::parse(cs);
+				if (nextCondExpr) {
+					condExpr->addNode(nextCondExpr);
+				} else {
+					errorFlag = true;
+				}
+
+			} else {
+				errorFlag = true;
+			}
+
+		} else {
+			errorFlag = true;
+		}
+	}
+
+	if (errorFlag) {
+		delete condExpr;
+		if (cs.reportError() > 9) {
+			exit(10);
+		}
+		return NULL;
+	}
+
+	return condExpr;
+}
+
+Node* NodeLogorExpr::parse(CompilerState &cs) {
+	Lexer &lex = cs.lexer;
+	bool errorFlag = false;
+	Node *logorExpr = new NodeLogorExpr();
+
+	return logorExpr;
+}

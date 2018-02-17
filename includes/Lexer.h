@@ -17,6 +17,8 @@ public:
 
 	Token read();
 	Token peek();
+	void mark();
+	bool set();
 	void recover();
 
 	bool isSingleByteLiteral(char ch);
@@ -38,7 +40,9 @@ private:
 	Token tokenizeKeywordOrID(char ch);
 
 	Token myToken;
+	Token markedToken;
 	bool peeked;
+	bool markedPeek;
 };
 
 #endif /* SRC_LEXER_H_ */
