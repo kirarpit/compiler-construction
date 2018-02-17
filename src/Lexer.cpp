@@ -6,7 +6,9 @@
 #include<algorithm>
 #include<vector>
 
-Lexer::Lexer() {
+Lexer::Lexer(InputStream &in) :
+		input(in), peeked(false) {
+
 	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
 	string literals[] = { "::", "==", "!=", "<<", ">>", ">=", "<=", "&&", "||",
@@ -48,7 +50,25 @@ bool Lexer::isKeyword(string str) {
 	return false;
 }
 
-Token Lexer::tokenInit(InputStream &input, string type, char ch) {
+string Lexer::getLiteralType(string val) {
+	if (val == "+" || val == "-") {
+		return "TERM_OP";
+	} else if (val == "*" || val == "/") {
+		return "FACTOR_OP";
+	} else if (val == "==" || val == "!=") {
+		return "EQ_OP";
+	} else if (val == "<" || val == "<=" || val == ">" || val == ">=") {
+		return "REL_OP";
+	} else if (val == "-" || val == "&") {
+		return "PREUN_OP";
+	} else if (val == "--" || val == "++") {
+		return "UN_OP";
+	}
+
+	return "";
+}
+
+Token Lexer::tokenInit(string type, char ch) {
 	string val = "";
 
 	if (ch) {
@@ -61,8 +81,8 @@ Token Lexer::tokenInit(InputStream &input, string type, char ch) {
 	return token;
 }
 
-Token Lexer::tokenizeLiteral(InputStream &input, char ch) {
-	Token token = tokenInit(input, "Literals", ch);
+Token Lexer::tokenizeLiteral(char ch) {
+	Token token = tokenInit("Literals", ch);
 
 	if (isSingleByteLiteral(input.peek())) {
 		if (isDoubleByteLiteral(token.value + input.peek())) {
@@ -70,11 +90,12 @@ Token Lexer::tokenizeLiteral(InputStream &input, char ch) {
 		}
 	}
 
+	token.subType = getLiteralType(token.value);
 	return token;
 }
 
-Token Lexer::tokenizeNumber(InputStream &input, char ch) {
-	Token token = tokenInit(input, "Number", ch);
+Token Lexer::tokenizeNumber(char ch) {
+	Token token = tokenInit("Number", ch);
 
 	bool dot_flag = false;
 	while (isdigit(input.peek()) || (input.peek() == '.' && !dot_flag)) {
@@ -87,8 +108,8 @@ Token Lexer::tokenizeNumber(InputStream &input, char ch) {
 	return token;
 }
 
-Token Lexer::tokenizeKeywordOrID(InputStream &input, char ch) {
-	Token token = tokenInit(input, "", ch);
+Token Lexer::tokenizeKeywordOrID(char ch) {
+	Token token = tokenInit("", ch);
 
 	while (input.peek() == '_' || isalnum(input.peek())) {
 		token.value += input.read();
@@ -102,7 +123,12 @@ Token Lexer::tokenizeKeywordOrID(InputStream &input, char ch) {
 	return token;
 }
 
-void Lexer::scan(InputStream &input, ostream &output) {
+Token Lexer::read() {
+	if (peeked) {
+		peeked = false;
+		return myToken;
+	}
+
 	char ch;
 	Token token;
 	while (input >> ch) {
@@ -113,34 +139,44 @@ void Lexer::scan(InputStream &input, ostream &output) {
 				input.read();
 			}
 			continue;
-		}
-
-		else if (isSingleByteLiteral(ch)) {
-			token = tokenizeLiteral(input, ch);
-		}
-
-		else if (isdigit(ch)) {
-			token = tokenizeNumber(input, ch);
-		}
-
-		else if (ch == '_' || isalnum(ch)) {
-			token = tokenizeKeywordOrID(input, ch);
-		}
-
-		else if (isspace(ch)) {
+		} else if (isSingleByteLiteral(ch)) {
+			token = tokenizeLiteral(ch);
+		} else if (isdigit(ch)) {
+			token = tokenizeNumber(ch);
+		} else if (ch == '_' || isalnum(ch)) {
+			token = tokenizeKeywordOrID(ch);
+		} else if (isspace(ch)) {
 			continue;
+		} else {
+			token = tokenInit("ILLCHR", ch);
 		}
 
-		else {
-			token = tokenInit(input, "ILLCHR", ch);
-		}
-
-		output << token.print();
+		return token;
 	}
 
 	if (input.is_eof()) {
-		token = tokenInit(input, "EOF", '\0');
-		output << token.print();
+		token = tokenInit("EOF", '\0');
+		return token;
 	} else
 		exit(1);
+}
+
+Token Lexer::peek() {
+	if (peeked)
+		return myToken;
+
+	myToken = read();
+	peeked = true;
+	return myToken;
+}
+
+void Lexer::recover() {
+	while (peek().value != ";" && peek().type != "EOF") {
+		read();
+	}
+	read();
+}
+
+Token Lexer::getToken(string str) {
+	return Token(str);
 }

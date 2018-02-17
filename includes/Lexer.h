@@ -12,24 +12,33 @@ using namespace std;
 class Lexer {
 
 public:
-	Lexer();
+	Lexer(InputStream &in);
 	virtual ~Lexer();
 
-	void scan(InputStream &input, ostream &output);
+	Token read();
+	Token peek();
+	void recover();
 
 	bool isSingleByteLiteral(char ch);
 	bool isDoubleByteLiteral(string str);
 	bool isKeyword(string str);
 
-	Token tokenInit(InputStream &input, string type, char ch);
+	string getLiteralType(string val);
+	Token tokenInit(string type, char ch);
+	Token getToken(string str);
 private:
+	InputStream &input;
+
 	string singleByteLiterals;
 	vector<string> doubleByteLiterals;
 	vector<string> keywords;
 
-	Token tokenizeLiteral(InputStream &input, char ch);
-	Token tokenizeNumber(InputStream &input, char ch);
-	Token tokenizeKeywordOrID(InputStream &input, char ch);
+	Token tokenizeLiteral(char ch);
+	Token tokenizeNumber(char ch);
+	Token tokenizeKeywordOrID(char ch);
+
+	Token myToken;
+	bool peeked;
 };
 
 #endif /* SRC_LEXER_H_ */

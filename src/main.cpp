@@ -1,7 +1,8 @@
 #include<iostream>
 #include<fstream>
-#include<main.h>
 #include<cstdlib>
+
+#include<main.h>
 
 using namespace std;
 
@@ -23,12 +24,13 @@ int main(int argc, char **argv) {
 	InputStream input((filename == "<stdin>") ? cin : fileStream);
 	input.setStreamName(filename);
 
-	Lexer lex = Lexer();
-	lex.scan(input, cout);
+	OutputStream &output = cout;
 
-	if (filename != "<stdin>") {
-		fileStream.close();
-	}
+	Lexer lex = Lexer(input);
+	CompilerState cs(input, output, lex);
+
+	NodeSpike2::parse(cs);
+
 	exit(0);
 }
 

@@ -7,12 +7,7 @@ Token::~Token() {
 std::string Token::print() {
 	std::ostringstream output;
 
-	output << filename;
-	output << ':';
-	output << line;
-	output << ':';
-	output << position;
-	output << ':';
+	output << filename << ':' << line << ':' << position << ':';
 
 	if (type == "Number") {
 		output << "$num:";

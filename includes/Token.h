@@ -10,6 +10,10 @@ public:
 			line(), position() {
 	}
 
+	Token(string value) :
+			line(), position(), value(value) {
+	}
+
 	Token(string filename, int line, int pos, string tokenType, string val) :
 			filename(filename), line(line), position(pos), type(tokenType), value(
 					val) {
@@ -21,6 +25,7 @@ public:
 	int line;
 	int position;
 	string type;
+	string subType;
 	string value;
 };
 
