@@ -8,21 +8,41 @@
 
 Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false) {
-
 	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
-	string literals[] = { "::", "==", "!=", "<<", ">>", ">=", "<=", "&&", "||",
-			"++", "--" };
+	vector<string> doubleByteLiterals;
+	doubleByteLiterals.push_back("::");
+	doubleByteLiterals.push_back("==");
+	doubleByteLiterals.push_back("!=");
+	doubleByteLiterals.push_back("<<");
+	doubleByteLiterals.push_back(">>");
+	doubleByteLiterals.push_back(">=");
+	doubleByteLiterals.push_back("<=");
+	doubleByteLiterals.push_back("&&");
+	doubleByteLiterals.push_back("||");
+	doubleByteLiterals.push_back("++");
+	doubleByteLiterals.push_back("--");
 
-	vector<string> tempLiterals(std::begin(literals), std::end(literals));
-	doubleByteLiterals = tempLiterals;
-
-	string keys[] = { "bool", "break", "case", "continue", "default", "do",
-			"else", "false", "float", "if", "return", "signed", "static",
-			"struct", "switch", "true", "unsigned", "var", "void", "while" };
-
-	vector<string> tempKeywords(std::begin(keys), std::end(keys));
-	keywords = tempKeywords;
+	keywords.push_back("bool");
+	keywords.push_back("break");
+	keywords.push_back("case");
+	keywords.push_back("continue");
+	keywords.push_back("default");
+	keywords.push_back("do");
+	keywords.push_back("else");
+	keywords.push_back("false");
+	keywords.push_back("float");
+	keywords.push_back("if");
+	keywords.push_back("return");
+	keywords.push_back("signed");
+	keywords.push_back("static");
+	keywords.push_back("struct");
+	keywords.push_back("switch");
+	keywords.push_back("true");
+	keywords.push_back("unsigned");
+	keywords.push_back("var");
+	keywords.push_back("void");
+	keywords.push_back("while");
 }
 
 Lexer::~Lexer() {
