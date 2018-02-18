@@ -82,7 +82,7 @@ string Lexer::getLiteralType(string val) {
 	} else if (val == "-" || val == "&") {
 		return "PREUN_OP";
 	} else if (val == "--" || val == "++") {
-		return "UN_OP";
+		return "POSTUN_OP";
 	}
 
 	return "";
