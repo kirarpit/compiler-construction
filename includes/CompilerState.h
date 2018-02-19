@@ -20,6 +20,7 @@ public:
 	int reportError();
 	void muteErrors();
 	void unmuteErrors();
+	int getErrorCount();
 
 	InputStream &input;
 	OutputStream &output;

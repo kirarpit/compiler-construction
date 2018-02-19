@@ -19,3 +19,7 @@ void CompilerState::muteErrors() {
 void CompilerState::unmuteErrors() {
 	--muteCount;
 }
+
+int CompilerState::getErrorCount() {
+	return errorCount;
+}

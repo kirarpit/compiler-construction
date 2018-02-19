@@ -1,0 +1,302 @@
+SPIKE2 - LOBO-C EXPRESSION TREES - VERSION spike2-10
+
+((s2.0)) Key dates
+
+  ((s2.0.1)) spike2 is due on Monday February 19, 2018 at 5pm.
+
+  ((s2.0.2)) The spike2 code turn-in mechanism will be similar to that
+             of the previous spikes, and any significant changes will
+             be detailed in class.
+
+((s2.1)) The primary task of spike2 is to write a standalone program
+'spike2' -- in C, C++, or Java -- that reads legal LOBO-C expressions
+from a filename supplied on the command line, or from standard input,
+then prints those expressions in 'fully-parenthesized infix form'
+('FPIF') to standard output, in a specific format detailed below.
+
+((s2.1.1)) Note that spike2 programs SHOULD include and make use of
+(all or most of the code of) the lexical analyzer developed in spike1.
+The top-level 'driver' or main program will necessarily be different,
+since the spike2 input-output requirements are different, but the
+spike1 token definitions _are_normative_ for spike2.  In particular,
+all tokens that are legal in spike1-11 MUST be recognized as such even
+if they are not used in the spike2 grammar (see (s2.2.3.1) and
+(s2.5.3.1.1.1) below).
+
+((s2.2)) This task is described by a 'spec package', which is a zip
+file named 'spike2-' plus a version number, such as 'spike2-10.zip'.
+
+  ((s2.2.1.1)) A spike2 spec package with a larger version number
+               supercedes any with a smaller version number.
+
+  ((s2.2.1.2)) See (s2.9) below for details of any spec package
+               revisions.
+
+  ((s2.2.2)) Files in the spike2 spec package include:
+
+   ((s2.2.2.1)) spike2.txt: This file.  Everything in spike2.txt is
+                normative for the spike2 task, unless otherwise noted.
+
+   ((s2.2.2.2)) implementation-notes.txt: Some suggestions and
+                discussion about implementation choices.  Everything
+                in implementation-notes.txt is advisory for spike2.
+
+   ((s2.2.2.3)) tests/*.(expi|expo): Files containing legal test input
+                (.expi files) according to the specification below
+                (s2.3), and their corresponding required fully
+                parenthesized outputs (.expo files).
+
+    ((s2.2.2.3.1)) Note there are two kinds of 'exp' files in tests.
+                   .expi files beginning with 't' (e.g., 't10.expi')
+                   contain only legal inputs, and spike2 is expected
+                   to exit with status zero (s2.5.4) when given such a
+                   file.  
+
+    ((s2.2.2.3.1.1)) On the other hand, .expi files beginning with 'e'
+                     (e.g., 'e10.expi') contain at least one illegal
+                     input according to the spike2 grammar.  spike2 is
+                     expected to perform error recovery (s2.5.3) and
+                     continue processing, ultimately exiting with a
+                     specific non-zero status (see (s2.5.4.2)).
+
+    ((s2.2.2.3.2)) Note that the '.expo' files provide the EXACT
+                   BYTE-FOR-BYTE required output for the corresponding
+                   '.expi'.  What your spike2 program sends to
+                   standard output MUST match the contents of the .expo
+                   file _exactly_ or it is incorrect.
+
+      ((s2.2.2.3.2.1)) As a result, if your spike2 outputs any prompts
+                   or debug messages -- or anything else, except the
+                   required output -- to standard output IT WILL FAIL
+                   TESTING!
+
+      ((s2.2.2.3.2.2)) Note this specification says nothing about any
+                   output -- or the lack thereof -- sent to standard
+                   error.  Any and all output sent to standard error
+                   will be ignored during testing and therefore cannot
+                   affect the test results.
+
+    ((s2.2.2.3.2)) Note also there are _many_ aspects of the spike2
+                   token specification that the provided examples do
+                   not test!  You are expected to develop additional
+                   .expi/.expo files of your own!
+
+((s2.3)) This section describes the spike2 target grammar.  With minor
+exceptions (see (s2.3.1.1) below), this grammar describes the legal
+expressions in LOBO-C.
+
+((s2.3.1)) This is the spike2 target grammar:
+
+SPIKE2         <- EOF | EXPR ";" SPIKE2
+EXPR           <- ASGN_EXPR | EXPR "," ASGN_EXPR
+ASGN_EXPR      <- POSTFIX_EXPR "=" ASGN_EXPR | COND_EXPR
+COND_EXPR      <- LOGOR_EXPR "?" EXPR ":" COND_EXPR | LOGOR_EXPR
+LOGOR_EXPR     <- LOGAND_EXPR | LOGOR_EXPR "||" LOGAND_EXPR
+LOGAND_EXPR    <- EQ_EXPR | LOGAND_EXPR "&&" EQ_EXPR
+EQ_EXPR        <- REL_EXPR | EQ_EXPR EQ_OP REL_EXPR
+REL_EXPR       <- SIMPLE_EXPR | REL_EXPR REL_OP SIMPLE_EXPR
+SIMPLE_EXPR    <- TERM | SIMPLE_EXPR TERM_OP TERM
+TERM           <- FACTOR | TERM FACTOR_OP FACTOR
+FACTOR         <- POSTFIX_EXPR | PREUN_OP FACTOR
+POSTFIX_EXPR   <- PRIMARY_EXPR | POSTFIX_EXPR POSTUN_OP | POSTFIX_EXPR ARRAY_SPEC
+ARRAY_SPEC     <- "[" OPT_ARRAY_SIZE "]"
+OPT_ARRAY_SIZE <- | EXPR
+PRIMARY_EXPR   <- IDENTIFIER | NUMBER | "(" EXPR ")"
+
+TERM_OP        <- "+" | "-"
+FACTOR_OP      <- "*" | "/"
+EQ_OP          <- "==" | "!="
+REL_OP         <- "<" | "<=" | ">" | ">="
+PREUN_OP       <- "-" | "--" | "++" | "&"
+POSTUN_OP      <- "--" | "++"
+
+IDENTIFIER     <- {any spike1 IDENTIFIER token}
+NUMBER         <- {any spike1 NUMBER token}
+
+((s2.3.1.1)) As an informational note only: The spike2 target grammar
+is a rule-by-rule subset of the overall LOBO-C grammar, with the
+following two exceptions:
+
+((s2.3.1.1.1)) The SPIKE2 rule in the spike2 target grammar does not
+appear in the full LOBO-C grammar, and
+
+((s2.3.1.1.2)) The PRIMARY_EXPR rule in the spike2 target grammar is
+somewhat simplified compared to the PRIMARY_EXPR rule of the full
+LOBO-C grammar.
+
+((s2.3.2)) Additional information about the spike2 grammar
+
+((s2.3.2.1)) Each terminal string in the spike2 grammar (an entity
+surrounded by double quotes) shall be represented by the corresponding
+spike1 token.
+
+((s2.3.2.2)) Similarly, this spec does not mention how to process
+whitespace or comments, because the spike1 spec remains in force in
+those matters.
+
+((s2.3.2.3)) As is customary in C-like languages, the spike2 grammar
+'assignment' operator ("=") is right-associative while all other
+spike2 grammar binary operators (",", "||", "&&", TERM_OP, FACTOR_OP,
+EQ_OP, REL_OP) are left-associative.
+
+((s2.4)) PRINTING PARSE TREES IN FULLY-PARENTHESIZED INFIX FORM
+
+((s2.4.1)) This section describes the key portion of the spike2
+required output format: 'fully-parenthesized infix' format.
+
+((s2.4.2)) The purpose of Fully-Parenthesized Infix Form (abbreviated
+FPIF) is to have an easy-to-read but completely unambiguous
+representation of a spike2 parse tree.  To accomplish that,
+intuitively, FPIF surrounds each 'use' of an operator with a set of
+parentheses.
+
+((s2.4.3)) Here are a few examples of spike2 input and spike2 FPIF
+output to help set the stage:
+
+((s2.4.3.1)) spike2 input:   1
+((s2.4.3.1.1)) spike2 output:1
+((s2.4.3.1.2)) Discussion: There is no operator, so no parentheses
+
+((s2.4.3.2)) spike2 input:   1+2*3-4;
+((s2.4.3.2.1)) spike2 output:((1+(2*3))-4)
+((s2.4.3.2.2)) Discussion: Three operators -- '+', '*', '-' -- lead to
+               three sets of parentheses.  The positioning of the
+               parens reveal the structure of the grammar and the
+               resulting abstract syntax tree -- both in terms of the
+               implied operator precedence ('*' before '+') and in
+               terms of the left associativity of the operators.
+
+((s2.4.3.3)) spike2 input:   a=b=c+d+e;
+((s2.4.3.3.1)) spike2 output:(a=(b=((c+d)+e)))
+((s2.4.3.3.2)) Discussion: The assignment operator '=' is right
+               associative, while addition '+' is left associative
+
+((s2.4.3.4)) spike2 input:   a--;
+((s2.4.3.4.1)) spike2 output:(a--)
+((s2.4.3.4.2)) Discussion: Uses of the unary operators (prefix and postfix)
+               are also surrounded by a set of parentheses.
+
+((s2.4.3.5)) spike2 input:   a[b+1];
+((s2.4.3.5.1)) spike2 output:(a[(b+1)])
+
+((s2.4.3.5.2)) Discussion: One might argue that uses of square
+               brackets ('[' and ']') should make an additional set of
+               parentheses unnecessary, but for spike2 FPIF, a set of
+               square brackets (one '[' plus the corresponding ']') is
+               considered one operator for FPIF.  Here, there are two
+               uses of operators (a set of square brackets, and a '+')
+               so there are two sets of parentheses.
+
+((s2.4.4)) As suggested by the examples and discussion in (s2.4.3),
+the _basic_ rules (there are exceptions, see (s2.4.5)) for producing
+spike2 FPIF from a parse tree 't', expressed recursively, are these:
+
+((s2.4.4.1)) If 't' is an IDENTIFIER or a NUMBER, it is just printed
+             normally. Otherwise,
+((s2.4.4.2)) If 't' applies a PREUN_OP unary operator to an subtree, then
+             (1) an "(" is printed, and then
+             (2) the unary operator is printed, and then
+             (3) the subtree is printed in FPIF, and then
+             (4) a ")" is printed.
+((s2.4.4.3)) If 't' applies a POSTUN_OP unary operator to an subtree, then
+             (1) an "(" is printed, and then
+             (2) the subtree is printed in FPIF, and then
+             (3) the unary operator is printed, and then
+             (4) a ")" is printed.
+((s2.4.4.4)) If 't' combines two subtrees via a binary operator, then
+             (1) an "(" is printed, and then
+             (2) the left subtree is printed in FPIF, and then
+             (3) the binary operator is printed, and then
+             (4) the right subtree is printed in FPIF, and then
+             (5) a ")" is printed.
+
+((s2.4.5)) Additional rules in spike2 FPIF formatting
+
+((s2.4.5.1)) The general rules in (s2.4.4) cover most but not all
+cases.  Here are some additional cases:
+
+((s2.4.5.2)) The ternary ?: operator is handled via analogy to the
+binary operators (s2.4.4.4) except with three subtrees and two
+operators.
+
+((s2.4.5.3)) Array accessing via '[]' operators is also handled via
+analogy to a binary operator (s2.4.4.4), with '[' appearing in the
+binary infix operator position, plus the corresponding ']' added just
+before the closing ')'.
+
+((s2.4.5.4)) Any parse tree nodes that do _not_ involve the
+application of an operator to a subtree do _not_ produce parentheses
+in FPIF.  For example, if an implementation has a parse tree fragment
+like POSTFIX_EXPR -> PRIMARY_EXPR -> IDENTIFIER -> "foo", the
+corresponding FPIF form is just 'foo', not '(((foo)))', because there
+are no operator applications in that fragment.
+
+((s2.5)) Overall flow of the spike2 program
+
+((s2.5.1)) The spike2 program may be run with either zero or one
+command line argument.  If one command line argument is supplied, it
+is interpreted as a file path which is opened for reading.  If it
+cannot be opened for reading, spike2 exits with non-zero status.  If
+no command line argument is supplied, spike2 reads from standard
+input.
+
+((s2.5.2)) In either case, spike2 then enters a loop.  
+
+((s2.5.2.1)) Each time around the loop, spike2 attempts to read and
+parse one instance of EXPR followed by a ";".  If the parse succeeds,
+the resulting tree is then printed in FPIF.
+
+((s2.5.3)) ERROR HANDLING
+
+((s2.5.3.1)) Unlike previous spikes, if the attempt to read and parse
+an EXPR fails, spike2 _DOES NOT EXIT_ immediately, but instead it
+performs 'error recovery' as follows:
+
+((s2.5.3.1.1)) During or after a parsing error is detected, spike2
+prints an error message to stderr.  This spec does not specify or
+determine the contents of that error message other than to suggest it
+be hopefully useful for identifying the location and nature of the
+error.
+
+  ((s2.5.3.1.1.1)) For purposes of this specification, the term
+  'parsing error' includes both clearly parsing errors, such as
+  encountering a 'while' keyword token, or detecting two IDENTIFIERs
+  in a row with no operator intervening, _and_ lexical errors such as
+  illegal characters in the input.
+
+((s2.5.3.1.2)) ERROR RECOVERY. Once a parse tree error has been
+reported via stderr, an error recovery process occurs.  During an
+error recovery, the spike2 main loop then reads and discards tokens
+until either ';' or EOF is encountered.  If ';' is encountered first,
+the spike2 main loop then resumes parsing at that point (s2.5.2.1).
+On the other hand, if EOF is encountered first, the spike2 main loop
+concludes and exit processing is performed instead.
+
+
+
+((s2.5.4)) EXIT PROCESSING
+
+((s2.5.4.1)) When spike2 encounters an EOF token on the input, the
+main processing loop (s2.5.2) ends. 
+
+((s2.5.4.2)) After the main processing loop ends, spike2 exits with an
+exit status determined as follows:
+
+((s2.5.4.2.1)) If error recovery (s2.5.3.1.2) was performed more than
+9 times during this run of spike2, spike2 exits with status 10.
+
+((s2.5.4.2.3)) Otherwise, spike2's exit status is the number times
+error recovery (s2.5.3.1.2) was performed.
+
+  ((s2.5.4.2.3.1)) Note this implies spike2's exit status is 0 only if
+  error recovery never needed to be performed.
+
+((s2.6)) Unused reserved
+
+((s2.7)) Unused reserved
+
+((s2.8)) Unused reserved
+
+((s2.9)) Spec revision history
+
+((s2.9.1)) Version spike2-10 released Sat Feb 10 13:18:15 2018 

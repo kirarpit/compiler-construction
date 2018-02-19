@@ -4,7 +4,7 @@ INCLUDE_DIR:=$(ROOT_DIR)/includes
 TEST_DIR:=$(ROOT_DIR)/tests
 
 # The program we will build is defined here
-NAME:=spike1
+NAME:=spike2
 PROGRAM:=$(ROOT_DIR)/$(NAME)
 
 # Some reasonably strict and therefore supportive compilation flags to get us started

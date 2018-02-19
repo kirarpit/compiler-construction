@@ -30,6 +30,6 @@ int main(int argc, char **argv) {
 
 	NodeSpike2::parse(cs);
 
-	exit(0);
+	exit(cs.getErrorCount());
 }
 
