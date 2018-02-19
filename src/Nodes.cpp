@@ -470,7 +470,14 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 
 	if (lex.peek().value == "[") {
 		arraySpec->addNode(new TerminalNode(lex.read()));
-		arraySpec->addNode(NodeArraySize::parse(cs));
+
+		Node *arraySize = NodeArraySize::parse(cs);
+		if (arraySize) {
+			arraySpec->addNode(arraySize);
+		} else {
+			delete arraySpec;
+			return NULL;
+		}
 
 		if (lex.peek().value == "]") {
 			arraySpec->addNode(new TerminalNode(lex.read()));
@@ -502,12 +509,14 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 
 	Node *arraySize = new NodeArraySize();
 
-	cs.muteErrors();
-	Node *expr = NodeExpr::parse(cs);
-	cs.unmuteErrors();
-
-	if (expr) {
-		arraySize->addNode(expr);
+	if (lex.peek().value != "]") {
+		Node *expr = NodeExpr::parse(cs);
+		if (expr) {
+			arraySize->addNode(expr);
+		} else {
+			delete arraySize;
+			return NULL;
+		}
 	}
 
 	Logger::log(
