@@ -17,9 +17,7 @@ void NodeSpike2::parse(CompilerState &cs) {
 			continue;
 		}
 		if (lex.peek().value != ";") {
-			if (cs.reportError() > 9) {
-				exit(10);
-			}
+			cs.reportError();
 			lex.recover();
 			cs.error = false;
 			continue;
@@ -84,9 +82,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 						"CE can't be PE, Token Value: " + lex.peek().value
 								+ "\n");
 
-				if (cs.reportError() > 9) {
-					exit(10);
-				}
+				cs.reportError();
 				delete asgnExpr;
 				return NULL;
 			}
@@ -146,9 +142,7 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 				}
 
 			} else {
-				if (cs.reportError() > 9) {
-					exit(10);
-				}
+				cs.reportError();
 				errorFlag = true;
 			}
 
@@ -490,9 +484,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 	}
 
 	if (errorFlag) {
-		if (cs.reportError() > 9) {
-			exit(10);
-		}
+		cs.reportError();
 		delete arraySpec;
 		return NULL;
 	}
@@ -549,18 +541,14 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 				lex.read();
 			} else {
 				errorFlag = true;
-				if (cs.reportError() > 9) {
-					exit(10);
-				}
+				cs.reportError();
 			}
 		} else {
 			errorFlag = true;
 		}
 	} else {
 		errorFlag = true;
-		if (cs.reportError() > 9) {
-			exit(10);
-		}
+		cs.reportError();
 	}
 
 	if (errorFlag) {
