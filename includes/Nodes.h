@@ -27,7 +27,6 @@ public:
 	virtual bool findPostfixExpr() {
 		return false;
 	}
-
 };
 
 class TerminalNode: public Node {

@@ -20,7 +20,6 @@ void NodeSpike2::parse(CompilerState &cs) {
 			if (cs.reportError() > 9) {
 				exit(10);
 			}
-
 			lex.recover();
 			cs.error = false;
 			continue;
@@ -77,10 +76,22 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 
 		if (1 && lex.peek().value == "=") {
 			//check if it's indeed PE
+			Logger::log(
+					"Checking if CE could be PE, Token Value: "
+							+ lex.peek().value + "\n");
 			if (!condOrPostfixExpr->findPostfixExpr()) {
+				Logger::log(
+						"CE can't be PE, Token Value: " + lex.peek().value
+								+ "\n");
+
+				if (cs.reportError() > 9) {
+					exit(10);
+				}
 				delete asgnExpr;
 				return NULL;
 			}
+			Logger::log(
+					"CE could be PE, Token Value: " + lex.peek().value + "\n");
 
 			asgnExpr->addNode(new TerminalNode(lex.read()));
 

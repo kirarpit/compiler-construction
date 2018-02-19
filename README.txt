@@ -27,7 +27,7 @@
       and "=" token is found next, the parse COND_EXPR is assumed to
       be POSTFIX_EXPR instead. So, some inputs like "-1=1;" would be
       parsed as if they are legal. Although, they would result into 
-      legal counterparts i.e. ((-1)=1) in above example.
+      their legal counterparts i.e. ((-1)=1) in above example.
     - RESOLUTION #2: Kind of a hack, fixed it for now.
 
   IMPLEMENTATION SPECIFICS           
