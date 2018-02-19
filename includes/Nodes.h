@@ -9,6 +9,7 @@
 #include<cstdlib>
 #include<Logger.h>
 #include<string>
+#include<typeinfo>
 
 using namespace std;
 

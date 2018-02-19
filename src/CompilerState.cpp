@@ -2,9 +2,7 @@
 
 int CompilerState::reportError() {
 
-	Logger::log(
-			"Error Reported, total error count: " + to_string(errorCount + 1)
-					+ "\n");
+	Logger::log("Error Reported, total error count: \n");
 	if (!muteCount) {
 		error = true;
 		return ++errorCount;
