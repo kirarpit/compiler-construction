@@ -5,6 +5,7 @@
 #include<OutputStream.h>
 #include<Lexer.h>
 #include<Logger.h>
+#include<cstdlib>
 
 using namespace std;
 
