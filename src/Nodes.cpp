@@ -370,7 +370,8 @@ Node* NodeFactor::parse(CompilerState &cs) {
 
 	Node *factor = new NodeFactor();
 
-	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP" || lex.peek().value == "-") {
+	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP"
+			|| lex.peek().value == "-") {
 		factor->addNode(new TerminalNode(lex.read()));
 		Node *nextFactor = NodeFactor::parse(cs);
 		if (nextFactor) {
@@ -484,11 +485,12 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 
 	Node *arraySize = new NodeArraySize();
 
+	cs.muteErrors();
 	Node *expr = NodeExpr::parse(cs);
+	cs.unmuteErrors();
+
 	if (expr) {
 		arraySize->addNode(expr);
-	} else {
-		arraySize->addNode(new TerminalNode(lex.getToken("")));
 	}
 
 	Logger::log(

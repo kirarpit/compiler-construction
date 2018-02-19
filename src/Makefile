@@ -32,8 +32,8 @@ ALL_DEP:=$(HDR_FILES) $(TCC_FILES) Makefile
 INCLUDES:=-I $(INCLUDE_DIR)
 
 # Test files info
-TEST_FILES:=$(wildcard $(TEST_DIR)/*.lexi)
-TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.lexi,$(TEST_DIR)/%.lexo,$(TEST_FILES))
+TEST_FILES:=$(wildcard $(TEST_DIR)/*.expi)
+TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.expi,$(TEST_DIR)/%.expo,$(TEST_FILES))
 
 all:	$(PROGRAM)
 
@@ -48,7 +48,7 @@ $(PROGRAM):	$(CPPOBJ_FILES) $(COBJ_FILES)
 
 test:	$(PROGRAM) $(TEST_RESULTS) Makefile
 
-$(TEST_DIR)/%.lexo:	$(TEST_DIR)/%.lexi FORCE
+$(TEST_DIR)/%.expo:	$(TEST_DIR)/%.expi FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
 	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) | diff $(@F) -
 	@echo "OK]"

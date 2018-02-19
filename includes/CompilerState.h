@@ -11,12 +11,15 @@ using namespace std;
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, Lexer &lex) :
-			input(in), output(out), lexer(lex), error(false), errorCount(0) {
+			input(in), output(out), lexer(lex), error(false), errorCount(0), muteCount(
+					0) {
 	}
 	virtual ~CompilerState() {
 	}
 
 	int reportError();
+	void muteErrors();
+	void unmuteErrors();
 
 	InputStream &input;
 	OutputStream &output;
@@ -25,6 +28,7 @@ public:
 	bool error;
 private:
 	int errorCount;
+	int muteCount;
 };
 
 #endif /* SRC_COMPILERSTATE_H_ */

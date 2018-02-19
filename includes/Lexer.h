@@ -25,7 +25,6 @@ public:
 
 	string getLiteralType(string val);
 	Token tokenInit(string type, char ch);
-	Token getToken(string str);
 private:
 	InputStream &input;
 

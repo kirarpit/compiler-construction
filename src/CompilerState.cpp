@@ -5,6 +5,17 @@ int CompilerState::reportError() {
 	Logger::log(
 			"Error Reported, total error count: " + to_string(errorCount + 1)
 					+ "\n");
-	error = true;
-	return ++errorCount;
+	if (!muteCount) {
+		error = true;
+		return ++errorCount;
+	}
+	return errorCount;
+}
+
+void CompilerState::muteErrors() {
+	++muteCount;
+}
+
+void CompilerState::unmuteErrors() {
+	--muteCount;
 }

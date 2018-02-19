@@ -196,7 +196,3 @@ void Lexer::recover() {
 	}
 	read();
 }
-
-Token Lexer::getToken(string str) {
-	return Token(str);
-}
