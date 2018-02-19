@@ -22,6 +22,11 @@ public:
 	virtual void print(OutputStream &) = 0;
 	virtual void addNode(Node *node) {
 	}
+
+	virtual bool findPostfixExpr() {
+		return false;
+	}
+
 };
 
 class TerminalNode: public Node {
@@ -52,6 +57,25 @@ public:
 	}
 
 	void print(OutputStream &out) = 0;
+
+	void addNode(Node *node) {
+		children.push_back(node);
+	}
+
+	bool findPostfixExpr() {
+		if (getName() == "15NodePostfixExpr")
+			return true;
+		if (children.size() != 1)
+			return false;
+
+		return children[0]->findPostfixExpr();
+	}
+
+	string getName() {
+		return string("") + typeid(*this).name();
+	}
+
+protected:
 	void printAllChildren(OutputStream &out) {
 		for (unsigned int i = 0; i < children.size(); i++) {
 			children[i]->print(out);
@@ -69,11 +93,7 @@ public:
 			printAllChildren(out);
 		}
 	}
-	void addNode(Node *node) {
-		children.push_back(node);
-	}
 
-protected:
 	vector<Node*> children;
 };
 

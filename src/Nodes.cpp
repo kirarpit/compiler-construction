@@ -75,7 +75,13 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	if (condOrPostfixExpr) {
 		asgnExpr->addNode(condOrPostfixExpr);
 
-		if (1 && lex.peek().value == "=") { //check if it's indeed PE
+		if (1 && lex.peek().value == "=") {
+			//check if it's indeed PE
+			if (!condOrPostfixExpr->findPostfixExpr()) {
+				delete asgnExpr;
+				return NULL;
+			}
+
 			asgnExpr->addNode(new TerminalNode(lex.read()));
 
 			Node *nextAsgnExpr = NodeAsgnExpr::parse(cs);
