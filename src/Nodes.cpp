@@ -484,9 +484,7 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 
 	Node *arraySize = new NodeArraySize();
 
-	cs.muteErrors();
 	Node *expr = NodeExpr::parse(cs);
-	cs.unmuteErrors();
 	if (expr) {
 		arraySize->addNode(expr);
 	} else {

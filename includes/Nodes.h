@@ -18,7 +18,6 @@ public:
 	}
 	virtual ~Node() {
 	}
-	bool a;
 
 	virtual void print(OutputStream &) = 0;
 	virtual void addNode(Node *node) {

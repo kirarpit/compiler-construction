@@ -58,15 +58,6 @@ char InputStream::peek() {
 	return myChar;
 }
 
-bool InputStream::match(char ch) {
-	if (ch == peek()) {
-		peeked = false;
-		return true;
-	} else {
-		return false;
-	}
-}
-
 void InputStream::setStreamName(std::string name) {
 	streamName = name;
 }
@@ -89,29 +80,4 @@ int InputStream::getLineNumber() {
 bool InputStream::is_eof() {
 	peek();
 	return eof_flag;
-}
-
-void InputStream::markLocation() {
-	markedInfo["location"] = location;
-	markedInfo["prev_location"] = prev_location;
-	markedInfo["lineNum"] = lineNum;
-	markedInfo["tellg"] = myStream.tellg();
-	markedInfo["eof"] = (eof_flag) ? 1 : 0;
-	markedInfo["peeked"] = (peeked) ? 1 : 0;
-	markedChar = myChar;
-}
-
-bool InputStream::setLocation() {
-	if (eof_flag)
-		return false;
-
-	location = markedInfo["location"];
-	prev_location = markedInfo["prev_location"];
-	lineNum = markedInfo["lineNum"];
-	myStream.seekg(markedInfo["tellg"]);
-	eof_flag = (markedInfo["eof"]) ? true : false;
-	peeked = (markedInfo["peeked"]) ? true : false;
-	myChar = markedChar;
-
-	return true;
 }

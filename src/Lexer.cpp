@@ -7,7 +7,7 @@
 #include<vector>
 
 Lexer::Lexer(InputStream &in) :
-		input(in), peeked(false), markedPeek(false) {
+		input(in), peeked(false) {
 	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
 	doubleByteLiterals.push_back("::");
@@ -199,16 +199,4 @@ void Lexer::recover() {
 
 Token Lexer::getToken(string str) {
 	return Token(str);
-}
-
-void Lexer::mark() {
-	input.markLocation();
-	markedPeek = peeked;
-	markedToken = myToken;
-}
-
-bool Lexer::set() {
-	peeked = markedPeek;
-	myToken = markedToken;
-	return input.setLocation();
 }
