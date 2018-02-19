@@ -2,11 +2,13 @@
 
 void NodeSpike2::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeSpike2, Token Value: " + lex.peek().value + "\n");
 
 	while (lex.peek().type != "EOF") {
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			expr->print(cs.output);
+			cs.output << endl;
 			delete expr;
 		}
 		if (cs.error) {
@@ -23,12 +25,15 @@ void NodeSpike2::parse(CompilerState &cs) {
 			cs.error = false;
 			continue;
 		}
+		Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
 		lex.read();
 	}
 }
 
 Node* NodeExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *expr = new NodeExpr();
 
 	Node *asgnExpr = NodeAsgnExpr::parse(cs);
@@ -55,73 +60,47 @@ Node* NodeExpr::parse(CompilerState &cs) {
 		expr = tempExpr;
 	}
 
+	Logger::log("Returning NodeExpr, Token Value: " + lex.peek().value + "\n");
 	return expr;
-}
-
-void NodeExpr::print(OutputStream &out) {
-	if (children.size() > 1) {
-		out << '(';
-
-		unsigned int i;
-		for (i = 0; i < children.size(); i++) {
-			if (i == 0 || i == 2)
-				children[i]->print(out);
-			else if (i == 1)
-				out << ',';
-		}
-
-		if (i == 3)
-			out << ')';
-
-	} else {
-		for (unsigned int i = 0; i < children.size(); i++) {
-			children[i]->print(out);
-		}
-	}
 }
 
 Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	bool condExpr = false;
+	Logger::log(
+			"Parsing NodeAsgnExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *asgnExpr = new NodeAsgnExpr();
 
-	lex.mark();
+	Node *condOrPostfixExpr = NodeCondExpr::parse(cs);
+	if (condOrPostfixExpr) {
+		asgnExpr->addNode(condOrPostfixExpr);
 
-	//ignore errors
-	Node *postfixExpr = NodePostfixExpr::parse(cs);
-	if (postfixExpr && lex.peek().value == "=") {
-		asgnExpr->addNode(postfixExpr);
-		asgnExpr->addNode(new TerminalNode(lex.read()));
+		if (1 && lex.peek().value == "=") { //check if it's indeed PE
+			asgnExpr->addNode(new TerminalNode(lex.read()));
 
-		Node *nextAsgnExpr = NodeAsgnExpr::parse(cs);
-		if (nextAsgnExpr) {
-			asgnExpr->addNode(nextAsgnExpr);
-		} else {
-			condExpr = true;
+			Node *nextAsgnExpr = NodeAsgnExpr::parse(cs);
+			if (nextAsgnExpr) {
+				asgnExpr->addNode(nextAsgnExpr);
+			} else {
+				delete asgnExpr;
+				return NULL;
+			}
 		}
 	} else {
-		condExpr = true;
-	}
-	//un-ignore errors
-
-	if (condExpr) {
-		if (!lex.set())
-			return NULL;
-
-		Node *condExpr = NodeCondExpr::parse(cs);
-		if (condExpr) {
-			asgnExpr->addNode(condExpr);
-		} else {
-			delete asgnExpr;
-			return NULL;
-		}
+		delete asgnExpr;
+		return NULL;
 	}
 
+	Logger::log(
+			"Returning NodeAsgnExpr, Token Value: " + lex.peek().value + "\n");
 	return asgnExpr;
 }
 
 Node* NodeCondExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeCondExpr, Token Value: " + lex.peek().value + "\n");
+
 	bool errorFlag = false;
 	Node *condExpr = new NodeCondExpr();
 
@@ -166,11 +145,16 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
+	Logger::log(
+			"Returning NodeCondExpr, Token Value: " + lex.peek().value + "\n");
 	return condExpr;
 }
 
 Node* NodeLogorExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeLogorExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *logorExpr = new NodeLogorExpr();
 
 	Node *logandExpr = NodeLogandExpr::parse(cs);
@@ -197,11 +181,16 @@ Node* NodeLogorExpr::parse(CompilerState &cs) {
 		logorExpr = tempLogorExpr;
 	}
 
+	Logger::log(
+			"Returning NodeLogorExpr, Token Value: " + lex.peek().value + "\n");
 	return logorExpr;
 }
 
 Node* NodeLogandExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeLogandExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *logandExpr = new NodeLogandExpr();
 
 	Node *eqExpr = NodeEqExpr::parse(cs);
@@ -228,11 +217,16 @@ Node* NodeLogandExpr::parse(CompilerState &cs) {
 		logandExpr = tempLogandExpr;
 	}
 
+	Logger::log(
+			"Returning NodeLogandExpr, Token Value: " + lex.peek().value
+					+ "\n");
 	return logandExpr;
 }
 
 Node* NodeEqExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeEqExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *eqExpr = new NodeEqExpr();
 
 	Node *relExpr = NodeRelExpr::parse(cs);
@@ -243,7 +237,7 @@ Node* NodeEqExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().value == "&&") {
+	while (lex.peek().subType == "EQ_OP") {
 		Node *tempEqExpr = new NodeEqExpr();
 
 		tempEqExpr->addNode(eqExpr);
@@ -259,11 +253,15 @@ Node* NodeEqExpr::parse(CompilerState &cs) {
 		eqExpr = tempEqExpr;
 	}
 
+	Logger::log(
+			"Returning NodeEqExpr, Token Value: " + lex.peek().value + "\n");
 	return eqExpr;
 }
 
 Node* NodeRelExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeRelExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *relExpr = new NodeRelExpr();
 
 	Node *simpleExpr = NodeSimpleExpr::parse(cs);
@@ -290,11 +288,16 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 		relExpr = tempRelExpr;
 	}
 
+	Logger::log(
+			"Returning NodeRelExpr, Token Value: " + lex.peek().value + "\n");
 	return relExpr;
 }
 
 Node* NodeSimpleExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeSimpleExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *simpleExpr = new NodeSimpleExpr();
 
 	Node *term = NodeTerm::parse(cs);
@@ -321,11 +324,16 @@ Node* NodeSimpleExpr::parse(CompilerState &cs) {
 		simpleExpr = tempSimpleExpr;
 	}
 
+	Logger::log(
+			"Returning NodeSimpleExpr, Token Value: " + lex.peek().value
+					+ "\n");
 	return simpleExpr;
 }
 
 Node* NodeTerm::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeTerm, Token Value: " + lex.peek().value + "\n");
+
 	Node *term = new NodeTerm();
 
 	Node *factor = NodeFactor::parse(cs);
@@ -352,14 +360,17 @@ Node* NodeTerm::parse(CompilerState &cs) {
 		term = tempTerm;
 	}
 
+	Logger::log("Returning NodeTerm, Token Value: " + lex.peek().value + "\n");
 	return term;
 }
 
 Node* NodeFactor::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log("Parsing NodeFactor, Token Value: " + lex.peek().value + "\n");
+
 	Node *factor = new NodeFactor();
 
-	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP") {
+	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP" || lex.peek().value == "-") {
 		factor->addNode(new TerminalNode(lex.read()));
 		Node *nextFactor = NodeFactor::parse(cs);
 		if (nextFactor) {
@@ -378,11 +389,16 @@ Node* NodeFactor::parse(CompilerState &cs) {
 		}
 	}
 
+	Logger::log(
+			"Returning NodeFactor, Token Value: " + lex.peek().value + "\n");
 	return factor;
 }
 
 Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodePostfixExpr, Token Value: " + lex.peek().value + "\n");
+
 	Node *postfixExpr = new NodePostfixExpr();
 
 	Node *primaryExpr = NodePrimaryExpr::parse(cs);
@@ -401,10 +417,8 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 			tempPostfixExpr->addNode(new TerminalNode(lex.read()));
 
 			postfixExpr = tempPostfixExpr;
-		} else {
-			//mute errors
+		} else if (lex.peek().value == "[") {
 			Node *arraySpec = NodeArraySpec::parse(cs);
-			//unmute errors
 
 			if (arraySpec) {
 				Node *tempPostfixExpr = new NodePostfixExpr();
@@ -414,22 +428,30 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 
 				postfixExpr = tempPostfixExpr;
 			} else {
-				break;
+				delete postfixExpr;
+				return NULL;
 			}
+		} else {
+			break;
 		}
 	}
 
+	Logger::log(
+			"Returning NodePostfixExpr, Token Value: " + lex.peek().value
+					+ "\n");
 	return postfixExpr;
 }
 
 Node* NodeArraySpec::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeArraySpec, Token Value: " + lex.peek().value + "\n");
+
 	bool errorFlag = false;
 	Node *arraySpec = new NodeArraySpec();
 
 	if (lex.peek().value == "[") {
 		arraySpec->addNode(new TerminalNode(lex.read()));
-
 		arraySpec->addNode(NodeArraySize::parse(cs));
 
 		if (lex.peek().value == "]") {
@@ -450,27 +472,37 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 		return NULL;
 	}
 
+	Logger::log(
+			"Returning NodeArraySpec, Token Value: " + lex.peek().value + "\n");
 	return arraySpec;
 }
 
 Node* NodeArraySize::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodeArraySize, Token Value: " + lex.peek().value + "\n");
+
 	Node *arraySize = new NodeArraySize();
 
-	//mute
+	cs.muteErrors();
 	Node *expr = NodeExpr::parse(cs);
-	//unmute
+	cs.unmuteErrors();
 	if (expr) {
 		arraySize->addNode(expr);
 	} else {
 		arraySize->addNode(new TerminalNode(lex.getToken("")));
 	}
 
+	Logger::log(
+			"Returning NodeArraySize, Token Value: " + lex.peek().value + "\n");
 	return arraySize;
 }
 
 Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
+	Logger::log(
+			"Parsing NodePrimaryExpr, Token Value: " + lex.peek().value + "\n");
+
 	bool errorFlag = false;
 	Node *primaryExpr = new NodePrimaryExpr();
 
@@ -479,14 +511,16 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	} else if (lex.peek().type == "Number") {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
 	} else if (lex.peek().value == "(") {
-		primaryExpr->addNode(new TerminalNode(lex.read()));
+		Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
+		lex.read();
 
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			primaryExpr->addNode(expr);
 
 			if (lex.peek().value == ")") {
-				primaryExpr->addNode(new TerminalNode(lex.read()));
+				Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
+				lex.read();
 			} else {
 				errorFlag = true;
 				if (cs.reportError() > 9) {
@@ -508,5 +542,8 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
+	Logger::log(
+			"Returning NodePrimaryExpr, Token Value: " + lex.peek().value
+					+ "\n");
 	return primaryExpr;
 }

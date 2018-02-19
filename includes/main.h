@@ -7,5 +7,6 @@
 #include<Nodes.h>
 #include<OutputStream.h>
 #include<Token.h>
+#include<Logger.h>
 
 #endif /* INCLUDES_MAIN_H_ */

@@ -1,7 +1,21 @@
 #include"CompilerState.h"
 
 int CompilerState::reportError() {
-	//output in std error expected node but found token
-	error = true;
-	return ++errorCount;
+
+	Logger::log(
+			"Error Reported, total error count: " + to_string(errorCount + 1)
+					+ "\n");
+	if (!muter) {
+		error = true;
+		return ++errorCount;
+	}
+	return 0;
+}
+
+void CompilerState::muteErrors() {
+	++muter;
+}
+
+void CompilerState::unmuteErrors() {
+	--muter;
 }

@@ -7,6 +7,8 @@
 #include<Lexer.h>
 #include<CompilerState.h>
 #include<cstdlib>
+#include<Logger.h>
+#include<string>
 
 using namespace std;
 
@@ -16,6 +18,7 @@ public:
 	}
 	virtual ~Node() {
 	}
+	bool a;
 
 	virtual void print(OutputStream &) = 0;
 	virtual void addNode(Node *node) {
@@ -26,6 +29,7 @@ class TerminalNode: public Node {
 public:
 	TerminalNode(Token token) :
 			terminalToken(token) {
+		Logger::log("Consumed Terminal:" + token.value + "\n");
 	}
 	~TerminalNode() {
 	}
@@ -33,8 +37,6 @@ public:
 	void print(OutputStream &out) {
 		out << terminalToken.value;
 	}
-
-	static const bool isTerminal = true;
 
 protected:
 	Token terminalToken;
@@ -51,11 +53,26 @@ public:
 	}
 
 	void print(OutputStream &out) = 0;
+	void printAllChildren(OutputStream &out) {
+		for (unsigned int i = 0; i < children.size(); i++) {
+			children[i]->print(out);
+		}
+	}
+	void printParenthesised(OutputStream &out) {
+		out << '(';
+		printAllChildren(out);
+		out << ')';
+	}
+	void printFPIF(OutputStream &out) {
+		if (children.size() > 1) {
+			printParenthesised(out);
+		} else {
+			printAllChildren(out);
+		}
+	}
 	void addNode(Node *node) {
 		children.push_back(node);
 	}
-
-	static const bool isTerminal = false;
 
 protected:
 	vector<Node*> children;
@@ -67,7 +84,6 @@ public:
 	}
 	~NodeSpike2() {
 	}
-
 	void print(OutputStream &out) = 0;
 	static void parse(CompilerState &cs);
 };
@@ -79,7 +95,9 @@ public:
 	~NodeExpr() {
 	}
 
-	void print(OutputStream &out);
+	void print(OutputStream &out) {
+		printFPIF(out);
+	}
 	static Node* parse(CompilerState &cs);
 };
 
@@ -91,18 +109,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
-	}
-	static Node* parse(CompilerState &cs);
-};
-
-class NodePostfixExpr: public NonTerminalNode {
-public:
-	NodePostfixExpr() {
-	}
-	~NodePostfixExpr() {
-	}
-
-	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -115,6 +122,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -127,6 +135,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -139,6 +148,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -151,6 +161,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -163,6 +174,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -175,6 +187,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -187,6 +200,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -199,18 +213,20 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
 
-class NodePrimaryExpr: public NonTerminalNode {
+class NodePostfixExpr: public NonTerminalNode {
 public:
-	NodePrimaryExpr() {
+	NodePostfixExpr() {
 	}
-	~NodePrimaryExpr() {
+	~NodePostfixExpr() {
 	}
 
 	void print(OutputStream &out) {
+		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -223,6 +239,7 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printAllChildren(out);
 	}
 	static Node* parse(CompilerState &cs);
 };
@@ -235,6 +252,20 @@ public:
 	}
 
 	void print(OutputStream &out) {
+		printAllChildren(out);
+	}
+	static Node* parse(CompilerState &cs);
+};
+
+class NodePrimaryExpr: public NonTerminalNode {
+public:
+	NodePrimaryExpr() {
+	}
+	~NodePrimaryExpr() {
+	}
+
+	void print(OutputStream &out) {
+		printAllChildren(out);
 	}
 	static Node* parse(CompilerState &cs);
 };

@@ -10,7 +10,6 @@ Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false), markedPeek(false) {
 	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
-	vector<string> doubleByteLiterals;
 	doubleByteLiterals.push_back("::");
 	doubleByteLiterals.push_back("==");
 	doubleByteLiterals.push_back("!=");
@@ -171,13 +170,11 @@ Token Lexer::read() {
 			token = tokenInit("ILLCHR", ch);
 		}
 
-		cout << token.print();
 		return token;
 	}
 
 	if (input.is_eof()) {
 		token = tokenInit("EOF", '\0');
-		cout << token.print();
 
 		return token;
 	} else
