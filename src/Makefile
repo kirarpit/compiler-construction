@@ -1,6 +1,7 @@
 # Directories
 ROOT_DIR:=..
 INCLUDE_DIR:=$(ROOT_DIR)/includes
+SOURCE_DIR:=$(ROOT_DIR)/src
 TEST_DIR:=$(ROOT_DIR)/tests
 
 # The program we will build is defined here
@@ -19,16 +20,13 @@ TARBASE:=$(NAME)-$(TIMESTAMP)-$(DEV)
 TARNAME:=$(TARBASE).tar
 
 # Here we support both C and C++ though we'd usually expect just one or the other
-C_FILES:=$(wildcard *.c)
-CPP_FILES:=$(wildcard *.cpp)
+CPP_FILES = $(shell find ./ -type f -name '*.cpp')
 HDR_FILES:=$(wildcard $(INCLUDE_DIR)/*.h)
-TCC_FILES:=$(wildcard $(INCLUDE_DIR)/*.tcc)
 
-COBJ_FILES:=$(patsubst %.c,%.o,$(C_FILES))
 CPPOBJ_FILES:=$(patsubst %.cpp,%.o,$(CPP_FILES))
 
 # Set up so changes in any file in ALL_DEP trigger a full rebuild
-ALL_DEP:=$(HDR_FILES) $(TCC_FILES) Makefile
+ALL_DEP:=$(HDR_FILES) Makefile
 INCLUDES:=-I $(INCLUDE_DIR)
 
 # Test files info
@@ -37,11 +35,8 @@ TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.expi,$(TEST_DIR)/%.expo,$(TEST_FILES))
 
 all:	$(PROGRAM)
 
-$(PROGRAM):	$(CPPOBJ_FILES) $(COBJ_FILES)
+$(PROGRAM):	$(CPPOBJ_FILES)
 	g++ $(LDFLAGS) $^ -o $@
-
-%.o:	%.c $(ALL_DEP)
-	gcc $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 %.o:	%.cpp $(ALL_DEP)
 	g++ $(CPPFLAGS) $(INCLUDES) -c $< -o $@
@@ -54,7 +49,7 @@ $(TEST_DIR)/%.expo:	$(TEST_DIR)/%.expi FORCE
 	@echo "OK]"
 
 clean:	
-	rm -f *.o *~ $(INCLUDE_DIR)/*~
+	find $(SOURCE_DIR) $(INCLUDE_DIR) -name "*.o" -type f -delete 
 
 realclean: clean
 	rm -f $(PROGRAM)
