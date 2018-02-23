@@ -1,7 +1,6 @@
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
-#include<Token.h>
 #include<CompilerState.h>
 #include<typeinfo>
 

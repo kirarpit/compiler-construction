@@ -1,7 +1,6 @@
 #ifndef SRC_COMPILERSTATE_H_
 #define SRC_COMPILERSTATE_H_
 
-#include<InputStream.h>
 #include<OutputStream.h>
 #include<Lexer.h>
 #include<Logger.h>

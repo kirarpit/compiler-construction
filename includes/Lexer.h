@@ -3,8 +3,6 @@
 
 #include<InputStream.h>
 #include<Token.h>
-#include<string>
-#include<iostream>
 #include<vector>
 
 using namespace std;
