@@ -4,9 +4,9 @@
 #include<CompilerState.h>
 #include<InputStream.h>
 #include<Lexer.h>
-#include<Nodes.h>
 #include<OutputStream.h>
 #include<Token.h>
 #include<Logger.h>
+#include<Nodes/AllNodesHeader.h>
 
 #endif /* INCLUDES_MAIN_H_ */

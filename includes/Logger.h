@@ -4,11 +4,14 @@
 #include<stdio.h>
 #include<iostream>
 #include<string>
+#include <execinfo.h>
 
 class Logger {
 public:
 	virtual ~Logger();
 	static void log(std::string str);
+	static void logEntry();
+	static void logExit();
 	static bool debug;
 
 private:

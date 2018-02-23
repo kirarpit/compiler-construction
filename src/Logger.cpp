@@ -10,3 +10,7 @@ void Logger::log(std::string str) {
 		std::cout << str;
 	}
 }
+
+void Logger::logEntry() {
+
+}
