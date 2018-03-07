@@ -5,7 +5,7 @@ SOURCE_DIR:=$(ROOT_DIR)/src
 TEST_DIR:=$(ROOT_DIR)/tests
 
 # The program we will build is defined here
-NAME:=spike2
+NAME:=spike3
 PROGRAM:=$(ROOT_DIR)/$(NAME)
 
 # Some reasonably strict and therefore supportive compilation flags to get us started
@@ -19,19 +19,20 @@ DEV:=$(shell whoami)
 TARBASE:=$(NAME)-$(TIMESTAMP)-$(DEV)
 TARNAME:=$(TARBASE).tar
 
-# Here we support both C and C++ though we'd usually expect just one or the other
+# Here we support both C and C++ though we'd usually blkect just one or the other
 CPP_FILES = $(shell find ./ -type f -name '*.cpp')
 HDR_FILES:=$(wildcard $(INCLUDE_DIR)/*.h)
+NODES_HDR_FILES:=$(wildcard $(INCLUDE_DIR)/Nodes/*.h)
 
 CPPOBJ_FILES:=$(patsubst %.cpp,%.o,$(CPP_FILES))
 
 # Set up so changes in any file in ALL_DEP trigger a full rebuild
-ALL_DEP:=$(HDR_FILES) Makefile
+ALL_DEP:=$(HDR_FILES) $(NODES_HDR_FILES) Makefile
 INCLUDES:=-I $(INCLUDE_DIR)
 
 # Test files info
-TEST_FILES:=$(wildcard $(TEST_DIR)/*.expi)
-TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.expi,$(TEST_DIR)/%.expo,$(TEST_FILES))
+TEST_FILES:=$(wildcard $(TEST_DIR)/*.blki)
+TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.blki,$(TEST_DIR)/%.blko,$(TEST_FILES))
 
 all:	$(PROGRAM)
 
@@ -43,7 +44,7 @@ $(PROGRAM):	$(CPPOBJ_FILES)
 
 test:	$(PROGRAM) $(TEST_RESULTS) Makefile
 
-$(TEST_DIR)/%.expo:	$(TEST_DIR)/%.expi FORCE
+$(TEST_DIR)/%.blko:	$(TEST_DIR)/%.blki FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
 	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) | diff $(@F) -
 	@echo "OK]"

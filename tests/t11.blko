@@ -1,0 +1,17 @@
+b undeclared unknown
+e okay signed[][(3-(4*3))][3]
+ea okay bool[3]
+f undeclared unknown
+x unused bool[3]
+
+(e+2);
+(b=3);
+(--e);
+{
+  (((3*3)-3)-f);
+  {
+  }
+  {
+    ((e[(2-1)])=((99+8)-(3*ea)));
+  }
+}

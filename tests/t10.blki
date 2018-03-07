@@ -1,0 +1,1 @@
+signed x,a; unsigned[3][2+3*4][] b; a=x*c; c=3+-x;

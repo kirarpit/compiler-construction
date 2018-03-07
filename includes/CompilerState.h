@@ -5,23 +5,27 @@
 #include<Lexer.h>
 #include<Logger.h>
 #include<cstdlib>
+#include<SymbolTable.h>
 
 using namespace std;
 
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, Lexer &lex) :
-			input(in), output(out), lexer(lex), error(false), errorCount(0) {
+			input(in), output(out), lexer(lex), error(false), errorCount(0), st(
+			NULL) {
 	}
 	virtual ~CompilerState() {
 	}
 
 	int reportError();
 	int getErrorCount();
+	void recover();
 
 	InputStream &input;
 	OutputStream &output;
 	Lexer &lexer;
+	SymbolTable *st;
 
 	bool error;
 private:

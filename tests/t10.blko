@@ -1,0 +1,7 @@
+a okay signed
+b unused unsigned[3][(2+(3*4))][]
+c undeclared unknown
+x okay signed
+
+(a=(x*c));
+(c=(3+(-x)));

@@ -1,0 +1,18 @@
+a undeclared unknown
+b undeclared unknown
+c undeclared unknown
+f undeclared unknown
+x undeclared unknown
+
+x;
+{
+  (a=b);
+  {
+  }
+  {
+    {
+      c;
+    }
+  }
+}
+f;

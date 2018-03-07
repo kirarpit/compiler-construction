@@ -1,7 +1,7 @@
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
-#include<CompilerState.h>
+#include "CompilerState.h"
 #include<typeinfo>
 
 using namespace std;
@@ -41,7 +41,8 @@ protected:
 
 class NonTerminalNode: public Node {
 public:
-	NonTerminalNode() {
+	NonTerminalNode() :
+			st(NULL) {
 	}
 	~NonTerminalNode() {
 		for (unsigned int i = 0; i < children.size(); i++) {
@@ -90,13 +91,14 @@ protected:
 	}
 
 	vector<Node*> children;
+	SymbolTable *st;
 };
 
-class NodeSpike2: public NonTerminalNode {
+class NodeSpike3: public NonTerminalNode {
 public:
-	NodeSpike2() {
+	NodeSpike3() {
 	}
-	~NodeSpike2() {
+	~NodeSpike3() {
 	}
 	void print(OutputStream &out) = 0;
 	static void parse(CompilerState &cs);

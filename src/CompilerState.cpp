@@ -13,3 +13,17 @@ int CompilerState::reportError() {
 int CompilerState::getErrorCount() {
 	return errorCount;
 }
+
+void CompilerState::recover() {
+	while (lexer.peek().value != ";" && lexer.peek().value != "}"
+			&& lexer.peek().type != "EOF") {
+		lexer.read();
+	}
+
+	if (lexer.peek().value != ";") {
+		reportError();
+	}
+
+	lexer.read();
+	error = false;
+}

@@ -24,11 +24,11 @@ int main(int argc, char **argv) {
 	InputStream input((filename == "<stdin>") ? cin : fileStream);
 	input.setStreamName(filename);
 
-	OutputStream &output = cout;
+	OutputStream output(cout);
 	Lexer lex = Lexer(input);
 	CompilerState cs(input, output, lex);
 
-	NodeSpike2::parse(cs);
+	NodeSpike3::parse(cs);
 
 	exit(cs.getErrorCount());
 }

@@ -15,7 +15,6 @@ public:
 
 	Token read();
 	Token peek();
-	void recover();
 
 	bool isSingleByteLiteral(char ch);
 	bool isDoubleByteLiteral(string str);

@@ -5,6 +5,7 @@
 #include<cstring>
 #include<algorithm>
 #include<vector>
+#include"TokenTable.h"
 
 Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false) {
@@ -22,7 +23,13 @@ Lexer::Lexer(InputStream &in) :
 	doubleByteLiterals.push_back("++");
 	doubleByteLiterals.push_back("--");
 
-	keywords.push_back("bool");
+#define XX(a,b,c) if(c==1){ \
+		keywords.push_back(TS_##b); \
+	}\
+	TOKEN_LIST
+#undef XX
+
+	keywords.push_back(TS_bool);
 	keywords.push_back("break");
 	keywords.push_back("case");
 	keywords.push_back("continue");
@@ -188,11 +195,4 @@ Token Lexer::peek() {
 	myToken = read();
 	peeked = true;
 	return myToken;
-}
-
-void Lexer::recover() {
-	while (peek().value != ";" && peek().type != "EOF") {
-		read();
-	}
-	read();
 }
