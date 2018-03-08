@@ -5,6 +5,8 @@ void NodeSpike3::parse(CompilerState &cs) {
 	Logger::log("Parsing NodeSpike3, Token Value: " + lex.peek().value + "\n");
 
 	Node *block = NodeBlock::parse(cs);
+	block->printST(cs);
+	cs.output << '\n';
 	block->print(cs.output);
 	delete block;
 

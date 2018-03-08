@@ -20,6 +20,8 @@ public:
 	virtual bool findPostfixExpr() {
 		return false;
 	}
+
+	virtual void printST(CompilerState &cs);
 };
 
 class TerminalNode: public Node {

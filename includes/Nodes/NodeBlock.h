@@ -10,13 +10,16 @@ public:
 
 	void print(OutputStream &out) {
 		for (unsigned int i = 0; i < children.size(); i++) {
-			children[i]->print(out);
-			if (!i) {
-				out << '\n';
-				out << '\n';
+			if (i) {
+				children[i]->print(out);
 			}
 		}
 	}
+
+	void printST(CompilerState &cs) {
+		cs.st->print(cs.output);
+	}
+
 	static Node* parse(CompilerState &cs);
 
 	SymbolTable *st;

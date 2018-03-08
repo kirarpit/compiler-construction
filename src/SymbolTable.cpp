@@ -1,31 +1,44 @@
 #include "SymbolTable.h"
 
-void SymbolTable::enterScope() {
+SymbolTable* SymbolTable::enterScope() {
 	SymbolTable *newST = new SymbolTable();
-	newST->parent = st;
-	st = newST;
+	newST->parent = this;
+	return newST;
 }
 
-void SymbolTable::exitScope() {
-	if (st) {
-		st = st->parent;
-	}
-}
-
-SymbolTable* SymbolTable::getSymbolTable() {
-	return st;
+SymbolTable* SymbolTable::exitScope() {
+	return parent;
 }
 
 void SymbolTable::updateType(int name, std::string value) {
 	TypeInfo *newType = new TypeInfo(name, value);
-	newType->typeOf = st->type;
-	st->type = newType;
+	newType->typeOf = type;
+	type = newType;
 }
 
 void SymbolTable::insertVar(Token id) {
-	if (st->variables.find(id) == st->variables.end()) {
-		st->variables[id] = VariableInfo(st->type, VS_UNUSED);
+	if (isDef) {
+		if (variables.find(id) == variables.end()) {
+			variables[id] = VariableInfo(type, VS_UNUSED);
+		}
 	} else {
-		st->variables.find(id)->second =
+		if (variables.find(id) == variables.end()) {
+			variables[id] = VariableInfo(type, VS_UNDEC);
+		} else {
+			variables.find(id)->second.status = VS_OKAY;
+		}
+	}
+}
+
+void SymbolTable::flush() {
+	type = NULL;
+}
+
+void SymbolTable::print(OutputStream &os) {
+	for (std::map<Token, VariableInfo>::iterator i = variables.begin();
+			i != variables.end(); i++) {
+		os << i->first << " ";
+		i->second.print(os);
+		os << '\n';
 	}
 }

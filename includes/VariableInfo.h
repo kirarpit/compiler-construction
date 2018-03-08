@@ -3,6 +3,7 @@
 
 #include<string>
 #include<TypeInfo.h>
+#include<OutputStream.h>
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\
@@ -30,6 +31,8 @@ public:
 	virtual ~VariableInfo() {
 	}
 
+	void print(OutputStream &os);
+	void recursiveTypePrint(OutputStream &os, TypeInfo *type);
 	TypeInfo *type;
 	int status;
 };

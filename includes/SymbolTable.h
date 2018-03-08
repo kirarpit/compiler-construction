@@ -5,24 +5,26 @@
 #include "VariableInfo.h"
 #include "Token.h"
 #include "TypeInfo.h"
+#include "OutputStream.h"
 
 class SymbolTable {
 public:
 	SymbolTable() :
-			parent(NULL), st(this), type(NULL), isDef(true) {
+			parent(NULL), type(NULL), isDef(true) {
 	}
 	virtual ~SymbolTable() {
 	}
 
 	SymbolTable *parent;
 
-	void enterScope();
-	void exitScope();
-	SymbolTable* getSymbolTable();
+	SymbolTable* enterScope();
+	SymbolTable* exitScope();
 	void updateType(int name, std::string value);
 	void insertVar(Token id);
+	void flush();
+	void print(OutputStream &out);
 
-	std::string id;
+	bool isDef;
 
 	/*
 	 * localLookup() checks in variables
@@ -31,9 +33,7 @@ public:
 
 private:
 	std::map<Token, VariableInfo> variables;
-	SymbolTable *st;
 	TypeInfo *type;
-	bool isDef;
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

@@ -7,10 +7,10 @@ Node* NodeBlock::parse(CompilerState &cs) {
 	if (!cs.st) {
 		cs.st = new SymbolTable();
 	} else {
-		cs.st->enterScope();
+		cs.st = cs.st->enterScope();
 	}
 
-	st = cs.st->getSymbolTable();
+	st = cs.st;
 	Node *block = NULL;
 
 	Node *defs = NodeDefs::parse(cs);
@@ -18,6 +18,7 @@ Node* NodeBlock::parse(CompilerState &cs) {
 		block = new NodeBlock();
 		block->addNode(defs);
 
+		cs.st->isDef = false;
 		Node *statements = NodeStatements::parse(cs);
 		if (statements) {
 			block->addNode(statements);
@@ -27,7 +28,7 @@ Node* NodeBlock::parse(CompilerState &cs) {
 		}
 	}
 
-	cs.st->exitScope();
+	cs.st = cs.st->exitScope();
 
 	Logger::log("Returning NodeBlock, Token Value: " + lex.peek().value + "\n");
 	return block;

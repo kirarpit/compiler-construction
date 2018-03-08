@@ -9,7 +9,11 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	Node *primaryExpr = new NodePrimaryExpr();
 
 	if (lex.peek().type == "Identifier") {
-		primaryExpr->addNode(new TerminalNode(lex.read()));
+		Token id = lex.read();
+		primaryExpr->addNode(new TerminalNode(id));
+
+		if (!cs.st->isDef)
+			cs.st->insertVar(id);
 	} else if (lex.peek().type == "Number") {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
 	} else if (lex.peek().value == "(") {
