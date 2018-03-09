@@ -9,8 +9,8 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	Node *typeName = NULL;
 
 	string primType = lex.peek().value;
-	if (primType == Type[TP_BOOL] || primType == Type[TP_SIGNED]
-			|| primType == Type[TP_UNSIGNED]) {
+	if (primType == TypeInfo::Type[TP_BOOL] || primType == TypeInfo::Type[TP_SIGNED]
+			|| primType == TypeInfo::Type[TP_UNSIGNED]) {
 		typeName = new NodeTypeName();
 		typeName->addNode(new TerminalNode(lex.read()));
 

@@ -7,8 +7,7 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-	TypeInfo::initType();
-	cout << Type[0];
+	cout << TypeInfo::Type[0];
 	exit(0);
 	string filename;
 	ifstream fileStream;

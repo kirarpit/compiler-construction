@@ -1,11 +1,7 @@
 #include "TypeInfo.h"
 
-void TypeInfo::initType() {
-
-#define XX(a, b) Type[i] = b;
-	for (int i = 0; i < TYPE_CNT; i++) {
+#define XX(a, b) b,
+const std::string TypeInfo::Type[] = {
 		TYPE_LIST
-	}
+};
 #undef XX
-
-}

@@ -19,8 +19,6 @@ enum {
 };
 #undef XX
 
-extern std::string Type[TYPE_CNT];
-
 class TypeInfo {
 public:
 	TypeInfo(int name, std::string value) :
@@ -29,8 +27,7 @@ public:
 	virtual ~TypeInfo() {
 	}
 
-	static void initType();
-
+	const static std::string Type[];
 	int name;
 	std::string value;
 	TypeInfo *typeOf;

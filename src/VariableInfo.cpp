@@ -1,5 +1,11 @@
 #include "VariableInfo.h"
 
+#define XX(a, b) b,
+const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
+		VAR_STAT_LIST
+};
+#undef XX
+
 void VariableInfo::print(OutputStream &os) {
 	os << VarStatInfo[status];
 	os << " ";

@@ -18,12 +18,6 @@ enum {
 };
 #undef XX
 
-#define XX(a, b) b,
-std::string VarStatInfo[VAR_STAT_CNT] = {
-		VAR_STAT_LIST
-};
-#undef XX
-
 class VariableInfo {
 public:
 	VariableInfo() :
@@ -35,6 +29,7 @@ public:
 	virtual ~VariableInfo() {
 	}
 
+	const static std::string VarStatInfo[];
 	void print(OutputStream &os);
 	void recursiveTypePrint(OutputStream &os, TypeInfo *type);
 	TypeInfo *type;
