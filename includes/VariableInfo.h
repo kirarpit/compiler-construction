@@ -4,11 +4,12 @@
 #include<string>
 #include<TypeInfo.h>
 #include<OutputStream.h>
+#include<Token.h>
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\
 	XX(OKAY, "okay")	\
-	XX(UNDEC, "undeclared")	\
+	XX(UNDEC, "undeclared")
 
 #define XX(a, b) VS_##a,
 enum {
@@ -25,7 +26,10 @@ std::string VarStatInfo[VAR_STAT_CNT] = {
 
 class VariableInfo {
 public:
-	VariableInfo(TypeInfo type, int status) :
+	VariableInfo() :
+			type(NULL), status(-1) {
+	}
+	VariableInfo(TypeInfo *type, int status) :
 			type(type), status(status) {
 	}
 	virtual ~VariableInfo() {
@@ -35,6 +39,7 @@ public:
 	void recursiveTypePrint(OutputStream &os, TypeInfo *type);
 	TypeInfo *type;
 	int status;
+	Token tkn;
 };
 
 #endif /* SRC_VARIABLEINFO_H_ */

@@ -18,14 +18,18 @@ void SymbolTable::updateType(int name, std::string value) {
 
 void SymbolTable::insertVar(Token id) {
 	if (isDef) {
-		if (variables.find(id) == variables.end()) {
-			variables[id] = VariableInfo(type, VS_UNUSED);
+		if (variables.find(id.value) == variables.end()) {
+			variables.insert(
+					std::pair<std::string, VariableInfo>(id.value,
+							VariableInfo(type, VS_UNUSED)));
 		}
 	} else {
-		if (variables.find(id) == variables.end()) {
-			variables[id] = VariableInfo(type, VS_UNDEC);
+		if (variables.find(id.value) == variables.end()) {
+			variables.insert(
+					std::pair<std::string, VariableInfo>(id.value,
+							VariableInfo(type, VS_UNDEC)));
 		} else {
-			variables.find(id)->second.status = VS_OKAY;
+			variables.find(id.value)->second.status = VS_OKAY;
 		}
 	}
 }
@@ -35,7 +39,7 @@ void SymbolTable::flush() {
 }
 
 void SymbolTable::print(OutputStream &os) {
-	for (std::map<Token, VariableInfo>::iterator i = variables.begin();
+	for (std::map<std::string, VariableInfo>::iterator i = variables.begin();
 			i != variables.end(); i++) {
 		os << i->first << " ";
 		i->second.print(os);

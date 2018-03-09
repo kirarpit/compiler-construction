@@ -24,7 +24,8 @@ OutputStream& OutputStream::operator<<(std::string str) {
 
 OutputStream& OutputStream::operator<<(char ch) {
 	if (buffer) {
-		std::string str = ch;
+		std::string str;
+		str.push_back(ch);
 		bufferOutput += str;
 	} else
 		os << ch;

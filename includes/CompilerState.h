@@ -12,8 +12,8 @@ using namespace std;
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, Lexer &lex) :
-			input(in), output(out), lexer(lex), error(false), errorCount(0), st(
-			NULL) {
+			input(in), output(out), lexer(lex), st(
+			NULL), error(false), errorCount(0) {
 	}
 	virtual ~CompilerState() {
 	}

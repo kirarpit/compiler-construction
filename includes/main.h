@@ -9,5 +9,7 @@
 #include<Token.h>
 #include<Logger.h>
 #include<TypeInfo.h>
+#include<VariableInfo.h>
+#include<SymbolTable.h>
 
 #endif /* INCLUDES_MAIN_H_ */

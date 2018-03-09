@@ -10,13 +10,13 @@ Node* NodeBlock::parse(CompilerState &cs) {
 		cs.st = cs.st->enterScope();
 	}
 
-	st = cs.st;
 	Node *block = NULL;
 
 	Node *defs = NodeDefs::parse(cs);
 	if (defs) {
 		block = new NodeBlock();
 		block->addNode(defs);
+		block->setSymbolTable(cs.st);
 
 		cs.st->isDef = false;
 		Node *statements = NodeStatements::parse(cs);
@@ -32,4 +32,8 @@ Node* NodeBlock::parse(CompilerState &cs) {
 
 	Logger::log("Returning NodeBlock, Token Value: " + lex.peek().value + "\n");
 	return block;
+}
+
+void NodeBlock::setSymbolTable(SymbolTable *st) {
+	myST = st;
 }

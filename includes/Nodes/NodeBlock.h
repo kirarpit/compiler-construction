@@ -3,7 +3,7 @@
 class NodeBlock: public NonTerminalNode {
 public:
 	NodeBlock() :
-			st(NULL) {
+			myST(NULL) {
 	}
 	~NodeBlock() {
 	}
@@ -20,7 +20,8 @@ public:
 		cs.st->print(cs.output);
 	}
 
+	void setSymbolTable(SymbolTable *st);
 	static Node* parse(CompilerState &cs);
 
-	SymbolTable *st;
+	SymbolTable *myST;
 };

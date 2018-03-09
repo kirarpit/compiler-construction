@@ -21,7 +21,10 @@ public:
 		return false;
 	}
 
-	virtual void printST(CompilerState &cs);
+	virtual void printST(CompilerState &cs) {
+	}
+	virtual void setSymbolTable(SymbolTable *st) {
+	}
 };
 
 class TerminalNode: public Node {

@@ -10,7 +10,7 @@
 class SymbolTable {
 public:
 	SymbolTable() :
-			parent(NULL), type(NULL), isDef(true) {
+			parent(NULL), isDef(true), type(NULL) {
 	}
 	virtual ~SymbolTable() {
 	}
@@ -32,7 +32,7 @@ public:
 	 */
 
 private:
-	std::map<Token, VariableInfo> variables;
+	std::map<std::string, VariableInfo> variables;
 	TypeInfo *type;
 };
 
