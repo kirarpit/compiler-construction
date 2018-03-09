@@ -38,11 +38,11 @@ void SymbolTable::flush() {
 	type = NULL;
 }
 
-void SymbolTable::print(OutputStream &os) {
+void SymbolTable::print(CompilerState &cs) {
 	for (std::map<std::string, VariableInfo>::iterator i = variables.begin();
 			i != variables.end(); i++) {
-		os << i->first << " ";
-		i->second.print(os);
-		os << '\n';
+		cs.output << i->first << " ";
+		i->second.print(cs);
+		cs.output << '\n';
 	}
 }

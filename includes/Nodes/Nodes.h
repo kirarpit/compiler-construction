@@ -1,7 +1,8 @@
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
-#include "CompilerState.h"
+#include<CompilerState.h>
+#include<SymbolTable.h>
 #include<typeinfo>
 
 using namespace std;
@@ -19,9 +20,6 @@ public:
 
 	virtual bool findPostfixExpr() {
 		return false;
-	}
-
-	virtual void setSymbolTable(SymbolTable *st) {
 	}
 };
 

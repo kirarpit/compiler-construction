@@ -5,6 +5,7 @@
 #include<TypeInfo.h>
 #include<OutputStream.h>
 #include<Token.h>
+#include<CompilerState.h>
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\
@@ -30,8 +31,8 @@ public:
 	}
 
 	const static std::string VarStatInfo[];
-	void print(OutputStream &os);
-	void recursiveTypePrint(OutputStream &os, TypeInfo *type);
+	void print(CompilerState &cs);
+	void recursiveTypePrint(CompilerState &cs, TypeInfo *type);
 	TypeInfo *type;
 	int status;
 	Token tkn;

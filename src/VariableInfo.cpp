@@ -6,26 +6,26 @@ const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
 };
 #undef XX
 
-void VariableInfo::print(OutputStream &os) {
-	os << VarStatInfo[status];
-	os << " ";
+void VariableInfo::print(CompilerState &cs) {
+	cs.output << VarStatInfo[status];
+	cs.output << " ";
 
 	if (type == NULL) {
-		os << "unknown";
+		cs.output << "unknown";
 	} else {
-		recursiveTypePrint(os, type);
+		recursiveTypePrint(cs, type);
 	}
 }
 
-void VariableInfo::recursiveTypePrint(OutputStream &os, TypeInfo *type) {
+void VariableInfo::recursiveTypePrint(CompilerState &cs, TypeInfo *type) {
 	if (!type) {
 		return;
 	}
 
-	recursiveTypePrint(os, type->typeOf);
+	recursiveTypePrint(cs, type->typeOf);
 	if (type->name == ARRAY || type->name == POINTER) {
-		os << "[" << type->value << "]";
+		cs.output << type->value;
 	} else if (type->name == PRIM) {
-		os << type->value;
+		cs.output << type->value;
 	}
 }

@@ -2,10 +2,11 @@
 #define SRC_SYMBOLTABLE_H_
 
 #include<map>
-#include "VariableInfo.h"
-#include "Token.h"
-#include "TypeInfo.h"
-#include "OutputStream.h"
+#include<CompilerState.h>
+#include<VariableInfo.h>
+#include<Token.h>
+#include<TypeInfo.h>
+#include<OutputStream.h>
 
 class SymbolTable {
 public:
@@ -22,7 +23,7 @@ public:
 	void updateType(int name, std::string value);
 	void insertVar(Token id);
 	void flush();
-	void print(OutputStream &out);
+	void print(CompilerState &cs);
 
 	bool isDef;
 

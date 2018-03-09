@@ -24,7 +24,6 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 		} else {
 			errorFlag = true;
 		}
-
 	} else {
 		errorFlag = true;
 	}

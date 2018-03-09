@@ -5,11 +5,16 @@ public:
 	NodeBlock() :
 			myST(NULL) {
 	}
+	NodeBlock(SymbolTable *st) :
+			myST(st) {
+	}
 	~NodeBlock() {
 		delete myST;
 	}
 
 	void print(CompilerState &cs) {
+		printST(cs);
+		cs.output << '\n';
 		for (unsigned int i = 0; i < children.size(); i++) {
 			if (i) {
 				children[i]->print(cs);
@@ -18,10 +23,9 @@ public:
 	}
 
 	void printST(CompilerState &cs) {
-		cs.st->print(cs.output);
+		myST->print(cs);
 	}
 
-	void setSymbolTable(SymbolTable *st);
 	static Node* parse(CompilerState &cs);
 
 	SymbolTable *myST;

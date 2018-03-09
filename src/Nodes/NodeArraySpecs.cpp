@@ -14,7 +14,7 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 
 			int name;
 			cs.output.startBuffer();
-			arraySpec->print(cs.output);
+			arraySpec->print(cs);
 			string arraySpecString = cs.output.clearBuffer();
 			if (arraySpecString == "") {
 				name = POINTER;

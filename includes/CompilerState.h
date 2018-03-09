@@ -5,8 +5,8 @@
 #include<Lexer.h>
 #include<Logger.h>
 #include<cstdlib>
-#include<SymbolTable.h>
 
+class SymbolTable;
 using namespace std;
 
 class CompilerState {
