@@ -8,22 +8,22 @@ public:
 	}
 
 	void print(CompilerState &cs) {
-		out.printWhiteSpaces();
+		cs.output.printWhiteSpaces();
 
 		if (children.size() == 3) {
-			out << '{';
-			out << '\n';
+			cs.output << '{';
+			cs.output << '\n';
 
-			out.indent();
-			children[1]->print(out);
-			out.deindent();
+			cs.output.indent();
+			children[1]->print(cs);
+			cs.output.deindent();
 
-			out.printWhiteSpaces();
-			out << '}';
+			cs.output.printWhiteSpaces();
+			cs.output << '}';
 		} else
-			printAllChildren(out);
+			printAllChildren(cs);
 
-		out << '\n';
+		cs.output << '\n';
 	}
 
 	static Node* parse(CompilerState &cs);

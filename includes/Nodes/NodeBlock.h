@@ -12,7 +12,7 @@ public:
 	void print(CompilerState &cs) {
 		for (unsigned int i = 0; i < children.size(); i++) {
 			if (i) {
-				children[i]->print(out);
+				children[i]->print(cs);
 			}
 		}
 	}

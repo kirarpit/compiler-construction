@@ -7,7 +7,7 @@ void NodeSpike3::parse(CompilerState &cs) {
 	Node *block = NodeBlock::parse(cs);
 	block->printST(cs);
 	cs.output << '\n';
-	block->print(cs.output);
+	block->print(cs);
 	delete block;
 
 	Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
