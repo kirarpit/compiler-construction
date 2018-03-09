@@ -7,8 +7,12 @@ void NodeSpike3::parse(CompilerState &cs) {
 	Node *block = NodeBlock::parse(cs);
 	if (block)
 		block->print(cs);
-	Logger::log("Deleting BLock");
+	Logger::log("Deleting Block");
 	delete block;
+
+	if (cs.lexer.peek().type != "EOF") {
+		cs.reportError();
+	}
 
 	Logger::log("Consumed Terminal:" + lex.peek().value);
 	lex.read();

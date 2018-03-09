@@ -31,7 +31,6 @@ public:
 	void insertVar(Token id);
 	void flush(bool error);
 	void print(CompilerState &cs);
-	TypeInfo* deepCopy(TypeInfo *type);
 
 	bool isDef;
 
@@ -39,6 +38,7 @@ private:
 	std::map<std::string, VariableInfo> variables;
 	TypeInfo *varType;
 	std::vector<std::string> varIDs;
+	TypeInfo* deepCopy(TypeInfo *type);
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

@@ -1,6 +1,7 @@
                  CS554 Spike2 - LOBO-C TYPES AND BLOCKS
 
   CONTACT INFORMATION
+
      Author:          Arpit Garg
      Email(s):        iarpitgarg@gmail.com, kiralobo@cs.unm.edu
      Date:            Fri March 9 12:42:11 2018 
@@ -14,33 +15,43 @@
 
   SPECIFICATION ISSUES
 
-    The following discussion is with respect to the spike2.txt
+    The following discussion is with respect to the spike3.txt
     specification. The following issues were noted during project
     development, presented along with the chosen resolutions:
                                                              
-    - ISSUE #1: In case an error is encountered while parsing 
+    - ISSUE #1: In the provided test cases outputs, blank line at the
+      end of the file seems to be missing.
+    - RESOLUTION: This behaviour is not replicated and a blank line is
+      added at the end of the given test cases output files. Refer
+      (s3.4.6.2.3.5) for further information.
+
+    - ISSUE #2: If extra closing curly bracket is encountered, then
+      BLOCK parsing returns and no error recovery is performed. Program
+      then exits with +1 error count. (See t15.blk* for more info)
+
+  IMPLEMENTATION SPECIFICS           
+
+    The enclosed spike3 is a fully-conforming implementation of the
+    spike3.txt specification, passing all supplied tests.
+    
+    - SPECIFIC #1: In case an error is encountered while parsing 
+      DEFS, the whole definition would be ignored as if it wasn't there
+      to start with. It would not appear in VDI at all or anywhere else.
+
+    - SPECIFIC #2: In case an error is encountered while parsing 
       STATEMENTS, the whole statement in which error is found would be
       ignored in BOFPIF output but any varaibles that occur before the
       error would still be parsed for variable declaration.
-      the expression Output in the test cases when errors are encountered is
-      inconsistent. Possibly because of a bug where semicolon in not
-      being checked before printing the parsed tree.
-    - RESOLUTION #1: Since, the spike specification doesn't talk about
-      the output when errors are encountered, I've taken the liberty
-      to be consistent with the inconsistency and reproduce the bug.
-
-    - ISSUE #2: In ASGN_EXPR, when COND_EXPR is successfully parsed
-      and "=" token is found next, the parse COND_EXPR is assumed to
-      be POSTFIX_EXPR instead. So, some inputs like "-1=1;" would be
-      parsed as if they are legal. Although, they would result into 
-      their legal counterparts i.e. ((-1)=1) in above example.
-    - RESOLUTION #2: Kind of a hack, fixed it for now.
-
-  IMPLEMENTATION SPECIFICS           
-                                     
-    The enclosed spike1 is a fully-conforming implementation of the
-    spike1.txt (version 11) specification, passing all supplied tests.
     
+    - SPECIFIC #3: If more than 9 errors are encountered, the program
+      gives up faith in machines and exits right away without any 
+      sanity checks.
+
+    - SPECIFIC #4: Block is printed before checking whether the next token
+      is EOF or not.
+
+  BUILD AND MAKE SPECIFICS           
+
     How to build and test?
      - `make` 		- compiles and builds the source code
      - `make test` 	- for automatically checking all the *.expi test
@@ -50,9 +61,9 @@
      - `make realclean` - removes the object files and executables
 
     How to use?
-     - ./spike1 <filename> 	- reads file contents and returns output
+     - ./spike3 <filename> 	- reads file contents and returns output
 				  as standard output
-     - cat <filename> | ./spike - takes file contents as standard input
+     - cat <filename> | ./spike3 - takes file contents as standard input
 				  and returns output as standard output
 
   ACKNOWLEDGMENTS:
