@@ -2,8 +2,7 @@
 
 Node* NodeLogandExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log(
-			"Parsing NodeLogandExpr, Token Value: " + lex.peek().value);
+	Logger::log("Parsing NodeLogandExpr, Token Value: " + lex.peek().value);
 
 	Node *logandExpr = new NodeLogandExpr();
 
@@ -31,8 +30,6 @@ Node* NodeLogandExpr::parse(CompilerState &cs) {
 		logandExpr = tempLogandExpr;
 	}
 
-	Logger::log(
-			"Returning NodeLogandExpr, Token Value: " + lex.peek().value
-					+ "\n");
+	Logger::log("Returning NodeLogandExpr, Token Value: " + lex.peek().value);
 	return logandExpr;
 }

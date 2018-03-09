@@ -34,7 +34,7 @@ public:
 
 	const static std::string VarStatInfo[];
 
-	void setType(TypeInfo *node);
+	void setType(TypeInfo *type);
 
 	void print(CompilerState &cs);
 	void recursiveTypePrint(CompilerState &cs, TypeInfo *type);

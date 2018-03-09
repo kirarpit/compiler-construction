@@ -45,7 +45,6 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodePrimaryExpr, Token Value: " + lex.peek().value
-					+ "\n");
+			"Returning NodePrimaryExpr, Token Value: " + lex.peek().value);
 	return primaryExpr;
 }

@@ -11,14 +11,19 @@ SymbolTable* SymbolTable::exitScope() {
 }
 
 void SymbolTable::updateVarType(int name, Node* node) {
-	Logger::log("Updating Type Number %d", name);
-	TypeInfo *newType = new TypeInfo(name, node);
-	newType->typeOf = varType;
-	varType = newType;
+	Logger::log("Updating Type: " + TypeInfo::Type[name]);
+
+	if (name == PRIM) {
+		varType = new TypeInfo(name, node);
+	} else {
+		TypeInfo *newType = new TypeInfo(name, node);
+		newType->typeOf = varType;
+		varType = newType;
+	}
 }
 
 void SymbolTable::insertVar(Token id) {
-	Logger::log("Inserting an ID:" + id.value);
+	Logger::log("Inserting an ID: " + id.value);
 
 	if (isDef) {
 		if (variables.find(id.value) == variables.end()) {
@@ -38,8 +43,7 @@ void SymbolTable::insertVar(Token id) {
 
 void SymbolTable::flush() {
 	Logger::log("Flushing Type value where bool(type) is %d", varType ? 1 : 0);
-
-	varType = NULL;
+	delete varType;
 }
 
 void SymbolTable::print(CompilerState &cs) {

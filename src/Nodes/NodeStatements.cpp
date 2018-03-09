@@ -26,7 +26,6 @@ Node* NodeStatements::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodeStatements, Token Value: " + lex.peek().value
-					+ "\n");
+			"Returning NodeStatements, Token Value: " + lex.peek().value);
 	return statements;
 }

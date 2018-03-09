@@ -18,7 +18,7 @@ public:
 	virtual ~CompilerState() {
 	}
 
-	int reportError();
+	void reportError();
 	int getErrorCount();
 	void recover();
 

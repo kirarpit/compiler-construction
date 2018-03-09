@@ -1,13 +1,14 @@
 #include"CompilerState.h"
 
-int CompilerState::reportError() {
-	Logger::log("Error Reported, total error count: \n");
+void CompilerState::reportError() {
+	error = true;
+	++errorCount;
 
-	if (errorCount == 9) {
+	Logger::log("Error Reported, total error count: %d", errorCount);
+
+	if (errorCount == 10) {
 		exit(10);
 	}
-	error = true;
-	return ++errorCount;
 }
 
 int CompilerState::getErrorCount() {

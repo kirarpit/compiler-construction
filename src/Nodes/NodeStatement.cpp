@@ -2,10 +2,8 @@
 
 Node* NodeStatement::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log(
-			"Parsing NodeStatement, Token Value: " + lex.peek().value);
+	Logger::log("Parsing NodeStatement, Token Value: " + lex.peek().value);
 
-	bool errorFlag = false;
 	Node *statement = new NodeStatement();
 
 	if (lex.peek().value == "{") {
@@ -19,12 +17,8 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
 				cs.reportError();
-				errorFlag = true;
 			}
-		} else {
-			errorFlag = true;
 		}
-
 	} else {
 		Node *expr = NodeExpr::parse(cs);
 
@@ -35,19 +29,17 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
 				cs.reportError();
-				errorFlag = true;
 			}
-		} else {
-			errorFlag = true;
 		}
 	}
 
-	if (errorFlag) {
+	if (cs.error) {
 		delete statement;
-		return NULL;
+		statement = new NodeStatement();
+		cs.recover();
+		cs.st->flush();
 	}
 
-	Logger::log(
-			"Returning NodeStatement, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeStatement, Token Value: " + lex.peek().value);
 	return statement;
 }

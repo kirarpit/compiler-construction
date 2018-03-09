@@ -4,7 +4,6 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log("Parsing NodeVarDef, Token Value: " + lex.peek().value);
 
-	bool errorRecovery = false;
 	Node *varDef = NULL;
 
 	Node *typeSpec = NodeTypeSpec::parse(cs);
@@ -18,25 +17,21 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 			if (lex.peek().value == ";") {
 				varDef->addNode(new TerminalNode(lex.read()));
-
-				cs.st->flush();
 			} else {
 				cs.reportError();
 				delete varDef;
-				errorRecovery = true;
 			}
 		} else {
 			delete varDef;
-			errorRecovery = true;
 		}
 	}
 
-	if (errorRecovery) {
+	if (cs.error) {
 		cs.recover();
+		cs.st->flush();
 		varDef = new NodeVarDef();
 	}
 
-	Logger::log(
-			"Returning NodeVarDef, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeVarDef, Token Value: " + lex.peek().value);
 	return varDef;
 }
