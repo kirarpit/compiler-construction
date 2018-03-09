@@ -1,0 +1,408 @@
+SPIKE3 - LOBO-C TYPES AND BLOCKS - VERSION spike3-12
+
+((s3.0)) Key dates
+
+  ((s3.0.1)) spike3 is due on Friday March 9, 2018 at 5pm.
+
+  ((s3.0.2)) The spike3 code turn-in mechanism will be similar to that
+             of the previous spikes, and any significant changes will
+             be detailed in class.
+
+((s3.1)) The primary task of spike3 is to write a standalone program
+'spike3' -- in C, C++, or Java -- that reads a legal LOBO-C block from
+a filename supplied on the command line, or from standard input, then
+prints, to standard output, information about the variable
+declarations and uses, and LOBO-C expressions, found within the block.
+The output format for spike3 is 'block-oriented fully-parenthesized
+infix form' ('BOFPIF'), the details of which are specified below.
+
+((s3.1.1)) Note that spike3 programs SHOULD include and make use of
+essentially all of the parser developed in spike2.  The top-level
+'driver' or main program will necessarily be different, since the
+spike3 input-output requirements are different, but the spike2
+specification _remains_normative_ for spike3 unless explicitly
+overruled in this document.  (And since the spike2 specification
+defaults to the spike1 specification, by transitivity that is
+normative here as well.)
+
+((s3.2)) This task is described by a 'spec package', which is a zip
+file named 'spike3-' plus a version number, such as 'spike3-10.zip'.
+
+  ((s3.2.1.1)) A spike3 spec package with a larger version number
+               supercedes any with a smaller version number.
+
+  ((s3.2.1.2)) See (s3.9) below for details of any spec package
+               revisions.
+
+  ((s3.2.2)) Files in the spike3 spec package include:
+
+   ((s3.2.2.1)) spike3.txt: This file.  Everything in spike3.txt is
+                normative for the spike3 task, unless otherwise noted.
+
+   ((s3.2.2.2)) implementation-notes.txt: Some suggestions and
+                discussion about implementation choices.  Everything
+                in implementation-notes.txt is advisory for spike3.
+
+   ((s3.2.2.3)) tests/*.(blki|blko): Files containing legal test input
+                (.blki files) according to the specification below
+                (s3.3), and their corresponding required fully
+                parenthesized outputs (.blko files).
+
+    ((s3.2.2.3.1)) Note there are two kinds of 'blk' files in tests.
+                   .blki files beginning with 't' (e.g., 't10.blki')
+                   contain only legal inputs, and spike3 is expected
+                   to exit with status zero (s3.5.4) when given such a
+                   file.  
+
+    ((s3.2.2.3.1.1)) On the other hand, .blki files beginning with 'e'
+                     (e.g., 'e10.blki') -- if any are included --
+                     contain at least one illegal input according to
+                     the spike3 grammar.  spike3 is expected to
+                     perform error recovery (s3.5.3) and continue
+                     processing, ultimately exiting with a specific
+                     non-zero status (see (s3.5.4.2)).
+
+    ((s3.2.2.3.2)) Note that the '.blko' files provide the EXACT
+                   BYTE-FOR-BYTE target output for the corresponding
+                   '.blki'.  What your spike3 program sends to
+                   standard output SHOULD match the contents of the
+                   .blko file _exactly_, EXCEPT POSSIBLY in matters of
+                   minor whitespace differences in the AST report (see
+                   (s3.4.6)).
+
+      ((s3.2.2.3.2.1)) Still, however, if your spike3 outputs any
+                   prompts or debug messages -- or anything else,
+                   except the required output -- to standard output,
+                   that is a spec violation!
+
+      ((s3.2.2.3.2.2)) Note this specification says nothing about any
+                   output -- or the lack thereof -- sent to standard
+                   error.  Any and all output sent to standard error
+                   will be ignored during testing and therefore cannot
+                   affect the test results.
+
+    ((s3.2.2.3.2)) Note also there are _many_ aspects of the spike3
+                   token specification that the provided examples do
+                   not test!  You are expected to develop additional
+                   .blki/.blko files of your own!
+
+((s3.3)) This section describes the spike3 target grammar.  With minor
+exceptions (see (s3.3.1.1) below), this grammar describes the legal
+expressions in LOBO-C.
+
+((s3.3.1)) This is the spike3 target grammar:
+
+SPIKE3         <- BLOCK EOF
+
+BLOCK          <- DEFS STATEMENTS
+DEFS           <- | DEF DEFS
+STATEMENTS     <- | STATEMENT STATEMENTS
+DEF            <- VAR_DEF
+VAR_DEF        <- TYPE_SPEC VAR_NAMES ";"
+VAR_NAMES      <- VAR_NAME OPT_VAR_NAMES
+VAR_NAME       <- IDENTIFIER
+OPT_VAR_NAMES  <- | "," VAR_NAMES
+TYPE_SPEC      <- TYPE_NAME OPT_ARRAY_SPECS
+TYPE_NAME      <- PRIM_TYPE
+PRIM_TYPE      <- "bool" | "unsigned" | "signed"
+
+STATEMENT      <- "{" STATEMENTS "}" | EXPR ";"
+EXPR           <- ASGN_EXPR | EXPR "," ASGN_EXPR
+ASGN_EXPR      <- POSTFIX_EXPR "=" ASGN_EXPR | COND_EXPR
+COND_EXPR      <- LOGOR_EXPR "?" EXPR ":" COND_EXPR | LOGOR_EXPR
+LOGOR_EXPR     <- LOGAND_EXPR | LOGOR_EXPR "||" LOGAND_EXPR
+LOGAND_EXPR    <- EQ_EXPR | LOGAND_EXPR "&&" EQ_EXPR
+EQ_EXPR        <- REL_EXPR | EQ_EXPR EQ_OP REL_EXPR
+REL_EXPR       <- SIMPLE_EXPR | REL_EXPR REL_OP SIMPLE_EXPR
+SIMPLE_EXPR    <- TERM | SIMPLE_EXPR TERM_OP TERM
+TERM           <- FACTOR | TERM FACTOR_OP FACTOR
+FACTOR         <- POSTFIX_EXPR | PREUN_OP FACTOR
+POSTFIX_EXPR   <- PRIMARY_EXPR | POSTFIX_EXPR POSTUN_OP | POSTFIX_EXPR ARRAY_SPEC
+OPT_ARRAY_SPECS<- | ARRAY_SPEC OPT_ARRAY_SPECS
+ARRAY_SPEC     <- "[" OPT_ARRAY_SIZE "]"
+OPT_ARRAY_SIZE <- | EXPR
+PRIMARY_EXPR   <- IDENTIFIER | NUMBER | "(" EXPR ")"
+
+TERM_OP        <- "+" | "-"
+FACTOR_OP      <- "*" | "/"
+EQ_OP          <- "==" | "!="
+REL_OP         <- "<" | "<=" | ">" | ">="
+PREUN_OP       <- "-" | "--" | "++" | "&"
+POSTUN_OP      <- "--" | "++"
+
+IDENTIFIER     <- {any spike1 IDENTIFIER token}
+NUMBER         <- {any spike1 NUMBER token}
+
+((s3.3.1.1)) As an informational note only: The spike3 target grammar
+is a rule-by-rule subset of the overall LOBO-C grammar, with the
+following two exceptions:
+
+  ((s3.3.1.1.1)) The SPIKE3 rule in the spike3 target grammar does not
+  appear in the full LOBO-C grammar, and
+
+  ((s3.3.1.1.2)) The STATEMENT rule in the spike3 target grammar is
+  somewhat simplified compared to the STATEMENT rule of the full
+  LOBO-C grammar.  (See implementation-notes.txt).
+
+((s3.3.2)) Additional information about the spike3 grammar
+
+((s3.3.2.1)) Each terminal string in the spike3 grammar (an entity
+surrounded by double quotes) shall be represented by the corresponding
+spike1 (or spike2 by inclusion) token.
+
+((s3.3.2.2)) This spec does not mention how to process whitespace or
+comments, because the spike1 spec (via the spike2 spec) remains in
+force in those matters.
+
+((s3.4)) PRINTING IN BLOCK-ORIENTED FULLY-PARENTHESIZED INFIX FORM
+
+((s3.4.1)) This section describes the key portion of the spike3
+required output format: 'block-oriented fully-parenthesized infix' format.
+
+((s3.4.2)) The purpose of Block-Oriented Fully-Parenthesized Infix
+Form (abbreviated BOFPIF) is to have an easy-to-read, clear and
+unambiguous representation of a spike3 parse tree.
+
+((s3.4.3)) BOFPIF consists of two parts, output in this order:
+
+  (1) A 'variables summary report' (VSR) containing one or more lines
+      (see (s3.4.5)), and
+
+  (2) An 'AST report' (ASTR) containing the parse trees in a FPIF
+      format similar to that of spike2 (see (s3.4.6)), except
+      augmented with multiple lines, indentation, and block structure.
+
+((s3.4.4)) <THIS SECTION DELETED>
+
+((s3.4.5)) The Variables Summary Report (VSR) lists, one per line,
+variable description information (VDI) about variables that appear
+within the block, plus information associated with each.  The VDIs are
+listed in lexicographic order of the variable names, using the ASCII
+collating sequence.  At the end of the VSR, a single blank line
+(containing just a newline) is output.
+
+((s3.4.5.1)) Each VDI consists of three components separated by two
+single spaces and followed by a newline.
+
+((s3.4.5.1)) The three VDI components, in order, are:
+
+((s3.4.5.1.1)) The first VDI component is the name of the variable,
+
+((s3.4.5.1.2)) The second VDI component is one of three words, depending
+on circumstances within the SPIKE3 BLOCK:
+
+  ((s3.4.5.1.2.1)) The word 'unused', if the variable was declared in
+  the BLOCK's DEFS, but then never used in the BLOCK's STATEMENTS.
+
+    ((s3.4.5.1.2.1.1)) If a variable 'foo' appears in DEFS as part of
+    the _declaration_ of another variable, _that_ appearance of 'foo'
+    is neither a 'declaration' nor a 'use' for the spike3 VDI.
+
+  ((s3.4.5.1.2.2)) The word 'undeclared', if the variable was used in
+  STATEMENTS without having been declared in DEFS, or
+
+  ((s3.4.5.1.2.3)) The word 'okay', if the variable was both declared
+  in DEFS and used in STATEMENTS.
+
+((s3.4.5.1.2)) The third VDI component is the type of the variable,
+unless the second component is 'undeclared', in which case the third
+components is the word 'unknown'.  When a type is known, it is printed
+in an FPIF form appropriate for types (see (s3.4.5.2.2)).
+
+((s3.4.5.2)) Here are two VSR-only  examples.  NOTE THESE EXAMPLES ARE
+NOT COMPLETE SPIKE3 OUTPUTS!
+
+((s3.4.5.2.1))   input: 
+1+2*3;4-5?
+6:7;
+((s3.4.5.2.1.1))   VSR:
+
+
+((s3.4.5.2.1.2)) Discussion: The VSR output consists of a single blank
+line, because no variables were encountered, so no VDIs were printed.
+
+((s3.4.5.2.2))   input: 
+signed x,a; unsigned[3][2+3*4][] b; a=x*c; c=3+-x;
+((s3.4.5.2.2.1))   VSR:
+a okay signed
+b unused unsigned[3][(2+(3*4))][]
+c undeclared unknown
+x okay signed
+
+
+((s3.4.5.2.2.2)) Types are printed out as a legal LOBO-C declaration
+of the type that was parsed, with two additional constraints:
+
+  ((s3.4.5.2.2.2.1)) FPIF output is used for any expressions found in
+  array specs.
+
+  ((s3.4.5.2.2.2.2)) The output form of a LOBO-C type should contain
+  no embedded whitespace regardless of the complexity of the type.
+
+((s3.4.5.2.2.3)) And again, there is a blank line at the end of the
+VSR.
+
+((s3.4.6)) The AST Report (ASTR) 
+
+((s3.4.6.1)) Following the VSR, the STATEMENTS of the BLOCK are
+printed out according to the rules presented in this section.
+
+((s3.4.6.2)) Here is an example of an ASTR.  NOTE THIS EXAMPLE IS NOT
+COMPLETE SPIKE3 OUTPUTS!
+
+((s3.4.6.2.1)) input:
+x;{ a = b; {   } {
+{ c;
+}}}f;
+
+((s3.4.6.2.2)) ASTR:
+x;
+{
+  (a=b);
+  {
+  }
+  {
+    {
+      c;
+    }
+  }
+}
+f;
+
+((s3.4.6.2.3)) Some points to notice in that example:
+
+ ((s3.4.6.2.3.1)) Each STATEMENT of the BLOCK's STATEMENTS is printed
+                  out in turn: First the 'x;', then the long
+                  brace-delimited form, then the 'f;'.
+
+ ((s3.4.6.2.3.2)) Each line of output of a nested block is indented by
+                  two spaces relative to its enclosing block (if any).
+                  
+ ((s3.4.6.2.3.3)) Each opening or closing braces appears on a line
+                  by itself, and the matched braces always have the
+                  same indentation.
+
+ ((s3.4.6.2.3.4)) Brace-delimited STATEMENTS always generate the
+                  braces on output, even if there is no STATEMENT
+                  inside.
+
+ ((s3.4.6.2.3.5)) Each STATEMENT of the form EXPR ";" is printed on a
+                  single line, appropriately indented, in spike2-style
+                  FPIF, followed by a ";" and a newline.
+
+((s3.5)) Overall flow of the spike3 program
+
+((s3.5.1)) The spike3 program may be run with either zero or one
+command line argument.  If one command line argument is supplied, it
+is interpreted as a file path which is opened for reading.  If it
+cannot be opened for reading, spike3 exits with non-zero status.  If
+no command line argument is supplied, spike3 reads from standard
+input.
+
+((s3.5.2)) In either case, spike3 then parses a single BLOCK, and then
+checks for EOF (with appropriate error detection and reporting if
+either of those steps fail).
+
+((s3.5.2.1)) Once the BLOCK has been parsed, it is analyzed as needed
+to produce and output the VSR and the ASTR.
+
+((s3.5.2.2)) After the BLOCK has been parsed, analyzed, and reported,
+spike3 exits (with status 0, unless there is a failure in (s3.5.2)).
+
+((s3.5.2.3)) Here is a complete spike3 processing example:
+
+((s3.5.2.3.1)) spike3 input:
+---cut here---
+signed[][3-4*3][3] e; bool[3] ea,x;
+e+2;b=3;--e;
+{ 3*3-3-f; {} { e[2-1] = 99+8-3*ea; }
+}
+---cut here---
+
+((s3.5.2.3.2)) And its corresponding spike3 output:
+---cut here---
+b undeclared unknown
+e okay signed[][(3-(4*3))][3]
+ea okay bool[3]
+f undeclared unknown
+x unused bool[3]
+
+(e+2);
+(b=3);
+(--e);
+{
+  (((3*3)-3)-f);
+  {
+  }
+  {
+    ((e[(2-1)])=((99+8)-(3*ea)));
+  }
+}
+---cut here---
+
+((s3.5.3)) ERROR HANDLING
+
+((s3.5.3.1)) spike3 handles parsing and lexical errors in EXPRs in
+essentially the same manner as spike2, as described in (s2.5.3.1.2) --
+except for these differences:
+
+  ((s3.5.3.1.1)) The first occurrence of any of these tokens -- ";",
+  "}", or EOF -- ends the token-discarding phase of error recovery.
+
+  ((s3.5.3.1.2)) If a ";" token is encountered during recovery,
+  parsing resumes in the nearest enclosing STATEMENT.
+
+  ((s3.5.3.1.3)) If a "}" token encountered first during recovery,
+  spike3 issues an additional error, and the parsing of the nearest
+  enclosing STATEMENT ends.
+
+  ((s3.5.3.1.4)) If an EOF token encountered first during recovery,
+  spike3 issues an additional error, and the parsing of the BLOCK
+  ends.
+
+((s3.5.3.2)) spike3 handles parsing and lexical errors in DEFS
+analogously -- encountering ";" recovers to the DEFS, while EOF
+terminates the parsing of the BLOCK.
+
+((s3.5.4)) EXIT PROCESSING
+
+((s3.5.4.1)) When spike3 has completed its processing (see
+(s3.5.2.2)), spike3 exits with an exit status determined as follows:
+
+((s3.5.4.1.1)) If error recovery ((s3.5.3.1) and/or (s3.5.3.2)) was
+performed more than 9 times during this run of spike2, spike3 exits
+with status 10.
+
+((s3.5.4.1.3)) Otherwise, spike3's exit status is the number times
+error recovery was performed.
+
+  ((s3.5.4.1.3.1)) Note this implies spike3's exit status is 0 only if
+  error recovery never needed to be performed.
+
+((s3.6)) Unused reserved
+
+((s3.7)) Unused reserved
+
+((s3.8)) Unused reserved
+
+((s3.9)) Spec revision history
+
+((s3.9.1)) Version spike3-10 released Thu Mar  1 09:41:36 2018 
+
+((s3.9.2)) Version spike3-11 released Thu Mar  1 15:49:11 2018
+
+  ((s3.9.2.1)) CHANGES:
+
+    ((s3.9.2.1.1)) Correct and complete grammar (tx John M)
+
+    ((s3.9.2.1.2)) Add (s3.5.3) and (s3.5.4)
+
+((s3.9.3)) Version spike3-12 released Tue Mar  6 16:30:47 2018 
+
+  ((s3.9.3.1)) CHANGES:
+
+    ((s3.9.3.1.1)) Try again to complete grammar grr (tx John M, Arpit)
+
+    ((s3.9.3.1.2)) Rework (s3.4.5.1.2) to exclude DEFS from possible
+    variable uses (tx Brendan)
+
