@@ -7,6 +7,7 @@
 #include<Token.h>
 #include<TypeInfo.h>
 #include<OutputStream.h>
+#include<Nodes/Nodes.h>
 
 class SymbolTable {
 public:
@@ -20,7 +21,7 @@ public:
 
 	SymbolTable* enterScope();
 	SymbolTable* exitScope();
-	void updateType(int name, std::string value);
+	void updateType(int name, Node* node);
 	void insertVar(Token id);
 	void flush();
 	void print(CompilerState &cs);

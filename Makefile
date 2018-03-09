@@ -19,4 +19,6 @@ topclean:	FORCE
 	rm -f *~
 	rm -f notes/*~
 
+depend:	FORCE
+	make -C src depend
 .PHONY:	FORCE

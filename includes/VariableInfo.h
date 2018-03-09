@@ -6,6 +6,7 @@
 #include<OutputStream.h>
 #include<Token.h>
 #include<CompilerState.h>
+#include<Nodes/Nodes.h>
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\

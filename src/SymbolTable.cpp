@@ -10,8 +10,8 @@ SymbolTable* SymbolTable::exitScope() {
 	return parent;
 }
 
-void SymbolTable::updateType(int name, std::string value) {
-	TypeInfo *newType = new TypeInfo(name, value);
+void SymbolTable::updateType(int name, Node* node) {
+	TypeInfo *newType = new TypeInfo(name, node);
 	newType->typeOf = type;
 	type = newType;
 }

@@ -1,4 +1,5 @@
 #include "Nodes.h"
+#include "SymbolTable.h"
 
 class NodeBlock: public NonTerminalNode {
 public:

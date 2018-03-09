@@ -2,6 +2,7 @@
 #define SRC_TYPEINFO_H_
 
 #include<string>
+class Node;
 
 enum {
 	PRIM, ARRAY, POINTER
@@ -21,15 +22,15 @@ enum {
 
 class TypeInfo {
 public:
-	TypeInfo(int name, std::string value) :
-			name(name), value(value), typeOf(NULL) {
+	TypeInfo(int name, Node* node) :
+			name(name), value(node), typeOf(NULL) {
 	}
 	virtual ~TypeInfo() {
 	}
 
 	const static std::string Type[];
 	int name;
-	std::string value;
+	Node* value;
 	TypeInfo *typeOf;
 };
 

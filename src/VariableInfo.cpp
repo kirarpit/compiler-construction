@@ -24,8 +24,8 @@ void VariableInfo::recursiveTypePrint(CompilerState &cs, TypeInfo *type) {
 
 	recursiveTypePrint(cs, type->typeOf);
 	if (type->name == ARRAY || type->name == POINTER) {
-		cs.output << type->value;
+		type->value->print(cs);
 	} else if (type->name == PRIM) {
-		cs.output << type->value;
+		type->value->print(cs);
 	}
 }

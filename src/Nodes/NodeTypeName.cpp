@@ -14,7 +14,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 		typeName = new NodeTypeName();
 		typeName->addNode(new TerminalNode(lex.read()));
 
-		cs.st->updateType(PRIM, primType);
+		cs.st->updateType(PRIM, typeName);
 	} else {
 		cs.reportError();
 	}

@@ -21,13 +21,12 @@ TARNAME:=$(TARBASE).tar
 
 # Here we support both C and C++ though we'd usually blkect just one or the other
 CPP_FILES = $(shell find ./ -type f -name '*.cpp')
-HDR_FILES:=$(wildcard $(INCLUDE_DIR)/*.h)
-NODES_HDR_FILES:=$(wildcard $(INCLUDE_DIR)/Nodes/*.h)
+HDR_FILES:=$(shell find ./ -type f -name '*.h')
 
 CPPOBJ_FILES:=$(patsubst %.cpp,%.o,$(CPP_FILES))
 
 # Set up so changes in any file in ALL_DEP trigger a full rebuild
-ALL_DEP:=$(HDR_FILES) $(NODES_HDR_FILES) Makefile
+ALL_DEP:=$(HDR_FILES) Makefile
 INCLUDES:=-I $(INCLUDE_DIR)
 
 # Test files info
@@ -57,5 +56,13 @@ realclean: clean
 
 tar:	realclean
 	cd ..;tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
+
+depend: .depend
+
+.depend:	$(CPP_FILES)
+	rm -f ./.depend
+	g++ $(CPPFLAGS) -MM $^ -MF ./.depend;
+
+include .depend
 
 .PHONY:	FORCE

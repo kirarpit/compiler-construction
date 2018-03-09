@@ -12,16 +12,7 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 		if (arraySpec) {
 			arraySpecs->addNode(arraySpec);
 
-			int name;
-			cs.output.startBuffer();
-			arraySpec->print(cs);
-			string arraySpecString = cs.output.clearBuffer();
-			if (arraySpecString == "") {
-				name = POINTER;
-			} else {
-				name = ARRAY;
-			}
-			cs.st->updateType(name, arraySpecString);
+			cs.st->updateType(ARRAY, arraySpec);
 
 			Node *nextArraySpecs = NodeArraySpecs::parse(cs);
 			if (nextArraySpecs) {
