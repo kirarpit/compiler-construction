@@ -11,6 +11,8 @@ void VariableInfo::setType(TypeInfo *typeInfo) {
 }
 
 void VariableInfo::print(CompilerState &cs) {
+	Logger::log("Printing VariableInfo");
+
 	cs.output << VarStatInfo[status];
 	cs.output << " ";
 
@@ -22,6 +24,7 @@ void VariableInfo::print(CompilerState &cs) {
 }
 
 void VariableInfo::recursiveTypePrint(CompilerState &cs, TypeInfo *type) {
+	Logger::log("Recursively Printing Type");
 	if (!type) {
 		return;
 	}

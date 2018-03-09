@@ -2,6 +2,7 @@
 #define SRC_SYMBOLTABLE_H_
 
 #include<map>
+#include<vector>
 #include<CompilerState.h>
 #include<VariableInfo.h>
 #include<Token.h>
@@ -13,8 +14,11 @@ class SymbolTable {
 public:
 	SymbolTable() :
 			parent(NULL), isDef(true), varType(NULL) {
+		Logger::log("SymbolTable Constructor Called");
+
 	}
 	virtual ~SymbolTable() {
+		Logger::log("SymbolTable Destructor Called");
 		if (varType)
 			delete varType;
 	}
@@ -25,7 +29,7 @@ public:
 	SymbolTable* exitScope();
 	void updateVarType(int name, Node* node);
 	void insertVar(Token id);
-	void flush();
+	void flush(bool error);
 	void print(CompilerState &cs);
 	TypeInfo* deepCopy(TypeInfo *type);
 
@@ -34,6 +38,7 @@ public:
 private:
 	std::map<std::string, VariableInfo> variables;
 	TypeInfo *varType;
+	std::vector<std::string> varIDs;
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

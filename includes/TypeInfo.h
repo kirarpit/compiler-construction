@@ -2,6 +2,7 @@
 #define SRC_TYPEINFO_H_
 
 #include<string>
+#include<Logger.h>
 class Node;
 
 enum {
@@ -24,8 +25,10 @@ class TypeInfo {
 public:
 	TypeInfo(int name, Node* node) :
 			name(name), value(node), typeOf(NULL) {
+		Logger::log("TypeInfo Constructor Called");
 	}
 	virtual ~TypeInfo() {
+		Logger::log("TypeInfo Destructor Called");
 		if (typeOf)
 			delete typeOf;
 	}

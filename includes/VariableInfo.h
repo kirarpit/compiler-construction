@@ -24,9 +24,11 @@ class VariableInfo {
 public:
 	VariableInfo() :
 			type(NULL), status(-1) {
+		Logger::log("VariableInfo Constructor w/o arguments Called");
 	}
 	VariableInfo(int status) :
 			type(NULL), status(status) {
+		Logger::log("VariableInfo Constructor w/ 1 argument Called");
 	}
 	virtual ~VariableInfo() {
 		Logger::log("VariableInfo Destructor Called");

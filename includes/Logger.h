@@ -12,8 +12,6 @@ public:
 	virtual ~Logger();
 	static void log(std::string str);
 	static void log(std::string str, int i);
-	static void logEntry();
-	static void logExit();
 	static bool debug;
 
 private:

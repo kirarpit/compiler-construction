@@ -37,7 +37,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		delete statement;
 		statement = new NodeStatement();
 		cs.recover();
-		cs.st->flush();
+		cs.st->flush(true);
 	}
 
 	Logger::log("Returning NodeStatement, Token Value: " + lex.peek().value);

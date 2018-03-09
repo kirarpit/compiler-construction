@@ -16,6 +16,7 @@ int CompilerState::getErrorCount() {
 }
 
 void CompilerState::recover() {
+	Logger::log("Error Recovery Started");
 	while (lexer.peek().value != ";" && lexer.peek().value != "}"
 			&& lexer.peek().type != "EOF") {
 		lexer.read();

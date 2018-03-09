@@ -1,14 +1,16 @@
-                 CS554 Spike2 - LOBO-C EXPRESSION TREES
+                 CS554 Spike2 - LOBO-C TYPES AND BLOCKS
 
   CONTACT INFORMATION
      Author:          Arpit Garg
      Email(s):        iarpitgarg@gmail.com, kiralobo@cs.unm.edu
-     Date:            Sun Feb  18 21:46:01 2018 
+     Date:            Fri March 9 12:42:11 2018 
                                                
   CONTENT DESCRIPTION                          
                                                
-     Spike2 performs lexical analysis and grammar parsing on tokens.
-     See spike2.txt in the root directory for a complete description.
+     Spike3 parses the standard input or takes a file name as an
+     argument and outputs information about variable declarations
+     followed by BOFPIF. See spike3.txt in the root directory for a
+     complete description.
 
   SPECIFICATION ISSUES
 
@@ -16,7 +18,11 @@
     specification. The following issues were noted during project
     development, presented along with the chosen resolutions:
                                                              
-    - ISSUE #1: Output in the test cases when errors are encountered is
+    - ISSUE #1: In case an error is encountered while parsing 
+      STATEMENTS, the whole statement in which error is found would be
+      ignored in BOFPIF output but any varaibles that occur before the
+      error would still be parsed for variable declaration.
+      the expression Output in the test cases when errors are encountered is
       inconsistent. Possibly because of a bug where semicolon in not
       being checked before printing the parsed tree.
     - RESOLUTION #1: Since, the spike specification doesn't talk about

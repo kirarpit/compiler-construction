@@ -18,7 +18,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 			if (lex.peek().value == ";") {
 				varDef->addNode(new TerminalNode(lex.read()));
 
-				cs.st->flush();
+				cs.st->flush(false);
 			} else {
 				cs.reportError();
 				delete varDef;
@@ -30,7 +30,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 	if (cs.error) {
 		cs.recover();
-		cs.st->flush();
+		cs.st->flush(true);
 		varDef = new NodeVarDef();
 	}
 
