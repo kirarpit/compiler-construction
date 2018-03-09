@@ -26,6 +26,8 @@ public:
 			name(name), value(node), typeOf(NULL) {
 	}
 	virtual ~TypeInfo() {
+		if (typeOf)
+			delete typeOf;
 	}
 
 	const static std::string Type[];

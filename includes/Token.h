@@ -2,6 +2,7 @@
 #define SRC_TOKEN_H_
 
 #include<string>
+#include<sstream>
 using namespace std;
 
 class Token {

@@ -25,13 +25,19 @@ public:
 	VariableInfo() :
 			type(NULL), status(-1) {
 	}
-	VariableInfo(TypeInfo *type, int status) :
-			type(type), status(status) {
+	VariableInfo(int status) :
+			type(NULL), status(status) {
 	}
 	virtual ~VariableInfo() {
+		Logger::log("VariableInfo Destructor Called");
+		if (type)
+			delete type;
 	}
 
 	const static std::string VarStatInfo[];
+
+	void setType(TypeInfo *node);
+
 	void print(CompilerState &cs);
 	void recursiveTypePrint(CompilerState &cs, TypeInfo *type);
 	TypeInfo *type;

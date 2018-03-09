@@ -11,23 +11,24 @@ SymbolTable* SymbolTable::exitScope() {
 }
 
 void SymbolTable::updateType(int name, Node* node) {
+	Logger::log("Updating Type Number %d", name);
 	TypeInfo *newType = new TypeInfo(name, node);
 	newType->typeOf = type;
 	type = newType;
 }
 
 void SymbolTable::insertVar(Token id) {
+	Logger::log("Inserting an ID:" + id.value);
+
 	if (isDef) {
 		if (variables.find(id.value) == variables.end()) {
-			variables.insert(
-					std::pair<std::string, VariableInfo>(id.value,
-							VariableInfo(type, VS_UNUSED)));
+			variables[id.value] = VariableInfo(VS_UNUSED);
+			variables.find(id.value)->second.setType(type);
 		}
 	} else {
 		if (variables.find(id.value) == variables.end()) {
-			variables.insert(
-					std::pair<std::string, VariableInfo>(id.value,
-							VariableInfo(type, VS_UNDEC)));
+			variables[id.value] = VariableInfo(VS_UNDEC);
+			variables.find(id.value)->second.setType(type);
 		} else {
 			variables.find(id.value)->second.status = VS_OKAY;
 		}
@@ -35,6 +36,8 @@ void SymbolTable::insertVar(Token id) {
 }
 
 void SymbolTable::flush() {
+	Logger::log("Flushing Type value where bool(type) is %d", type ? 1 : 0);
+
 	type = NULL;
 }
 

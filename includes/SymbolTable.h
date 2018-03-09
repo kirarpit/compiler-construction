@@ -15,6 +15,8 @@ public:
 			parent(NULL), isDef(true), type(NULL) {
 	}
 	virtual ~SymbolTable() {
+		if (type)
+			delete type;
 	}
 
 	SymbolTable *parent;

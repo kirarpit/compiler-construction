@@ -6,6 +6,10 @@ const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
 };
 #undef XX
 
+void VariableInfo::setType(TypeInfo *node) {
+	type = node;
+}
+
 void VariableInfo::print(CompilerState &cs) {
 	cs.output << VarStatInfo[status];
 	cs.output << " ";

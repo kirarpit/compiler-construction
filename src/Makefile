@@ -41,7 +41,7 @@ $(PROGRAM):	$(CPPOBJ_FILES)
 %.o:	%.cpp $(ALL_DEP)
 	g++ $(CPPFLAGS) $(INCLUDES) -c $< -o $@
 
-test:	$(PROGRAM) $(TEST_RESULTS) Makefile
+test:	$(PROGRAM) $(TEST_RESULTS)
 
 $(TEST_DIR)/%.blko:	$(TEST_DIR)/%.blki FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
@@ -57,12 +57,12 @@ realclean: clean
 tar:	realclean
 	cd ..;tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
 
-depend: .depend
+#depend: .depend
 
-.depend:	$(CPP_FILES)
-	rm -f ./.depend
-	g++ $(CPPFLAGS) -MM $^ -MF ./.depend;
+#.depend:	$(CPP_FILES)
+#	rm -f ./.depend
+#	g++ $(CPPFLAGS) $(INCLUDES) -MM $^ -MF ./.depend;
 
-include .depend
+#include .depend
 
 .PHONY:	FORCE
