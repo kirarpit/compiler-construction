@@ -25,6 +25,7 @@ void CompilerState::recover() {
 		reportError();
 	}
 
-	lexer.read();
+	if (lexer.peek().value != "}")
+		lexer.read();
 	error = false;
 }

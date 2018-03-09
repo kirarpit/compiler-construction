@@ -27,6 +27,7 @@ public:
 	void insertVar(Token id);
 	void flush();
 	void print(CompilerState &cs);
+	TypeInfo* deepCopy(TypeInfo *type);
 
 	bool isDef;
 

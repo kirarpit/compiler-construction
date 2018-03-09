@@ -8,6 +8,9 @@ public:
 	}
 
 	void print(CompilerState &cs) {
+		if (!children.size())
+			return;
+
 		cs.output.printWhiteSpaces();
 
 		if (children.size() == 3) {

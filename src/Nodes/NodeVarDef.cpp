@@ -17,6 +17,8 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 			if (lex.peek().value == ";") {
 				varDef->addNode(new TerminalNode(lex.read()));
+
+				cs.st->flush();
 			} else {
 				cs.reportError();
 				delete varDef;

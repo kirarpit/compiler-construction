@@ -13,13 +13,9 @@ SymbolTable* SymbolTable::exitScope() {
 void SymbolTable::updateVarType(int name, Node* node) {
 	Logger::log("Updating Type: " + TypeInfo::Type[name]);
 
-	if (name == PRIM) {
-		varType = new TypeInfo(name, node);
-	} else {
-		TypeInfo *newType = new TypeInfo(name, node);
-		newType->typeOf = varType;
-		varType = newType;
-	}
+	TypeInfo *newType = new TypeInfo(name, node);
+	newType->typeOf = varType;
+	varType = newType;
 }
 
 void SymbolTable::insertVar(Token id) {
@@ -29,11 +25,12 @@ void SymbolTable::insertVar(Token id) {
 		if (variables.find(id.value) == variables.end()) {
 			variables[id.value] = VariableInfo(VS_UNUSED);
 			variables.find(id.value)->second.setType(varType);
+			varType = deepCopy(varType);
 		}
 	} else {
 		if (variables.find(id.value) == variables.end()) {
 			variables[id.value] = VariableInfo(VS_UNDEC);
-			variables.find(id.value)->second.setType(varType);
+			variables.find(id.value)->second.setType(NULL);
 		} else {
 			if (variables.find(id.value)->second.status == VS_UNUSED)
 				variables.find(id.value)->second.status = VS_OKAY;
@@ -42,8 +39,10 @@ void SymbolTable::insertVar(Token id) {
 }
 
 void SymbolTable::flush() {
-	Logger::log("Flushing Type value where bool(type) is %d", varType ? 1 : 0);
-	delete varType;
+	Logger::log("Flushing Type");
+	if (varType)
+		delete varType;
+	varType = NULL;
 }
 
 void SymbolTable::print(CompilerState &cs) {
@@ -53,4 +52,14 @@ void SymbolTable::print(CompilerState &cs) {
 		i->second.print(cs);
 		cs.output << '\n';
 	}
+}
+
+TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
+	if (!type)
+		return NULL;
+
+	TypeInfo *newType = deepCopy(type->typeOf);
+	TypeInfo *temp = new TypeInfo(type->name, type->value);
+	temp->typeOf = newType;
+	return temp;
 }
