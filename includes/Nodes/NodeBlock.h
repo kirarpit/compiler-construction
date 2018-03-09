@@ -6,6 +6,7 @@ public:
 			myST(NULL) {
 	}
 	~NodeBlock() {
+		delete myST;
 	}
 
 	void print(OutputStream &out) {

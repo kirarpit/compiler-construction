@@ -13,7 +13,7 @@ public:
 	virtual ~Node() {
 	}
 
-	virtual void print(OutputStream &) = 0;
+	virtual void print(CompilerState &cs) = 0;
 	virtual void addNode(Node *node) {
 	}
 
@@ -21,8 +21,6 @@ public:
 		return false;
 	}
 
-	virtual void printST(CompilerState &cs) {
-	}
 	virtual void setSymbolTable(SymbolTable *st) {
 	}
 };
@@ -36,8 +34,8 @@ public:
 	~TerminalNode() {
 	}
 
-	void print(OutputStream &out) {
-		out << terminalToken.value;
+	void print(CompilerState &cs) {
+		cs.output << terminalToken.value;
 	}
 
 protected:
@@ -46,8 +44,7 @@ protected:
 
 class NonTerminalNode: public Node {
 public:
-	NonTerminalNode() :
-			st(NULL) {
+	NonTerminalNode() {
 	}
 	~NonTerminalNode() {
 		for (unsigned int i = 0; i < children.size(); i++) {
@@ -55,7 +52,7 @@ public:
 		}
 	}
 
-	void print(OutputStream &out) = 0;
+	void print(CompilerState &cs) = 0;
 
 	void addNode(Node *node) {
 		children.push_back(node);
@@ -75,28 +72,27 @@ public:
 	}
 
 protected:
-	void printAllChildren(OutputStream &out) {
+	void printAllChildren(CompilerState &cs) {
 		for (unsigned int i = 0; i < children.size(); i++) {
-			children[i]->print(out);
+			children[i]->print(cs);
 		}
 	}
 
-	void printParenthesised(OutputStream &out) {
-		out << '(';
-		printAllChildren(out);
-		out << ')';
+	void printParenthesised(CompilerState &cs) {
+		cs.output << '(';
+		printAllChildren(cs);
+		cs.output << ')';
 	}
 
-	void printFPIF(OutputStream &out) {
+	void printFPIF(CompilerState &cs) {
 		if (children.size() > 1) {
-			printParenthesised(out);
+			printParenthesised(cs);
 		} else {
-			printAllChildren(out);
+			printAllChildren(cs);
 		}
 	}
 
 	vector<Node*> children;
-	SymbolTable *st;
 };
 
 class NodeSpike3: public NonTerminalNode {
@@ -105,7 +101,7 @@ public:
 	}
 	~NodeSpike3() {
 	}
-	void print(OutputStream &out) = 0;
+	void print(CompilerState &cs) = 0;
 	static void parse(CompilerState &cs);
 };
 
