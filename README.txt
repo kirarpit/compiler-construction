@@ -1,4 +1,4 @@
-                 CS554 Spike2 - LOBO-C TYPES AND BLOCKS
+                 CS554 Spike3 - LOBO-C TYPES AND BLOCKS
 
   CONTACT INFORMATION
 
