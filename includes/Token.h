@@ -3,7 +3,6 @@
 
 #include<string>
 #include<sstream>
-using namespace std;
 
 class Token {
 public:
@@ -11,19 +10,20 @@ public:
 			line(), position() {
 	}
 
-	Token(string filename, int line, int pos, string tokenType, string val) :
+	Token(std::string filename, int line, int pos, std::string tokenType,
+			std::string val) :
 			filename(filename), line(line), position(pos), type(tokenType), value(
 					val) {
 	}
 	virtual ~Token();
-	string print();
+	std::string print();
 
-	string filename;
+	std::string filename;
 	int line;
 	int position;
-	string type;
-	string subType;
-	string value;
+	std::string type;
+	std::string subType;
+	std::string value;
 };
 
 #endif /* SRC_TOKEN_H_ */

@@ -48,13 +48,13 @@ Lexer::~Lexer() {
 }
 
 bool Lexer::isSingleByteLiteral(char ch) {
-	if (singleByteLiterals.find(ch) != string::npos) {
+	if (singleByteLiterals.find(ch) != std::string::npos) {
 		return true;
 	}
 	return false;
 }
 
-bool Lexer::isDoubleByteLiteral(string str) {
+bool Lexer::isDoubleByteLiteral(std::string str) {
 	if (find(doubleByteLiterals.begin(), doubleByteLiterals.end(), str)
 			!= doubleByteLiterals.end()) {
 		return true;
@@ -62,14 +62,14 @@ bool Lexer::isDoubleByteLiteral(string str) {
 	return false;
 }
 
-bool Lexer::isKeyword(string str) {
+bool Lexer::isKeyword(std::string str) {
 	if (find(keywords.begin(), keywords.end(), str) != keywords.end()) {
 		return true;
 	}
 	return false;
 }
 
-string Lexer::getLiteralType(string val) {
+std::string Lexer::getLiteralType(std::string val) {
 	if (val == "+" || val == "-") {
 		return "TERM_OP";
 	} else if (val == "*" || val == "/") {
@@ -87,8 +87,8 @@ string Lexer::getLiteralType(string val) {
 	return "";
 }
 
-Token Lexer::tokenInit(string type, char ch) {
-	string val = "";
+Token Lexer::tokenInit(std::string type, char ch) {
+	std::string val = "";
 
 	if (ch) {
 		val.push_back(ch);

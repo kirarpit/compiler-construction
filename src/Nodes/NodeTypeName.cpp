@@ -8,7 +8,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 
 	Node *typeName = NULL;
 
-	string primType = lex.peek().value;
+	std::string primType = lex.peek().value;
 	if (primType == TypeInfo::Type[TP_BOOL] || primType == TypeInfo::Type[TP_SIGNED]
 			|| primType == TypeInfo::Type[TP_UNSIGNED]) {
 		typeName = new NodeTypeName();

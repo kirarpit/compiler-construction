@@ -7,7 +7,6 @@
 #include<cstdlib>
 
 class SymbolTable;
-using namespace std;
 
 class CompilerState {
 public:

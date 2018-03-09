@@ -4,8 +4,6 @@
 #include<CompilerState.h>
 #include<typeinfo>
 
-using namespace std;
-
 class Node {
 public:
 	Node() {
@@ -64,8 +62,8 @@ public:
 		return children[0]->findPostfixExpr();
 	}
 
-	string getName() {
-		return string("") + typeid(*this).name();
+	std::string getName() {
+		return std::string("") + typeid(*this).name();
 	}
 
 protected:
@@ -89,7 +87,7 @@ protected:
 		}
 	}
 
-	vector<Node*> children;
+	std::vector<Node*> children;
 };
 
 class NodeSpike3: public NonTerminalNode {

@@ -4,14 +4,12 @@
 
 #include<main.h>
 
-using namespace std;
-
 int main(int argc, char **argv) {
-	string filename;
-	ifstream fileStream;
+	std::string filename;
+	std::ifstream fileStream;
 
 	if (argc > 1 && argv[1] != NULL) {
-		fileStream.open(argv[1], ifstream::in);
+		fileStream.open(argv[1], std::ifstream::in);
 		if (fileStream.fail()) {
 			exit(1);
 		}
@@ -20,10 +18,10 @@ int main(int argc, char **argv) {
 		filename = "<stdin>";
 	}
 
-	InputStream input((filename == "<stdin>") ? cin : fileStream);
+	InputStream input((filename == "<stdin>") ? std::cin : fileStream);
 	input.setStreamName(filename);
 
-	OutputStream output(cout);
+	OutputStream output(std::cout);
 	Lexer lex = Lexer(input);
 	CompilerState cs(input, output, lex);
 

@@ -15,7 +15,6 @@ public:
 	SymbolTable() :
 			parent(NULL), isDef(true), varType(NULL) {
 		Logger::log("SymbolTable Constructor Called");
-
 	}
 	virtual ~SymbolTable() {
 		Logger::log("SymbolTable Destructor Called");

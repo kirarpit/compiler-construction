@@ -5,8 +5,6 @@
 #include<Token.h>
 #include<vector>
 
-using namespace std;
-
 class Lexer {
 
 public:
@@ -17,17 +15,17 @@ public:
 	Token peek();
 
 	bool isSingleByteLiteral(char ch);
-	bool isDoubleByteLiteral(string str);
-	bool isKeyword(string str);
+	bool isDoubleByteLiteral(std::string str);
+	bool isKeyword(std::string str);
 
-	string getLiteralType(string val);
-	Token tokenInit(string type, char ch);
+	std::string getLiteralType(std::string val);
+	Token tokenInit(std::string type, char ch);
 private:
 	InputStream &input;
 
-	string singleByteLiterals;
-	vector<string> doubleByteLiterals;
-	vector<string> keywords;
+	std::string singleByteLiterals;
+	std::vector<std::string> doubleByteLiterals;
+	std::vector<std::string> keywords;
 
 	Token tokenizeLiteral(char ch);
 	Token tokenizeNumber(char ch);
