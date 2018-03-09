@@ -12,7 +12,7 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 		if (arraySpec) {
 			arraySpecs->addNode(arraySpec);
 
-			cs.st->updateType(ARRAY, arraySpec);
+			cs.st->updateVarType(ARRAY, arraySpec);
 
 			Node *nextArraySpecs = NodeArraySpecs::parse(cs);
 			if (nextArraySpecs) {

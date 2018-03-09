@@ -12,32 +12,27 @@
 class SymbolTable {
 public:
 	SymbolTable() :
-			parent(NULL), isDef(true), type(NULL) {
+			parent(NULL), isDef(true), varType(NULL) {
 	}
 	virtual ~SymbolTable() {
-		if (type)
-			delete type;
+		if (varType)
+			delete varType;
 	}
 
 	SymbolTable *parent;
 
 	SymbolTable* enterScope();
 	SymbolTable* exitScope();
-	void updateType(int name, Node* node);
+	void updateVarType(int name, Node* node);
 	void insertVar(Token id);
 	void flush();
 	void print(CompilerState &cs);
 
 	bool isDef;
 
-	/*
-	 * localLookup() checks in variables
-	 * lookup() checks in parents else returns false
-	 */
-
 private:
 	std::map<std::string, VariableInfo> variables;
-	TypeInfo *type;
+	TypeInfo *varType;
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

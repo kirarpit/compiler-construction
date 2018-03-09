@@ -10,11 +10,11 @@ SymbolTable* SymbolTable::exitScope() {
 	return parent;
 }
 
-void SymbolTable::updateType(int name, Node* node) {
+void SymbolTable::updateVarType(int name, Node* node) {
 	Logger::log("Updating Type Number %d", name);
 	TypeInfo *newType = new TypeInfo(name, node);
-	newType->typeOf = type;
-	type = newType;
+	newType->typeOf = varType;
+	varType = newType;
 }
 
 void SymbolTable::insertVar(Token id) {
@@ -23,22 +23,23 @@ void SymbolTable::insertVar(Token id) {
 	if (isDef) {
 		if (variables.find(id.value) == variables.end()) {
 			variables[id.value] = VariableInfo(VS_UNUSED);
-			variables.find(id.value)->second.setType(type);
+			variables.find(id.value)->second.setType(varType);
 		}
 	} else {
 		if (variables.find(id.value) == variables.end()) {
 			variables[id.value] = VariableInfo(VS_UNDEC);
-			variables.find(id.value)->second.setType(type);
+			variables.find(id.value)->second.setType(varType);
 		} else {
-			variables.find(id.value)->second.status = VS_OKAY;
+			if (variables.find(id.value)->second.status == VS_UNUSED)
+				variables.find(id.value)->second.status = VS_OKAY;
 		}
 	}
 }
 
 void SymbolTable::flush() {
-	Logger::log("Flushing Type value where bool(type) is %d", type ? 1 : 0);
+	Logger::log("Flushing Type value where bool(type) is %d", varType ? 1 : 0);
 
-	type = NULL;
+	varType = NULL;
 }
 
 void SymbolTable::print(CompilerState &cs) {
