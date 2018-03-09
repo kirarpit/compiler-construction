@@ -3,7 +3,7 @@
 Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodePrimaryExpr, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodePrimaryExpr, Token Value: " + lex.peek().value);
 
 	bool errorFlag = false;
 	Node *primaryExpr = new NodePrimaryExpr();
@@ -17,7 +17,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	} else if (lex.peek().type == "Number") {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
 	} else if (lex.peek().value == "(") {
-		Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
+		Logger::log("Consumed Terminal:" + lex.peek().value);
 		lex.read();
 
 		Node *expr = NodeExpr::parse(cs);
@@ -25,7 +25,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 			primaryExpr->addNode(expr);
 
 			if (lex.peek().value == ")") {
-				Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
+				Logger::log("Consumed Terminal:" + lex.peek().value);
 				lex.read();
 			} else {
 				errorFlag = true;

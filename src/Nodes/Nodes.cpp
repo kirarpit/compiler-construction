@@ -2,12 +2,12 @@
 
 void NodeSpike3::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeSpike3, Token Value: " + lex.peek().value + "\n");
+	Logger::log("Parsing NodeSpike3, Token Value: " + lex.peek().value);
 
 	Node *block = NodeBlock::parse(cs);
 	block->print(cs);
 	delete block;
 
-	Logger::log("Consumed Terminal:" + lex.peek().value + "\n");
+	Logger::log("Consumed Terminal:" + lex.peek().value);
 	lex.read();
 }

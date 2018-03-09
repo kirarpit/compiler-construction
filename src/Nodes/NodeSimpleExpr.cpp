@@ -3,7 +3,7 @@
 Node* NodeSimpleExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodeSimpleExpr, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodeSimpleExpr, Token Value: " + lex.peek().value);
 
 	Node *simpleExpr = new NodeSimpleExpr();
 

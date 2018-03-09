@@ -3,7 +3,7 @@
 Node* NodeArraySpecs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodeArraySpec, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodeArraySpec, Token Value: " + lex.peek().value);
 
 	Node *arraySpecs = new NodeArraySpecs();
 
@@ -28,6 +28,6 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodeArraySpec, Token Value: " + lex.peek().value + "\n");
+			"Returning NodeArraySpec, Token Value: " + lex.peek().value);
 	return arraySpecs;
 }

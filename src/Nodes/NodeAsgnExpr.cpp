@@ -3,7 +3,7 @@
 Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodeAsgnExpr, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodeAsgnExpr, Token Value: " + lex.peek().value);
 
 	Node *asgnExpr = new NodeAsgnExpr();
 
@@ -15,7 +15,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 			//check if it's indeed PE
 			Logger::log(
 					"Checking if CE could be PE, Token Value: "
-							+ lex.peek().value + "\n");
+							+ lex.peek().value);
 			if (!condOrPostfixExpr->findPostfixExpr()) {
 				Logger::log(
 						"CE can't be PE, Token Value: " + lex.peek().value
@@ -26,7 +26,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 				return NULL;
 			}
 			Logger::log(
-					"CE could be PE, Token Value: " + lex.peek().value + "\n");
+					"CE could be PE, Token Value: " + lex.peek().value);
 
 			asgnExpr->addNode(new TerminalNode(lex.read()));
 
@@ -44,6 +44,6 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodeAsgnExpr, Token Value: " + lex.peek().value + "\n");
+			"Returning NodeAsgnExpr, Token Value: " + lex.peek().value);
 	return asgnExpr;
 }

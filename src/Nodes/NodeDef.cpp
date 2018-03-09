@@ -2,7 +2,7 @@
 
 Node* NodeDef::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeDef, Token Value: " + lex.peek().value + "\n");
+	Logger::log("Parsing NodeDef, Token Value: " + lex.peek().value);
 
 	Node *def = NULL;
 
@@ -12,6 +12,6 @@ Node* NodeDef::parse(CompilerState &cs) {
 		def->addNode(varDef);
 	}
 
-	Logger::log("Returning NodeDef, Token Value: " + lex.peek().value + "\n");
+	Logger::log("Returning NodeDef, Token Value: " + lex.peek().value);
 	return def;
 }

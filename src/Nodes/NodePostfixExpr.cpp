@@ -3,7 +3,7 @@
 Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodePostfixExpr, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodePostfixExpr, Token Value: " + lex.peek().value);
 
 	Node *postfixExpr = new NodePostfixExpr();
 

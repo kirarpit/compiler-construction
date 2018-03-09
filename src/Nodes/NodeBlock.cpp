@@ -2,7 +2,7 @@
 
 Node* NodeBlock::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeBlock, Token Value: " + lex.peek().value + "\n");
+	Logger::log("Parsing NodeBlock, Token Value: " + lex.peek().value);
 
 	if (!cs.st) {
 		cs.st = new SymbolTable();
@@ -29,6 +29,6 @@ Node* NodeBlock::parse(CompilerState &cs) {
 
 	cs.st = cs.st->exitScope();
 
-	Logger::log("Returning NodeBlock, Token Value: " + lex.peek().value + "\n");
+	Logger::log("Returning NodeBlock, Token Value: " + lex.peek().value);
 	return block;
 }

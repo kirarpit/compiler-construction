@@ -26,7 +26,7 @@ class TerminalNode: public Node {
 public:
 	TerminalNode(Token token) :
 			terminalToken(token) {
-		Logger::log("Consumed Terminal:" + token.value + "\n");
+		Logger::log("Consumed Terminal:" + token.value);
 	}
 	~TerminalNode() {
 	}

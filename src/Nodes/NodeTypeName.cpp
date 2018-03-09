@@ -4,7 +4,7 @@
 Node* NodeTypeName::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodeTypeName, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodeTypeName, Token Value: " + lex.peek().value);
 
 	Node *typeName = NULL;
 
@@ -20,6 +20,6 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodeTypeName, Token Value: " + lex.peek().value + "\n");
+			"Returning NodeTypeName, Token Value: " + lex.peek().value);
 	return typeName;
 }

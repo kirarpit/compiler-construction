@@ -3,7 +3,7 @@
 Node* NodeCondExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::log(
-			"Parsing NodeCondExpr, Token Value: " + lex.peek().value + "\n");
+			"Parsing NodeCondExpr, Token Value: " + lex.peek().value);
 
 	bool errorFlag = false;
 	Node *condExpr = new NodeCondExpr();
@@ -48,6 +48,6 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 	}
 
 	Logger::log(
-			"Returning NodeCondExpr, Token Value: " + lex.peek().value + "\n");
+			"Returning NodeCondExpr, Token Value: " + lex.peek().value);
 	return condExpr;
 }
