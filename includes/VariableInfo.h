@@ -30,6 +30,8 @@ public:
 	}
 	virtual ~VariableInfo() {
 		Logger::log("VariableInfo Destructor Called");
+		if (type)
+			delete type;
 	}
 
 	const static std::string VarStatInfo[];
