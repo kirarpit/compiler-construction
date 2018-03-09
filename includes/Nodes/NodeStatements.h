@@ -7,7 +7,7 @@ public:
 	~NodeStatements() {
 	}
 
-	void print(OutputStream &out) {
+	void print(CompilerState &cs) {
 		printAllChildren(out);
 	}
 	static Node* parse(CompilerState &cs);

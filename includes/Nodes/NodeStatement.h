@@ -7,7 +7,7 @@ public:
 	~NodeStatement() {
 	}
 
-	void print(OutputStream &out) {
+	void print(CompilerState &cs) {
 		out.printWhiteSpaces();
 
 		if (children.size() == 3) {

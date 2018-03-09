@@ -7,7 +7,7 @@ public:
 	~NodeExpr() {
 	}
 
-	void print(OutputStream &out) {
+	void print(CompilerState &cs) {
 		printFPIF(out);
 	}
 	static Node* parse(CompilerState &cs);
