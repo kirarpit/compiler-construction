@@ -8,7 +8,7 @@ public:
 	}
 
 	void print(CompilerState &cs) {
-		printAllChildren(out);
+		printAllChildren(cs);
 	}
 	static Node* parse(CompilerState &cs);
 };

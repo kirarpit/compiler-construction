@@ -8,7 +8,7 @@ public:
 	}
 
 	void print(CompilerState &cs) {
-		printFPIF(out);
+		printFPIF(cs);
 	}
 	static Node* parse(CompilerState &cs);
 };
