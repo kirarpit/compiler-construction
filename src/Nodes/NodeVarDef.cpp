@@ -20,7 +20,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 				cs.st->flush(false);
 			} else {
-				cs.es.reportError();
+				cs.es.reportError(cs);
 				delete varDef;
 			}
 		} else {

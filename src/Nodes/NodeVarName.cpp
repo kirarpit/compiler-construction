@@ -13,7 +13,7 @@ Node* NodeVarName::parse(CompilerState &cs) {
 
 		cs.st->insertVar(id);
 	} else {
-		cs.es.reportError();
+		cs.es.reportError(cs);
 	}
 
 	Logger::logNodeExit("NodeVarName", lex.peek());

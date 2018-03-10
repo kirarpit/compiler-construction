@@ -16,7 +16,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 
 		cs.st->updateVarType(PRIM, typeName);
 	} else {
-		cs.es.reportError();
+		cs.es.reportError(cs);
 	}
 
 	Logger::logNodeExit("NodeTypeName", lex.peek());

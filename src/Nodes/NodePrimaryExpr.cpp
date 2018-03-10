@@ -28,14 +28,14 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 				lex.read();
 			} else {
 				errorFlag = true;
-				cs.es.reportError();
+				cs.es.reportError(cs);
 			}
 		} else {
 			errorFlag = true;
 		}
 	} else {
 		errorFlag = true;
-		cs.es.reportError();
+		cs.es.reportError(cs);
 	}
 
 	if (errorFlag) {

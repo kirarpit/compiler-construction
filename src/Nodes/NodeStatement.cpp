@@ -16,7 +16,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportError();
+				cs.es.reportError(cs);
 			}
 		}
 	} else {
@@ -28,7 +28,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportError();
+				cs.es.reportError(cs);
 			}
 		}
 	}

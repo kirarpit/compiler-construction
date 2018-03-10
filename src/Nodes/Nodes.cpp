@@ -11,7 +11,7 @@ void NodeSpike3::parse(CompilerState &cs) {
 	delete block;
 
 	if (cs.lexer.peek().type != TT_EOF) {
-		cs.es.reportError();
+		cs.es.reportError(cs);
 	}
 
 	Logger::logConsTerm(lex.peek());

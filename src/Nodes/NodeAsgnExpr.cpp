@@ -16,7 +16,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 				Logger::log(
 						"CE can't be PE, Token Value: " + lex.peek().print());
 
-				cs.es.reportError();
+				cs.es.reportError(cs);
 				delete asgnExpr;
 				return NULL;
 			}
