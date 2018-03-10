@@ -14,7 +14,7 @@ Node* NodeTerm::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().subType == "FACTOR_OP") {
+	while (lex.peek().type & TT_FACTOR_OP) {
 		Node *tempTerm = new NodeTerm();
 
 		tempTerm->addNode(term);

@@ -15,14 +15,14 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 	}
 
 	while (1) {
-		if (lex.peek().subType == "POSTUN_OP") {
+		if (lex.peek().type & TT_POSTUN_OP) {
 			Node *tempPostfixExpr = new NodePostfixExpr();
 
 			tempPostfixExpr->addNode(postfixExpr);
 			tempPostfixExpr->addNode(new TerminalNode(lex.read()));
 
 			postfixExpr = tempPostfixExpr;
-		} else if (lex.peek().value == TokenTable::TnInfo[TN_opnbrk]) {
+		} else if (lex.peek().value == TokenTable::TS[TN_opnbrk]) {
 			Node *arraySpec = NodeArraySpec::parse(cs);
 
 			if (arraySpec) {

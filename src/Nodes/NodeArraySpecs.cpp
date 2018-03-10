@@ -7,7 +7,7 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 
 	Node *arraySpecs = new NodeArraySpecs();
 
-	if (lex.peek().value == TokenTable::TnInfo[TN_opnbrk]) {
+	if (lex.peek().value == TokenTable::TS[TN_opnbrk]) {
 		Node *arraySpec = NodeArraySpec::parse(cs);
 		if (arraySpec) {
 			arraySpecs->addNode(arraySpec);

@@ -14,7 +14,7 @@ Node* NodeLogandExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().value == TokenTable::TnInfo[TN_andand]) {
+	while (lex.peek().value == TokenTable::TS[TN_andand]) {
 		Node *tempLogandExpr = new NodeLogandExpr();
 
 		tempLogandExpr->addNode(logandExpr);

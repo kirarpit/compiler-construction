@@ -8,7 +8,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 	bool errorFlag = false;
 	Node *arraySpec = new NodeArraySpec();
 
-	if (lex.peek().value == TokenTable::TnInfo[TN_opnbrk]) {
+	if (lex.peek().value == TokenTable::TS[TN_opnbrk]) {
 		arraySpec->addNode(new TerminalNode(lex.read()));
 
 		Node *arraySize = NodeArraySize::parse(cs);
@@ -19,7 +19,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 			return NULL;
 		}
 
-		if (lex.peek().value == TokenTable::TnInfo[TN_clsbrk]) {
+		if (lex.peek().value == TokenTable::TS[TN_clsbrk]) {
 			arraySpec->addNode(new TerminalNode(lex.read()));
 		} else {
 			errorFlag = true;

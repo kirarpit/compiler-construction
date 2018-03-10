@@ -7,7 +7,7 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 
 	Node *arraySize = new NodeArraySize();
 
-	if (lex.peek().value != TokenTable::TnInfo[TN_clsbrk]) {
+	if (lex.peek().value != TokenTable::TS[TN_clsbrk]) {
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			arraySize->addNode(expr);

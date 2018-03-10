@@ -3,7 +3,7 @@
 
 #include<iostream>
 #include<vector>
-#include<set>
+#include<map>
 #include<cstdlib>
 #include<cstring>
 #include<algorithm>
@@ -26,13 +26,12 @@ public:
 	bool isLiteral(std::string str);
 	bool isKeyword(std::string str);
 
-	std::string getLiteralType(std::string val);
 	Token tokenInit(int type, std::string val);
 private:
 	InputStream &input;
 
-	std::set<std::string> literals;
-	std::set<std::string> keywords;
+	std::map<std::string, int> literals;
+	std::map<std::string, int> keywords;
 
 	Token tokenizeLiteral(std::string val);
 	Token tokenizeNumber(std::string val);

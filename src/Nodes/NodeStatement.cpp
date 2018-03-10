@@ -6,14 +6,14 @@ Node* NodeStatement::parse(CompilerState &cs) {
 
 	Node *statement = new NodeStatement();
 
-	if (lex.peek().value == TokenTable::TnInfo[TN_opnbrc]) {
+	if (lex.peek().value == TokenTable::TS[TN_opnbrc]) {
 		statement->addNode(new TerminalNode(lex.read()));
 
 		Node *statements = NodeStatements::parse(cs);
 		if (statements) {
 			statement->addNode(statements);
 
-			if (lex.peek().value == TokenTable::TnInfo[TN_clsbrc]) {
+			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
 				cs.reportError();
@@ -25,7 +25,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		if (expr) {
 			statement->addNode(expr);
 
-			if (lex.peek().value == TokenTable::TnInfo[TN_semi]) {
+			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
 				cs.reportError();

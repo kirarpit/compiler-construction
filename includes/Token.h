@@ -23,7 +23,6 @@ public:
 	int line;
 	int position;
 	int type;
-	std::string subType;
 	std::string value;
 };
 

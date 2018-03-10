@@ -15,13 +15,13 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	if (lex.peek().value == TokenTable::TnInfo[TN_quest]) {
+	if (lex.peek().value == TokenTable::TS[TN_quest]) {
 		condExpr->addNode(new TerminalNode(lex.read()));
 
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			condExpr->addNode(expr);
-			if (lex.peek().value == TokenTable::TnInfo[TN_colon]) {
+			if (lex.peek().value == TokenTable::TS[TN_colon]) {
 				condExpr->addNode(new TerminalNode(lex.read()));
 
 				Node *nextCondExpr = NodeCondExpr::parse(cs);

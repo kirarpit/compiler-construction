@@ -10,7 +10,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	if (condOrPostfixExpr) {
 		asgnExpr->addNode(condOrPostfixExpr);
 
-		if (1 && lex.peek().value == TokenTable::TnInfo[TN_equal]) {
+		if (1 && lex.peek().value == TokenTable::TS[TN_equal]) {
 			//check if it's indeed PE
 			Logger::log(
 					"Checking if CE could be PE, Token Value: "

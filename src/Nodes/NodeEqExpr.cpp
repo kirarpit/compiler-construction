@@ -14,7 +14,7 @@ Node* NodeEqExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().subType == "EQ_OP") {
+	while (lex.peek().type & TT_EQ_OP) {
 		Node *tempEqExpr = new NodeEqExpr();
 
 		tempEqExpr->addNode(eqExpr);
@@ -30,7 +30,6 @@ Node* NodeEqExpr::parse(CompilerState &cs) {
 		eqExpr = tempEqExpr;
 	}
 
-	Logger::log(
-			"Returning NodeEqExpr, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeEqExpr, Token Value: " + lex.peek().value);
 	return eqExpr;
 }

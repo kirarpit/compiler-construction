@@ -6,8 +6,7 @@ Node* NodeFactor::parse(CompilerState &cs) {
 
 	Node *factor = new NodeFactor();
 
-	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP"
-			|| lex.peek().value == TokenTable::TnInfo[TN_minus]) {
+	if (lex.peek().type & TT_PREUN_OP) {
 		factor->addNode(new TerminalNode(lex.read()));
 		Node *nextFactor = NodeFactor::parse(cs);
 		if (nextFactor) {
@@ -26,7 +25,6 @@ Node* NodeFactor::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log(
-			"Returning NodeFactor, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeFactor, Token Value: " + lex.peek().value);
 	return factor;
 }

@@ -14,7 +14,7 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().subType == "REL_OP") {
+	while (lex.peek().type & TT_REL_OP) {
 		Node *tempRelExpr = new NodeRelExpr();
 
 		tempRelExpr->addNode(relExpr);
@@ -30,7 +30,6 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 		relExpr = tempRelExpr;
 	}
 
-	Logger::log(
-			"Returning NodeRelExpr, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeRelExpr, Token Value: " + lex.peek().value);
 	return relExpr;
 }

@@ -15,7 +15,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 		if (varNames) {
 			varDef->addNode(varNames);
 
-			if (lex.peek().value == TokenTable::TnInfo[TN_semi]) {
+			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				varDef->addNode(new TerminalNode(lex.read()));
 
 				cs.st->flush(false);

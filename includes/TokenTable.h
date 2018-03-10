@@ -101,8 +101,8 @@ public:
 	virtual ~TokenTable() {
 	}
 
-	const static std::string TnInfo[];
-	const static std::string TTInfo[];
+	const static std::string TS[];
+	const static std::string TyInfo[];
 };
 
 #endif /* SRC_TOKENTABLE_H_ */

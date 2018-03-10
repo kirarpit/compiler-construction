@@ -14,7 +14,7 @@ Node* NodeSimpleExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().subType == "TERM_OP") {
+	while (lex.peek().type & TT_TERM_OP) {
 		Node *tempSimpleExpr = new NodeSimpleExpr();
 
 		tempSimpleExpr->addNode(simpleExpr);

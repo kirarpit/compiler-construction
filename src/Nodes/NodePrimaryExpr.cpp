@@ -16,7 +16,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 			cs.st->insertVar(id);
 	} else if (lex.peek().type == TT_NUM) {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
-	} else if (lex.peek().value == TokenTable::TnInfo[TN_opnpar]) {
+	} else if (lex.peek().value == TokenTable::TS[TN_opnpar]) {
 		Logger::log("Consumed Terminal:" + lex.peek().value);
 		lex.read();
 
@@ -24,7 +24,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		if (expr) {
 			primaryExpr->addNode(expr);
 
-			if (lex.peek().value == TokenTable::TnInfo[TN_clspar]) {
+			if (lex.peek().value == TokenTable::TS[TN_clspar]) {
 				Logger::log("Consumed Terminal:" + lex.peek().value);
 				lex.read();
 			} else {
