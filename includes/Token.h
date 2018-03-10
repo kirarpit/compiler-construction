@@ -3,14 +3,15 @@
 
 #include<string>
 #include<sstream>
+#include<TokenTable.h>
 
 class Token {
 public:
 	Token() :
-			line(), position() {
+			line(), position(), type(-1) {
 	}
 
-	Token(std::string filename, int line, int pos, std::string tokenType,
+	Token(std::string filename, int line, int pos, int tokenType,
 			std::string val) :
 			filename(filename), line(line), position(pos), type(tokenType), value(
 					val) {
@@ -21,7 +22,7 @@ public:
 	std::string filename;
 	int line;
 	int position;
-	std::string type;
+	int type;
 	std::string subType;
 	std::string value;
 };

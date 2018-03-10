@@ -15,7 +15,7 @@ Node* NodeLogorExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().value == "||") {
+	while (lex.peek().value == TokenTable::TnInfo[TN_oror]) {
 		Node *tempLogorExpr = new NodeLogorExpr();
 
 		tempLogorExpr->addNode(logorExpr);

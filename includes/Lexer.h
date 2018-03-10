@@ -1,9 +1,18 @@
 #ifndef SRC_LEXER_H_
 #define SRC_LEXER_H_
 
-#include<InputStream.h>
-#include<Token.h>
+#include<iostream>
 #include<vector>
+#include<set>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+#include<sstream>
+
+#include<Token.h>
+#include<InputStream.h>
+#include<TokenTable.h>
+#include<Logger.h>
 
 class Lexer {
 
@@ -14,22 +23,20 @@ public:
 	Token read();
 	Token peek();
 
-	bool isSingleByteLiteral(char ch);
-	bool isDoubleByteLiteral(std::string str);
+	bool isLiteral(std::string str);
 	bool isKeyword(std::string str);
 
 	std::string getLiteralType(std::string val);
-	Token tokenInit(std::string type, char ch);
+	Token tokenInit(int type, std::string val);
 private:
 	InputStream &input;
 
-	std::string singleByteLiterals;
-	std::vector<std::string> doubleByteLiterals;
-	std::vector<std::string> keywords;
+	std::set<std::string> literals;
+	std::set<std::string> keywords;
 
-	Token tokenizeLiteral(char ch);
-	Token tokenizeNumber(char ch);
-	Token tokenizeKeywordOrID(char ch);
+	Token tokenizeLiteral(std::string val);
+	Token tokenizeNumber(std::string val);
+	Token tokenizeKeywordOrID(std::string val);
 
 	Token myToken;
 	bool peeked;

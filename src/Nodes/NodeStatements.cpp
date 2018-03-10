@@ -7,7 +7,7 @@ Node* NodeStatements::parse(CompilerState &cs) {
 
 	Node *statements = new NodeStatements();
 
-	if (lex.peek().type != "EOF" && lex.peek().value != "}") {
+	if (lex.peek().type != TT_EOF && lex.peek().value != TokenTable::TnInfo[TN_clsbrc]) {
 		Node *statement = NodeStatement::parse(cs);
 		if (statement) {
 			statements->addNode(statement);

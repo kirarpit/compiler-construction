@@ -14,7 +14,7 @@ Node* NodeExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	while (lex.peek().value == ",") {
+	while (lex.peek().value == TokenTable::TnInfo[TN_comma]) {
 		Node *tempExpr = new NodeExpr();
 
 		tempExpr->addNode(expr);

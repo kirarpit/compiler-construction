@@ -7,7 +7,7 @@ Node* NodeOptVarNames::parse(CompilerState &cs) {
 
 	Node *optVarNames = new NodeOptVarNames();
 
-	if (lex.peek().value == ",") {
+	if (lex.peek().value == TokenTable::TnInfo[TN_comma]) {
 		optVarNames->addNode(new TerminalNode(lex.read()));
 
 		Node *varNames = NodeVarNames::parse(cs);

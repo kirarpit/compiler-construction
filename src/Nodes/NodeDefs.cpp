@@ -6,8 +6,9 @@ Node* NodeDefs::parse(CompilerState &cs) {
 
 	Node *defs = new NodeDefs();
 
-	if (lex.peek().value == "bool" || lex.peek().value == "unsigned"
-			|| lex.peek().value == "signed") {
+	if (lex.peek().value == TokenTable::TnInfo[TN_bool]
+			|| lex.peek().value == TokenTable::TnInfo[TN_unsigned]
+			|| lex.peek().value == TokenTable::TnInfo[TN_signed]) {
 		Node *def = NodeDef::parse(cs);
 		if (def) {
 			defs->addNode(def);

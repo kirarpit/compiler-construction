@@ -3,23 +3,24 @@
 
 #include<iostream>
 #include<string>
+#include<sstream>
 
 class InputStream {
 
 public:
 	InputStream(std::istream &s) :
-			myStream(s), streamName("<stdin>"), peeked(false), myChar('\0'), location(
+			myStream(s), streamName("<stdin>"), peeked(false), myChar("\0"), location(
 					1), prev_location(0), lineNum(1), eof_flag(false) {
 	}
 	virtual ~InputStream();
 
-	char read();
-	char peek();
+	std::string read();
+	std::string peek();
 
 	int getLineNumber();
 	int getLocation();
 
-	InputStream& operator>>(char &ch);
+	InputStream& operator>>(std::string &ch);
 	operator bool() const;
 	bool is_eof();
 
@@ -30,11 +31,12 @@ private:
 	std::istream &myStream;
 	std::string streamName;
 	bool peeked;
-	char myChar;
+	std::string myChar;
 	int location;
 	int prev_location;
 	int lineNum;
 	bool eof_flag;
+	std::stringstream ss;
 };
 
 #endif /* INCLUDES_INPUTSTREAM_H_ */

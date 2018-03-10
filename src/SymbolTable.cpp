@@ -11,7 +11,7 @@ SymbolTable* SymbolTable::exitScope() {
 }
 
 void SymbolTable::updateVarType(int name, Node* node) {
-	Logger::log("Updating Type: " + TypeInfo::Type[name]);
+	Logger::log("Updating Type of type: %d", name);
 
 	TypeInfo *newType = new TypeInfo(name, node);
 	newType->typeOf = varType;

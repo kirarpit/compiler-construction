@@ -10,7 +10,7 @@ void NodeSpike3::parse(CompilerState &cs) {
 	Logger::log("Deleting Block");
 	delete block;
 
-	if (cs.lexer.peek().type != "EOF") {
+	if (cs.lexer.peek().type != TT_EOF) {
 		cs.reportError();
 	}
 

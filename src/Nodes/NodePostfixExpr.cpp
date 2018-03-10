@@ -22,7 +22,7 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 			tempPostfixExpr->addNode(new TerminalNode(lex.read()));
 
 			postfixExpr = tempPostfixExpr;
-		} else if (lex.peek().value == "[") {
+		} else if (lex.peek().value == TokenTable::TnInfo[TN_opnbrk]) {
 			Node *arraySpec = NodeArraySpec::parse(cs);
 
 			if (arraySpec) {

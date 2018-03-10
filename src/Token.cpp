@@ -8,19 +8,15 @@ std::string Token::print() {
 
 	output << filename << ':' << line << ':' << position << ':';
 
-	if (type == "Number") {
+	if (type == TT_NUM) {
 		output << "$num:";
-	} else if (type == "EOF") {
+	} else if (type == TT_EOF) {
 		output << "$EOF";
-	} else if (type == "ILLCHR") {
+	} else if (type == TT_ILLCHR) {
 		output << "$illchr:";
-	} else if (type == "Identifier") {
+	} else if (type == TT_ID) {
 		output << "$id:";
 	}
-
-	if (value != "")
-		output << value;
-	output << '\n';
 
 	return output.str();
 }

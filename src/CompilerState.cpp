@@ -17,16 +17,17 @@ int CompilerState::getErrorCount() {
 
 void CompilerState::recover() {
 	Logger::log("Error Recovery Started");
-	while (lexer.peek().value != ";" && lexer.peek().value != "}"
-			&& lexer.peek().type != "EOF") {
+	while (lexer.peek().value != TokenTable::TnInfo[TN_semi]
+			&& lexer.peek().value != TokenTable::TnInfo[TN_clsbrc]
+			&& lexer.peek().type != TT_EOF) {
 		lexer.read();
 	}
 
-	if (lexer.peek().value != ";") {
+	if (lexer.peek().value != TokenTable::TnInfo[TN_semi]) {
 		reportError();
 	}
 
-	if (lexer.peek().value != "}")
+	if (lexer.peek().value != TokenTable::TnInfo[TN_clsbrc])
 		lexer.read();
 	error = false;
 }

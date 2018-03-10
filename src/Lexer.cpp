@@ -1,69 +1,30 @@
 #include <Lexer.h>
-#include<iostream>
-#include<InputStream.h>
-#include<cstdlib>
-#include<cstring>
-#include<algorithm>
-#include<vector>
 
 Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false) {
-	singleByteLiterals = "()[]{}.,;:!?=<>&|^*%/+-";
 
-	doubleByteLiterals.push_back("::");
-	doubleByteLiterals.push_back("==");
-	doubleByteLiterals.push_back("!=");
-	doubleByteLiterals.push_back("<<");
-	doubleByteLiterals.push_back(">>");
-	doubleByteLiterals.push_back(">=");
-	doubleByteLiterals.push_back("<=");
-	doubleByteLiterals.push_back("&&");
-	doubleByteLiterals.push_back("||");
-	doubleByteLiterals.push_back("++");
-	doubleByteLiterals.push_back("--");
-
-	keywords.push_back("bool");
-	keywords.push_back("break");
-	keywords.push_back("case");
-	keywords.push_back("continue");
-	keywords.push_back("default");
-	keywords.push_back("do");
-	keywords.push_back("else");
-	keywords.push_back("false");
-	keywords.push_back("float");
-	keywords.push_back("if");
-	keywords.push_back("return");
-	keywords.push_back("signed");
-	keywords.push_back("static");
-	keywords.push_back("struct");
-	keywords.push_back("switch");
-	keywords.push_back("true");
-	keywords.push_back("unsigned");
-	keywords.push_back("var");
-	keywords.push_back("void");
-	keywords.push_back("while");
+#define XX(a, b, c)	\
+	if (c == 0) {	\
+		literals.insert(b);	\
+	} else if (c == 1){	\
+		keywords.insert(b);	\
+	}
+	TOKEN_LIST
+#undef XX
 }
 
 Lexer::~Lexer() {
 }
 
-bool Lexer::isSingleByteLiteral(char ch) {
-	if (singleByteLiterals.find(ch) != std::string::npos) {
-		return true;
-	}
-	return false;
-}
-
-bool Lexer::isDoubleByteLiteral(std::string str) {
-	if (find(doubleByteLiterals.begin(), doubleByteLiterals.end(), str)
-			!= doubleByteLiterals.end()) {
+bool Lexer::isLiteral(std::string str) {
+	if (literals.find(str) != literals.end()) {
 		return true;
 	}
 	return false;
 }
 
 bool Lexer::isKeyword(std::string str) {
-	if (find(keywords.begin(), keywords.end(), str) != keywords.end()) {
+	if (keywords.find(str) != keywords.end()) {
 		return true;
 	}
 	return false;
@@ -87,38 +48,31 @@ std::string Lexer::getLiteralType(std::string val) {
 	return "";
 }
 
-Token Lexer::tokenInit(std::string type, char ch) {
-	std::string val = "";
-
-	if (ch) {
-		val.push_back(ch);
-	}
-
+Token Lexer::tokenInit(int type, std::string val) {
 	Token token(input.getStreamName(), input.getLineNumber(),
 			input.getLocation() - 1, type, val);
 
 	return token;
 }
 
-Token Lexer::tokenizeLiteral(char ch) {
-	Token token = tokenInit("Literals", ch);
+Token Lexer::tokenizeLiteral(std::string val) {
+	Token token = tokenInit(TT_LIT, val);
 
-	if (isSingleByteLiteral(input.peek())) {
-		if (isDoubleByteLiteral(token.value + input.peek())) {
-			token.value.push_back(input.read());
-		}
+	if (isLiteral(input.peek()) && isLiteral(val + input.peek())) {
+		token.value += input.read();
 	}
 
 	token.subType = getLiteralType(token.value);
 	return token;
 }
 
-Token Lexer::tokenizeNumber(char ch) {
-	Token token = tokenInit("Number", ch);
+Token Lexer::tokenizeNumber(std::string val) {
+	Token token = tokenInit(TT_NUM, val);
 
 	bool dot_flag = false;
-	while (isdigit(input.peek()) || (input.peek() == '.' && !dot_flag)) {
-		if (input.peek() == '.')
+	while (isdigit(input.peek()[0])
+			|| (input.peek() == TokenTable::TnInfo[TN_dot] && !dot_flag)) {
+		if (input.peek() == TokenTable::TnInfo[TN_dot])
 			dot_flag = true;
 
 		token.value += input.read();
@@ -127,16 +81,17 @@ Token Lexer::tokenizeNumber(char ch) {
 	return token;
 }
 
-Token Lexer::tokenizeKeywordOrID(char ch) {
-	Token token = tokenInit("", ch);
+Token Lexer::tokenizeKeywordOrID(std::string str) {
+	Token token = tokenInit(-1, str);
 
-	while (input.peek() == '_' || isalnum(input.peek())) {
+	while (input.peek() == TokenTable::TnInfo[TN_underscore]
+			|| isalnum(input.peek()[0])) {
 		token.value += input.read();
 	}
 	if (isKeyword(token.value)) {
-		token.type = "Keyword";
+		token.type = TT_KEY;
 	} else {
-		token.type = "Identifier";
+		token.type = TT_ID;
 	}
 
 	return token;
@@ -148,33 +103,41 @@ Token Lexer::read() {
 		return myToken;
 	}
 
-	char ch;
+	std::string str;
 	Token token;
-	while (input >> ch) {
+	while (input >> str) {
 
-		if (ch == '/' && input.peek() == '/') {
+		if (str == TokenTable::TnInfo[TN_slash]
+				&& input.peek() == TokenTable::TnInfo[TN_slash]) {
 			input.read();
-			while (input.peek() != '\n' && !input.is_eof()) {
+			while (input.peek() != TokenTable::TnInfo[TN_newline]
+					&& !input.is_eof()) {
 				input.read();
 			}
 			continue;
-		} else if (isSingleByteLiteral(ch)) {
-			token = tokenizeLiteral(ch);
-		} else if (isdigit(ch)) {
-			token = tokenizeNumber(ch);
-		} else if (ch == '_' || isalnum(ch)) {
-			token = tokenizeKeywordOrID(ch);
-		} else if (isspace(ch)) {
+
+		} else if (isLiteral(str)) {
+			token = tokenizeLiteral(str);
+
+		} else if (isdigit(str[0])) {
+			token = tokenizeNumber(str);
+
+		} else if (str == TokenTable::TnInfo[TN_underscore]
+				|| isalnum(str[0])) {
+			token = tokenizeKeywordOrID(str);
+
+		} else if (isspace(str[0])) {
 			continue;
+
 		} else {
-			token = tokenInit("ILLCHR", ch);
+			token = tokenInit(TT_ILLCHR, str);
 		}
 
 		return token;
 	}
 
 	if (input.is_eof()) {
-		token = tokenInit("EOF", '\0');
+		token = tokenInit(TT_EOF, TokenTable::TnInfo[TN_null]);
 
 		return token;
 	} else

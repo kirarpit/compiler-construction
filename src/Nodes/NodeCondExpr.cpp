@@ -2,8 +2,7 @@
 
 Node* NodeCondExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log(
-			"Parsing NodeCondExpr, Token Value: " + lex.peek().value);
+	Logger::log("Parsing NodeCondExpr, Token Value: " + lex.peek().value);
 
 	bool errorFlag = false;
 	Node *condExpr = new NodeCondExpr();
@@ -16,13 +15,13 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	if (lex.peek().value == "?") {
+	if (lex.peek().value == TokenTable::TnInfo[TN_quest]) {
 		condExpr->addNode(new TerminalNode(lex.read()));
 
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			condExpr->addNode(expr);
-			if (lex.peek().value == ":") {
+			if (lex.peek().value == TokenTable::TnInfo[TN_colon]) {
 				condExpr->addNode(new TerminalNode(lex.read()));
 
 				Node *nextCondExpr = NodeCondExpr::parse(cs);
@@ -47,7 +46,6 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::log(
-			"Returning NodeCondExpr, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeCondExpr, Token Value: " + lex.peek().value);
 	return condExpr;
 }

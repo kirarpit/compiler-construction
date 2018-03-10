@@ -7,7 +7,7 @@ Node* NodeFactor::parse(CompilerState &cs) {
 	Node *factor = new NodeFactor();
 
 	if (lex.peek().subType == "PREUN_OP" || lex.peek().subType == "POSTUN_OP"
-			|| lex.peek().value == "-") {
+			|| lex.peek().value == TokenTable::TnInfo[TN_minus]) {
 		factor->addNode(new TerminalNode(lex.read()));
 		Node *nextFactor = NodeFactor::parse(cs);
 		if (nextFactor) {

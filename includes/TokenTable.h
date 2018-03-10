@@ -11,10 +11,10 @@
 		XX(opnbrc, "{", 0) \
 		XX(clsbrc, "}", 0) \
 		XX(dot, ".", 0)  \
-		XX(comma, ", ", 0)  \
+		XX(comma, ",", 0)  \
 		XX(semi, ";", 0) \
-		XX(colon, "", 0) \
-		XX(coloncolon, "", 0)  \
+		XX(colon, ":", 0) \
+		XX(coloncolon, "::", 0)  \
 		XX(bang, "!", 0) \
 		XX(quest, "?", 0)  \
 		XX(equal, "=", 0)  \
@@ -38,41 +38,64 @@
 		XX(minus, "-", 0)  \
 		XX(plusplus, "++", 0)  \
 		XX(minusminus, "--", 0)	\
-		XX(bool, "bool", 1)  \
-		XX(break, "break", 1)  \
-		XX(case, "case", 1)  \
-		XX(continue, "continue", 1)  \
-		XX(default, "default", 1)  \
-		XX(do, "do", 1)  \
-		XX(else, "else", 1)  \
-		XX(false, "false", 1)  \
-		XX(float, "float", 1)  \
-		XX(if, "if", 1)  \
-		XX(return, "return", 1)  \
-		XX(signed, "signed", 1)  \
-		XX(static, "static", 1)  \
-		XX(struct, "struct", 1)  \
-		XX(switch, "switch", 1)  \
-		XX(true, "true", 1)  \
-		XX(unsigned, "unsigned", 1)  \
-		XX(var, "var", 1)  \
-		XX(void, "void", 1)  \
-		XX(while, "while", 1)  \
+		\
+		XX(bool, "bool", 2)  \
+		XX(break, "break", 2)  \
+		XX(case, "case", 2)  \
+		XX(continue, "continue", 2)  \
+		XX(default, "default", 2)  \
+		XX(do, "do", 2)  \
+		XX(else, "else", 2)  \
+		XX(false, "false", 2)  \
+		XX(float, "float", 2)  \
+		XX(if, "if", 2)  \
+		XX(return, "return", 2)  \
+		XX(signed, "signed", 2)  \
+		XX(static, "static", 2)  \
+		XX(struct, "struct", 2)  \
+		XX(switch, "switch", 2)  \
+		XX(true, "true", 2)  \
+		XX(unsigned, "unsigned", 2)  \
+		XX(var, "var", 2)  \
+		XX(void, "void", 2)  \
+		XX(while, "while", 2)  \
+		\
+		XX(underscore, "_", 3)	\
+		XX(null, "\0", 3)  \
+		XX(newline, "\n", 3)  \
+		XX(empty, "\n", 3)  \
 
-enum TOKEN_ID {
+enum {
 #define XX(a, b, c) TN_##a,
+	TOKEN_LIST
 	TN_COUNT
 #undef XX
 };
 
-#define XX(a, b, c) const std::string TS_##a=b;
-TOKEN_LIST
+#define TOKEN_TYPE_LIST \
+		XX(ILLCHR, "ILLCHR") \
+		XX(EOF, "EOF") \
+		XX(NUM, "Number")	\
+		XX(ID, "Identifier")	\
+		XX(KEY, "Keyword")	\
+		XX(LIT, "Literal")
+
+enum {
+#define XX(a, b) TT_##a,
+	TOKEN_TYPE_LIST
+	TT_COUNT
 #undef XX
+};
 
 class TokenTable {
 public:
-	TokenTable();
-	virtual ~TokenTable();
+	TokenTable() {
+	}
+	virtual ~TokenTable() {
+	}
+
+	const static std::string TnInfo[];
+	const static std::string TTInfo[];
 };
 
 #endif /* SRC_TOKENTABLE_H_ */
