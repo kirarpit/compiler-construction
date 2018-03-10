@@ -2,7 +2,7 @@
 
 Node* NodeArraySize::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeArraySize", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *arraySize = new NodeArraySize();
 
@@ -16,6 +16,6 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodeArraySize", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return arraySize;
 }

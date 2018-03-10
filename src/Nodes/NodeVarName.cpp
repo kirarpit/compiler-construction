@@ -2,7 +2,7 @@
 
 Node* NodeVarName::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeVarName", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *varName = NULL;
 
@@ -13,9 +13,9 @@ Node* NodeVarName::parse(CompilerState &cs) {
 
 		cs.st->insertVar(id);
 	} else {
-		cs.es.reportError(cs);
+		cs.es.reportParseError(cs);
 	}
 
-	Logger::logNodeExit("NodeVarName", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return varName;
 }

@@ -7,17 +7,18 @@
 
 class ErrorStream {
 public:
-	ErrorStream(std::ostream &err) :
-			error(false), errorStream(err), errorCount(0) {
+	ErrorStream(std::ostream &s) :
+			error(false), es(s), errorCount(0) {
 	}
 
+	void reportParseError(CompilerState &cs);
 	void reportError();
 	int getErrorCount();
 	void recover(CompilerState &cs);
 
 	bool error;
 private:
-	std::ostream &errorStream;
+	std::ostream &es;
 	int errorCount;
 };
 

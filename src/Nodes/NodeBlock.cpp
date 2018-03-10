@@ -2,7 +2,7 @@
 
 Node* NodeBlock::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeBlock", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	if (!cs.st) {
 		cs.st = new SymbolTable();
@@ -29,6 +29,6 @@ Node* NodeBlock::parse(CompilerState &cs) {
 
 	cs.st = cs.st->exitScope();
 
-	Logger::logNodeExit("NodeBlock", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return block;
 }

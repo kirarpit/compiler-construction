@@ -14,7 +14,7 @@ std::string InputStream::read() {
 	}
 
 	char ch;
-	if (myStream >> std::noskipws >> ch) {
+	if (is >> std::noskipws >> ch) {
 		if (ch == '\n') {
 			lineNum++;
 			prev_location = location;
@@ -27,7 +27,7 @@ std::string InputStream::read() {
 		ss.clear();
 		ss << ch;
 		return ss.str();
-	} else if (myStream.eof()) { //end of file
+	} else if (is.eof()) { //end of file
 		if (!eof_flag) {
 			prev_location = location++;
 			eof_flag = true;

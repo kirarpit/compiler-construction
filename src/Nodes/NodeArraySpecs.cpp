@@ -2,7 +2,7 @@
 
 Node* NodeArraySpecs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeArraySpec", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *arraySpecs = new NodeArraySpecs();
 
@@ -26,6 +26,6 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodeArraySpec", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return arraySpecs;
 }

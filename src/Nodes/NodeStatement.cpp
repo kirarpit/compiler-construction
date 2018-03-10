@@ -2,7 +2,7 @@
 
 Node* NodeStatement::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeStatement", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *statement = new NodeStatement();
 
@@ -16,7 +16,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportError(cs);
+				cs.es.reportParseError(cs);
 			}
 		}
 	} else {
@@ -28,7 +28,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportError(cs);
+				cs.es.reportParseError(cs);
 			}
 		}
 	}
@@ -40,7 +40,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		cs.st->flush(true);
 	}
 
-	Logger::logNodeExit("NodeStatement", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 
 	return statement;
 }

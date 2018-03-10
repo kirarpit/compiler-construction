@@ -2,7 +2,7 @@
 
 Node* NodeVarNames::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeVarNames", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *varNames = NULL;
 
@@ -20,6 +20,6 @@ Node* NodeVarNames::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodeVarNames", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return varNames;
 }

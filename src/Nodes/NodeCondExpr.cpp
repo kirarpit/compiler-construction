@@ -2,7 +2,7 @@
 
 Node* NodeCondExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeCondExpr", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	bool errorFlag = false;
 	Node *condExpr = new NodeCondExpr();
@@ -32,7 +32,7 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 				}
 
 			} else {
-				cs.es.reportError(cs);
+				cs.es.reportParseError(cs);
 				errorFlag = true;
 			}
 
@@ -46,6 +46,6 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::logNodeExit("NodeCondExpr", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return condExpr;
 }

@@ -2,7 +2,7 @@
 
 Node* NodeDefs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeDefs", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *defs = new NodeDefs();
 
@@ -26,6 +26,6 @@ Node* NodeDefs::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodeDefs", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return defs;
 }

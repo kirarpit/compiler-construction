@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-bool Logger::debug = false;
+bool Logger::debug = true;
 
 Logger::~Logger() {
 }
@@ -25,9 +25,9 @@ void Logger::logConsTerm(Token tkn) {
 }
 
 void Logger::logNodeEntry(std::string name, Token tkn) {
-	log("Parsing " + name + ". Token:" + tkn.print());
+	log("Parsing " + name + " @ " + tkn.print());
 }
 
 void Logger::logNodeExit(std::string name, Token tkn) {
-	log("Returning " + name + ". Token:" + tkn.print());
+	log("Returning " + name + " @ " + tkn.print());
 }

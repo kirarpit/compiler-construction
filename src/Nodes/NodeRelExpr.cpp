@@ -2,7 +2,7 @@
 
 Node* NodeRelExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeRelExpr", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *relExpr = new NodeRelExpr();
 
@@ -30,6 +30,6 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 		relExpr = tempRelExpr;
 	}
 
-	Logger::logNodeExit("NodeRelExpr", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return relExpr;
 }

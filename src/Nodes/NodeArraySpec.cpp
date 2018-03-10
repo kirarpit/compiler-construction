@@ -2,7 +2,7 @@
 
 Node* NodeArraySpec::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeArraySpec", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	bool errorFlag = false;
 	Node *arraySpec = new NodeArraySpec();
@@ -28,11 +28,11 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 	}
 
 	if (errorFlag) {
-		cs.es.reportError(cs);
+		cs.es.reportParseError(cs);
 		delete arraySpec;
 		return NULL;
 	}
 
-	Logger::logNodeExit("NodeArraySpec", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return arraySpec;
 }

@@ -9,7 +9,7 @@ class InputStream {
 
 public:
 	InputStream(std::istream &s) :
-			myStream(s), streamName("<stdin>"), peeked(false), myChar("\0"), location(
+			is(s), streamName("<stdin>"), peeked(false), myChar("\0"), location(
 					1), prev_location(0), lineNum(1), eof_flag(false) {
 	}
 	virtual ~InputStream();
@@ -28,7 +28,7 @@ public:
 	void setStreamName(std::string name);
 
 private:
-	std::istream &myStream;
+	std::istream &is;
 	std::string streamName;
 	bool peeked;
 	std::string myChar;

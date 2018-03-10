@@ -2,7 +2,7 @@
 
 Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeAsgnExpr", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *asgnExpr = new NodeAsgnExpr();
 
@@ -16,7 +16,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 				Logger::log(
 						"CE can't be PE, Token Value: " + lex.peek().print());
 
-				cs.es.reportError(cs);
+				cs.es.reportParseError(cs);
 				delete asgnExpr;
 				return NULL;
 			}
@@ -37,6 +37,6 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::logNodeExit("NodeAsgnExpr", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return asgnExpr;
 }

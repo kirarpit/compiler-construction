@@ -1,9 +1,13 @@
 #include<ErrorStream.h>
 
+void ErrorStream::reportParseError(CompilerState &cs) {
+	reportError();
+	es << "Error while parsing AST @ " << cs.lexer.peek().print() << "\n";
+}
+
 void ErrorStream::reportError() {
 	Logger::log("Error Reported, total error count: %d", errorCount + 1);
 
-	errorStream << "adsf";
 	error = true;
 	++errorCount;
 	if (errorCount == 10) {
@@ -25,7 +29,7 @@ void ErrorStream::recover(CompilerState &cs) {
 	}
 
 	if (cs.lexer.peek().value != TokenTable::TS[TN_semi])
-		reportError();
+		reportParseError(cs);
 
 	if (cs.lexer.peek().value != TokenTable::TS[TN_clsbrc])
 		cs.lexer.read();

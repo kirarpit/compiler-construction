@@ -2,7 +2,7 @@
 
 void NodeSpike3::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeSpike3", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *block = NodeBlock::parse(cs);
 	if (block)
@@ -11,7 +11,7 @@ void NodeSpike3::parse(CompilerState &cs) {
 	delete block;
 
 	if (cs.lexer.peek().type != TT_EOF) {
-		cs.es.reportError(cs);
+		cs.es.reportParseError(cs);
 	}
 
 	Logger::logConsTerm(lex.peek());

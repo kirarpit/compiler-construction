@@ -2,7 +2,7 @@
 
 Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodePrimaryExpr", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	bool errorFlag = false;
 	Node *primaryExpr = new NodePrimaryExpr();
@@ -28,14 +28,14 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 				lex.read();
 			} else {
 				errorFlag = true;
-				cs.es.reportError(cs);
+				cs.es.reportParseError(cs);
 			}
 		} else {
 			errorFlag = true;
 		}
 	} else {
 		errorFlag = true;
-		cs.es.reportError(cs);
+		cs.es.reportParseError(cs);
 	}
 
 	if (errorFlag) {
@@ -43,6 +43,6 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::logNodeExit("NodePrimaryExpr", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return primaryExpr;
 }

@@ -2,7 +2,7 @@
 
 Node* NodeStatements::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodeStatements", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *statements = new NodeStatements();
 
@@ -24,6 +24,6 @@ Node* NodeStatements::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodeStatements", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return statements;
 }

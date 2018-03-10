@@ -2,7 +2,7 @@
 
 Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry("NodePostfixExpr", lex.peek());
+	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *postfixExpr = new NodePostfixExpr();
 
@@ -41,6 +41,6 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit("NodePostfixExpr", lex.peek());
+	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return postfixExpr;
 }
