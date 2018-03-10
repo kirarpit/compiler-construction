@@ -11,22 +11,22 @@ public:
 		if (!children.size())
 			return;
 
-		cs.output.printWhiteSpaces();
+		cs.os.printWhiteSpaces();
 
 		if (children.size() == 3) {
-			cs.output << '{';
-			cs.output << '\n';
+			cs.os << '{';
+			cs.os << '\n';
 
-			cs.output.indent();
+			cs.os.indent();
 			children[1]->print(cs);
-			cs.output.deindent();
+			cs.os.deindent();
 
-			cs.output.printWhiteSpaces();
-			cs.output << '}';
+			cs.os.printWhiteSpaces();
+			cs.os << '}';
 		} else
 			printAllChildren(cs);
 
-		cs.output << '\n';
+		cs.os << '\n';
 	}
 
 	static Node* parse(CompilerState &cs);

@@ -1,6 +1,7 @@
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
+#include<ErrorStream.h>
 #include<CompilerState.h>
 #include<typeinfo>
 
@@ -24,13 +25,13 @@ class TerminalNode: public Node {
 public:
 	TerminalNode(Token token) :
 			terminalToken(token) {
-		Logger::log("Consumed Terminal: " + token.value);
+		Logger::logConsTerm(token);
 	}
 	~TerminalNode() {
 	}
 
 	void print(CompilerState &cs) {
-		cs.output << terminalToken.value;
+		cs.os << terminalToken.value;
 	}
 
 protected:
@@ -74,9 +75,9 @@ protected:
 	}
 
 	void printParenthesised(CompilerState &cs) {
-		cs.output << '(';
+		cs.os << '(';
 		printAllChildren(cs);
-		cs.output << ')';
+		cs.os << ')';
 	}
 
 	void printFPIF(CompilerState &cs) {

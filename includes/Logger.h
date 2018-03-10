@@ -6,12 +6,17 @@
 #include<sstream>
 #include<string>
 #include<execinfo.h>
+#include<Token.h>
 
 class Logger {
 public:
 	virtual ~Logger();
 	static void log(std::string str);
 	static void log(std::string str, int i);
+	static void logConsTerm(Token tkn);
+	static void logNodeEntry(std::string name, Token tkn);
+	static void logNodeExit(std::string name, Token tkn);
+
 	static bool debug;
 
 private:

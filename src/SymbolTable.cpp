@@ -60,9 +60,9 @@ void SymbolTable::print(CompilerState &cs) {
 
 	for (std::map<std::string, VariableInfo>::iterator i = variables.begin();
 			i != variables.end(); i++) {
-		cs.output << i->first << " ";
+		cs.os << i->first << " ";
 		i->second.print(cs);
-		cs.output << '\n';
+		cs.os << '\n';
 	}
 }
 

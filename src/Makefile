@@ -45,7 +45,7 @@ test:	$(PROGRAM) $(TEST_RESULTS)
 
 $(TEST_DIR)/%.blko:	$(TEST_DIR)/%.blki FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
-	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) | diff $(@F) -
+	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null | diff $(@F) -
 	@echo "OK]"
 
 clean:	

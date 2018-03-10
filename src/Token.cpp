@@ -18,5 +18,6 @@ std::string Token::print() {
 		output << "$id:";
 	}
 
+	output << value;
 	return output.str();
 }

@@ -6,29 +6,24 @@
 #include<Logger.h>
 #include<cstdlib>
 
+class ErrorStream;
 class SymbolTable;
 
 class CompilerState {
 public:
-	CompilerState(InputStream &in, OutputStream &out, Lexer &lex) :
-			input(in), output(out), lexer(lex), st(
-			NULL), error(false), errorCount(0) {
+	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
+			Lexer &lex) :
+			is(in), os(out), es(err), lexer(lex), st(
+			NULL) {
 	}
 	virtual ~CompilerState() {
 	}
 
-	void reportError();
-	int getErrorCount();
-	void recover();
-
-	InputStream &input;
-	OutputStream &output;
+	InputStream &is;
+	OutputStream &os;
+	ErrorStream &es;
 	Lexer &lexer;
 	SymbolTable *st;
-
-	bool error;
-private:
-	int errorCount;
 };
 
 #endif /* SRC_COMPILERSTATE_H_ */

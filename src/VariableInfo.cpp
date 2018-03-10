@@ -13,11 +13,11 @@ void VariableInfo::setType(TypeInfo *typeInfo) {
 void VariableInfo::print(CompilerState &cs) {
 	Logger::log("Printing VariableInfo");
 
-	cs.output << VarStatInfo[status];
-	cs.output << " ";
+	cs.os << VarStatInfo[status];
+	cs.os << " ";
 
 	if (type == NULL) {
-		cs.output << "unknown";
+		cs.os << "unknown";
 	} else {
 		recursiveTypePrint(cs, type);
 	}

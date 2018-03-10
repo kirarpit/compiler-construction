@@ -20,3 +20,14 @@ void Logger::log(std::string str, int i) {
 		std::cout << str << '\n';
 	}
 }
+void Logger::logConsTerm(Token tkn) {
+	log("Consumed Terminal. Token:" + tkn.print());
+}
+
+void Logger::logNodeEntry(std::string name, Token tkn) {
+	log("Parsing " + name + ". Token:" + tkn.print());
+}
+
+void Logger::logNodeExit(std::string name, Token tkn) {
+	log("Returning " + name + ". Token:" + tkn.print());
+}

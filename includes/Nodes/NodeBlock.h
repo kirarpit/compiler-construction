@@ -15,7 +15,7 @@ public:
 
 	void print(CompilerState &cs) {
 		printST(cs);
-		cs.output << '\n';
+		cs.os << '\n';
 		for (unsigned int i = 0; i < children.size(); i++) {
 			if (i) {
 				children[i]->print(cs);

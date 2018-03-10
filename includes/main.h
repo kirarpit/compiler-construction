@@ -6,6 +6,7 @@
 #include<InputStream.h>
 #include<Lexer.h>
 #include<OutputStream.h>
+#include<ErrorStream.h>
 #include<Token.h>
 #include<Logger.h>
 #include<TypeInfo.h>

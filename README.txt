@@ -40,7 +40,7 @@
 
     - SPECIFIC #2: In case an error is encountered while parsing 
       STATEMENTS, the whole statement in which error is found would be
-      ignored in BOFPIF output but any varaibles that occur before the
+      ignored in BOFPIF output but any varaibles which occured before the
       error would still be parsed for variable declaration.
     
     - SPECIFIC #3: If more than 9 errors are encountered, the program

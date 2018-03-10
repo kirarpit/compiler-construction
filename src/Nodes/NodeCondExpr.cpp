@@ -32,7 +32,7 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 				}
 
 			} else {
-				cs.reportError();
+				cs.es.reportError();
 				errorFlag = true;
 			}
 

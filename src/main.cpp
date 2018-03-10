@@ -23,10 +23,12 @@ int main(int argc, char **argv) {
 
 	OutputStream output(std::cout);
 	Lexer lex = Lexer(input);
-	CompilerState cs(input, output, lex);
+	ErrorStream error(std::cerr);
+
+	CompilerState cs(input, output, error, lex);
 
 	NodeSpike3::parse(cs);
 
-	exit(cs.getErrorCount());
+	exit(cs.es.getErrorCount());
 }
 

@@ -11,9 +11,9 @@ void NodeSpike3::parse(CompilerState &cs) {
 	delete block;
 
 	if (cs.lexer.peek().type != TT_EOF) {
-		cs.reportError();
+		cs.es.reportError();
 	}
 
-	Logger::log("Consumed Terminal:" + lex.peek().value);
+	Logger::logConsTerm(lex.peek());
 	lex.read();
 }
