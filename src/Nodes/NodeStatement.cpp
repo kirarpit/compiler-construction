@@ -2,7 +2,7 @@
 
 Node* NodeStatement::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeStatement, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeStatement", lex.peek());
 
 	Node *statement = new NodeStatement();
 
@@ -40,7 +40,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		cs.st->flush(true);
 	}
 
-	Logger::log("Returning NodeStatement, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeStatement", lex.peek());
 
 	return statement;
 }

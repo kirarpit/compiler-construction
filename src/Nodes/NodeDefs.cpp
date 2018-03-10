@@ -2,7 +2,7 @@
 
 Node* NodeDefs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeDefs, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeDefs", lex.peek());
 
 	Node *defs = new NodeDefs();
 
@@ -26,6 +26,6 @@ Node* NodeDefs::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log("Returning NodeDefs, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeDefs", lex.peek());
 	return defs;
 }

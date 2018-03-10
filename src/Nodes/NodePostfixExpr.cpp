@@ -2,7 +2,7 @@
 
 Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodePostfixExpr, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodePostfixExpr", lex.peek());
 
 	Node *postfixExpr = new NodePostfixExpr();
 
@@ -41,6 +41,6 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log("Returning NodePostfixExpr, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodePostfixExpr", lex.peek());
 	return postfixExpr;
 }

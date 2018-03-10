@@ -2,7 +2,7 @@
 
 Node* NodeTypeSpec::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeTypeSpec, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeTypeSpec", lex.peek());
 
 	Node *typeSpec = NULL;
 
@@ -20,6 +20,6 @@ Node* NodeTypeSpec::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log("Returning NodeTypeSpec, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeTypeSpec", lex.peek());
 	return typeSpec;
 }

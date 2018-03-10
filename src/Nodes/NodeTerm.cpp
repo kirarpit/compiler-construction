@@ -2,7 +2,7 @@
 
 Node* NodeTerm::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeTerm, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeTerm", lex.peek());
 
 	Node *term = new NodeTerm();
 
@@ -30,6 +30,6 @@ Node* NodeTerm::parse(CompilerState &cs) {
 		term = tempTerm;
 	}
 
-	Logger::log("Returning NodeTerm, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeTerm", lex.peek());
 	return term;
 }

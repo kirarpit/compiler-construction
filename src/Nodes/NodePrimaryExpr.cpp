@@ -2,7 +2,7 @@
 
 Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodePrimaryExpr, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodePrimaryExpr", lex.peek());
 
 	bool errorFlag = false;
 	Node *primaryExpr = new NodePrimaryExpr();
@@ -43,6 +43,6 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::log("Returning NodePrimaryExpr, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodePrimaryExpr", lex.peek());
 	return primaryExpr;
 }

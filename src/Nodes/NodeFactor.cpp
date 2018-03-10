@@ -2,7 +2,7 @@
 
 Node* NodeFactor::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeFactor, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeFactor", lex.peek());
 
 	Node *factor = new NodeFactor();
 
@@ -25,6 +25,6 @@ Node* NodeFactor::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log("Returning NodeFactor, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeFactor", lex.peek());
 	return factor;
 }

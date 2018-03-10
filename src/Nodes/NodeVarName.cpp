@@ -2,7 +2,7 @@
 
 Node* NodeVarName::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeVarName, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeVarName", lex.peek());
 
 	Node *varName = NULL;
 
@@ -16,6 +16,6 @@ Node* NodeVarName::parse(CompilerState &cs) {
 		cs.reportError();
 	}
 
-	Logger::log("Returning NodeVarName, Token Value: " + lex.peek().value);
+	Logger::logNodeExit("NodeVarName", lex.peek());
 	return varName;
 }

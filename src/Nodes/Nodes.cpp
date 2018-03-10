@@ -2,7 +2,7 @@
 
 void NodeSpike3::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log("Parsing NodeSpike3, Token Value: " + lex.peek().value);
+	Logger::logNodeEntry("NodeSpike3", lex.peek());
 
 	Node *block = NodeBlock::parse(cs);
 	if (block)
