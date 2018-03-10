@@ -6,7 +6,7 @@ const std::string TokenTable::TnInfo[TN_COUNT] = {
 };
 #undef XX
 
-#define XX(a, b) b,
+#define XX(a, b, c) b,
 const std::string TokenTable::TTInfo[TT_COUNT] = {
 		TOKEN_TYPE_LIST
 };

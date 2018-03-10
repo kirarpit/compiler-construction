@@ -4,9 +4,9 @@ Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false) {
 
 #define XX(a, b, c)	\
-	if (c == 0) {	\
+	if (c & TT_LIT) {	\
 		literals.insert(b);	\
-	} else if (c == 1){	\
+	} else if (c & TT_KEY){	\
 		keywords.insert(b);	\
 	}
 	TOKEN_LIST
