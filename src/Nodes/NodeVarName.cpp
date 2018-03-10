@@ -16,7 +16,6 @@ Node* NodeVarName::parse(CompilerState &cs) {
 		cs.reportError();
 	}
 
-	Logger::log(
-			"Returning NodeVarName, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeVarName, Token Value: " + lex.peek().value);
 	return varName;
 }

@@ -2,8 +2,7 @@
 
 Node* NodeOptVarNames::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log(
-			"Parsing NodeOptVarNames, Token Value: " + lex.peek().value);
+	Logger::log("Parsing NodeOptVarNames, Token Value: " + lex.peek().value);
 
 	Node *optVarNames = new NodeOptVarNames();
 
@@ -19,7 +18,6 @@ Node* NodeOptVarNames::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log(
-			"Returning NodeOptVarNames, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeOptVarNames, Token Value: " + lex.peek().value);
 	return optVarNames;
 }

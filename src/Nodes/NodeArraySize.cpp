@@ -2,8 +2,7 @@
 
 Node* NodeArraySize::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::log(
-			"Parsing NodeArraySize, Token Value: " + lex.peek().value);
+	Logger::log("Parsing NodeArraySize, Token Value: " + lex.peek().value);
 
 	Node *arraySize = new NodeArraySize();
 
@@ -17,7 +16,6 @@ Node* NodeArraySize::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::log(
-			"Returning NodeArraySize, Token Value: " + lex.peek().value);
+	Logger::log("Returning NodeArraySize, Token Value: " + lex.peek().value);
 	return arraySize;
 }
