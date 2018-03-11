@@ -18,26 +18,26 @@
 		XX(bang, "!", TT_LIT) \
 		XX(quest, "?", TT_LIT)  \
 		XX(equal, "=", TT_LIT)  \
-		XX(equalequal, "==", TT_LIT | TT_EQ_OP)  \
-		XX(notequal, "!=", TT_LIT | TT_EQ_OP)  \
+		XX(equalequal, "==", (TT_LIT | TT_EQ_OP))  \
+		XX(notequal, "!=", (TT_LIT | TT_EQ_OP))  \
 		XX(leftshift, "<<", TT_LIT) \
 		XX(rightshift, ">>", TT_LIT)  \
-		XX(gtr, ">", TT_LIT | TT_REL_OP)  \
-		XX(lss, "<", TT_LIT | TT_REL_OP)  \
-		XX(gtrequal, ">=", TT_LIT | TT_REL_OP)  \
-		XX(lssequal, "<=", TT_LIT | TT_REL_OP)  \
-		XX(and, "&", TT_LIT | TT_PREUN_OP)  \
+		XX(gtr, ">", (TT_LIT | TT_REL_OP))  \
+		XX(lss, "<", (TT_LIT | TT_REL_OP))  \
+		XX(gtrequal, ">=", (TT_LIT | TT_REL_OP))  \
+		XX(lssequal, "<=", (TT_LIT | TT_REL_OP))  \
+		XX(and, "&", (TT_LIT | TT_PREUN_OP))  \
 		XX(andand, "&&", TT_LIT)  \
 		XX(or, "|", TT_LIT) \
 		XX(oror, "||", TT_LIT)  \
 		XX(xor, "^", TT_LIT)  \
-		XX(star, "*", TT_LIT | TT_FACTOR_OP) \
+		XX(star, "*", (TT_LIT | TT_FACTOR_OP)) \
 		XX(mod, "%", TT_LIT)  \
-		XX(slash, "/", TT_LIT | TT_FACTOR_OP)  \
-		XX(plus, "+", TT_LIT | TT_TERM_OP) \
-		XX(minus, "-", TT_LIT | TT_TERM_OP | TT_PREUN_OP)  \
-		XX(plusplus, "++", TT_LIT | TT_PREUN_OP | TT_POSTUN_OP)  \
-		XX(minusminus, "--", TT_LIT | TT_PREUN_OP | TT_POSTUN_OP)	\
+		XX(slash, "/", (TT_LIT | TT_FACTOR_OP))  \
+		XX(plus, "+", (TT_LIT | TT_TERM_OP)) \
+		XX(minus, "-", ((TT_LIT | TT_TERM_OP) | TT_PREUN_OP))  \
+		XX(plusplus, "++", ((TT_LIT | TT_PREUN_OP) | TT_POSTUN_OP))  \
+		XX(minusminus, "--", ((TT_LIT | TT_PREUN_OP) | TT_POSTUN_OP))	\
 		\
 		XX(bool, "bool", TT_KEY)  \
 		XX(break, "break", TT_KEY)  \

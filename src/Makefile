@@ -1,7 +1,7 @@
 # Directories
 ROOT_DIR:=..
 INCLUDE_DIR:=$(ROOT_DIR)/includes
-SOURCE_DIR:=$(ROOT_DIR)/src
+SOURCE_DIR:=.
 TEST_DIR:=$(ROOT_DIR)/tests
 
 # The program we will build is defined here
@@ -20,8 +20,8 @@ TARBASE:=$(NAME)-$(TIMESTAMP)-$(DEV)
 TARNAME:=$(TARBASE).tar
 
 # Here we support both C and C++ though we'd usually blkect just one or the other
-CPP_FILES = $(shell find ./ -type f -name '*.cpp')
-HDR_FILES:=$(shell find ./ -type f -name '*.h')
+CPP_FILES = $(shell find $(SOURCE_DIR)/ -type f -name '*.cpp')
+HDR_FILES:=$(shell find $(INCLUDE_DIR)/ -type f -name '*.h')
 
 CPPOBJ_FILES:=$(patsubst %.cpp,%.o,$(CPP_FILES))
 
@@ -33,13 +33,24 @@ INCLUDES:=-I $(INCLUDE_DIR)
 TEST_FILES:=$(wildcard $(TEST_DIR)/*.blki)
 TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.blki,$(TEST_DIR)/%.blko,$(TEST_FILES))
 
+# Dependencies generation
+DEPDIR := .d
+$(shell mkdir -p $(DEPDIR) >/dev/null)
+$(shell mkdir -p $(DEPDIR)/Nodes >/dev/null)
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
+POSTCOMPILE = @mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d && touch $@
+
 all:	$(PROGRAM)
 
 $(PROGRAM):	$(CPPOBJ_FILES)
 	g++ $(LDFLAGS) $^ -o $@
 
-%.o:	%.cpp $(ALL_DEP)
-	g++ $(CPPFLAGS) $(INCLUDES) -c $< -o $@
+%.o:	%.cpp
+	g++ $(DEPFLAGS) $(CPPFLAGS) $(INCLUDES) -c $< -o $@
+	$(POSTCOMPILE)
+
+$(DEPDIR)/%.d:	;
+.PRECIOUS:	$(DEPDIR)/%.d
 
 test:	$(PROGRAM) $(TEST_RESULTS)
 
@@ -50,19 +61,15 @@ $(TEST_DIR)/%.blko:	$(TEST_DIR)/%.blki FORCE
 
 clean:	
 	find $(SOURCE_DIR) $(INCLUDE_DIR) -name "*.o" -type f -delete 
+	rm -rf $(SOURCE_DIR)/$(DEPDIR)
 
 realclean: clean
 	rm -f $(PROGRAM)
 
 tar:	realclean
-	cd ..;tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
+	cd ..;
+	tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
 
-#depend: .depend
-
-#.depend:	$(CPP_FILES)
-#	rm -f ./.depend
-#	g++ $(CPPFLAGS) $(INCLUDES) -MM $^ -MF ./.depend;
-
-#include .depend
+include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(CPP_FILES))))
 
 .PHONY:	FORCE
