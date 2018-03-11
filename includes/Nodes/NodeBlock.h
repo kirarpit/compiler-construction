@@ -1,3 +1,6 @@
+#ifndef SRC_NodeBlock_H_
+#define SRC_NodeBlock_H_
+
 #include "Nodes.h"
 #include "SymbolTable.h"
 
@@ -31,3 +34,5 @@ public:
 
 	SymbolTable *myST;
 };
+
+#endif

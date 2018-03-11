@@ -1,3 +1,6 @@
+#ifndef SRC_NodeArraySize_H_
+#define SRC_NodeArraySize_H_
+
 #include "Nodes.h"
 
 class NodeArraySize: public NonTerminalNode {
@@ -12,3 +15,5 @@ public:
 	}
 	static Node* parse(CompilerState &cs);
 };
+
+#endif

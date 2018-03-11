@@ -1,3 +1,6 @@
+#ifndef SRC_NodeSimpleExpr_H_
+#define SRC_NodeSimpleExpr_H_
+
 #include "Nodes.h"
 
 class NodeSimpleExpr: public NonTerminalNode {
@@ -12,3 +15,5 @@ public:
 	}
 	static Node* parse(CompilerState &cs);
 };
+
+#endif

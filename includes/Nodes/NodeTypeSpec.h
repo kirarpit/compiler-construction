@@ -1,3 +1,6 @@
+#ifndef SRC_NodeTypeSpec_H_
+#define SRC_NodeTypeSpec_H_
+
 #include "Nodes.h"
 
 class NodeTypeSpec: public NonTerminalNode {
@@ -12,3 +15,5 @@ public:
 	}
 	static Node* parse(CompilerState &cs);
 };
+
+#endif
