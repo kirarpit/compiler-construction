@@ -1,8 +1,6 @@
 #ifndef SRC_NodeOptVarNames_H_
 #define SRC_NodeOptVarNames_H_
 
-#include "Nodes.h"
-
 class NodeOptVarNames: public NonTerminalNode {
 public:
 	NodeOptVarNames() {

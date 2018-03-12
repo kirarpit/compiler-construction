@@ -1,8 +1,6 @@
 #ifndef SRC_NodePostfixExpr_H_
 #define SRC_NodePostfixExpr_H_
 
-#include "Nodes.h"
-
 class NodePostfixExpr: public NonTerminalNode {
 public:
 	NodePostfixExpr() {

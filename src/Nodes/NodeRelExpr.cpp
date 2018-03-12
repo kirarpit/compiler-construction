@@ -1,4 +1,4 @@
-#include "Nodes/AllNodesHeader.h"
+#include <AllNodeHeaders.h>
 
 Node* NodeRelExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;

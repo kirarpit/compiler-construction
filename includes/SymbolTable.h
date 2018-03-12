@@ -5,10 +5,8 @@
 #include<vector>
 #include<CompilerState.h>
 #include<VariableInfo.h>
-#include<Token.h>
-#include<TypeInfo.h>
-#include<OutputStream.h>
-#include<Nodes/Nodes.h>
+
+class Node;
 
 class SymbolTable {
 public:

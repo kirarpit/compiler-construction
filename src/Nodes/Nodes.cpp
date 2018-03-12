@@ -1,4 +1,4 @@
-#include "Nodes/AllNodesHeader.h"
+#include <AllNodeHeaders.h>
 
 void NodeSpike3::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;

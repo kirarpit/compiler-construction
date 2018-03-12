@@ -1,4 +1,4 @@
-#include "Nodes/AllNodesHeader.h"
+#include <AllNodeHeaders.h>
 #include "TypeInfo.h"
 
 Node* NodeTypeName::parse(CompilerState &cs) {

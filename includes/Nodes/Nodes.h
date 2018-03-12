@@ -1,9 +1,9 @@
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
-#include<ErrorStream.h>
-#include<CompilerState.h>
 #include<typeinfo>
+#include<CompilerState.h>
+#include<ErrorStream.h>
 
 class Node {
 public:

@@ -1,8 +1,6 @@
 #ifndef SRC_NodeLogorExpr_H_
 #define SRC_NodeLogorExpr_H_
 
-#include "Nodes.h"
-
 class NodeLogorExpr: public NonTerminalNode {
 public:
 	NodeLogorExpr() {

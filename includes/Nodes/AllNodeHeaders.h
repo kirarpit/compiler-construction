@@ -1,5 +1,5 @@
-#ifndef ALL_NODES_HEADER_H_
-#define ALL_NODES_HEADER_H_
+#ifndef ALL_NODE_HEADERS_H_
+#define ALL_NODE_HEADERS_H_
 
 #include "Nodes/Nodes.h"
 
@@ -31,4 +31,4 @@
 #include "NodeSimpleExpr.h"
 #include "NodeTerm.h"
 
-#endif /* ALL_NODES_HEADER_H_ */
+#endif /* ALL_NODE_HEADERS_H_ */

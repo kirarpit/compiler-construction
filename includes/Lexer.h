@@ -12,7 +12,6 @@
 #include<Token.h>
 #include<InputStream.h>
 #include<TokenTable.h>
-#include<Logger.h>
 
 class Lexer {
 

@@ -1,8 +1,6 @@
 #ifndef SRC_NodeEqExpr_H_
 #define SRC_NodeEqExpr_H_
 
-#include "Nodes.h"
-
 class NodeEqExpr: public NonTerminalNode {
 public:
 	NodeEqExpr() {

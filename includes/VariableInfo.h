@@ -3,10 +3,7 @@
 
 #include<string>
 #include<TypeInfo.h>
-#include<OutputStream.h>
-#include<Token.h>
-#include<CompilerState.h>
-#include<Nodes/Nodes.h>
+#include<Nodes.h>
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\
@@ -44,7 +41,6 @@ public:
 	void recursiveTypePrint(CompilerState &cs, TypeInfo *type);
 	TypeInfo *type;
 	int status;
-	Token tkn;
 };
 
 #endif /* SRC_VARIABLEINFO_H_ */

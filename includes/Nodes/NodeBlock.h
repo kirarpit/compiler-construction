@@ -1,8 +1,7 @@
 #ifndef SRC_NodeBlock_H_
 #define SRC_NodeBlock_H_
 
-#include "Nodes.h"
-#include "SymbolTable.h"
+#include<SymbolTable.h>
 
 class NodeBlock: public NonTerminalNode {
 public:
