@@ -5,7 +5,6 @@
 #include<iostream>
 #include<sstream>
 #include<string>
-#include<execinfo.h>
 #include<Token.h>
 
 inline std::string className(const std::string& prettyFunction) {

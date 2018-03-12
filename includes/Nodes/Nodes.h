@@ -1,6 +1,3 @@
-#ifndef SRC_Nodes_H_
-#define SRC_Nodes_H_
-
 #ifndef SRC_NODES_H_
 #define SRC_NODES_H_
 
@@ -105,5 +102,3 @@ public:
 };
 
 #endif /* SRC_NODES_H_ */
-
-#endif

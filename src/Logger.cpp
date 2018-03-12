@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-bool Logger::debug = true;
+bool Logger::debug = false;
 
 Logger::~Logger() {
 }

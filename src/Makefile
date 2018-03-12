@@ -27,7 +27,7 @@ CPPOBJ_FILES:=$(patsubst %.cpp,%.o,$(CPP_FILES))
 
 # Set up so changes in any file in ALL_DEP trigger a full rebuild
 ALL_DEP:=$(HDR_FILES) Makefile
-INCLUDES:=-I $(INCLUDE_DIR)
+INCLUDES:=-I $(INCLUDE_DIR) -I $(INCLUDE_DIR)/Nodes
 
 # Test files info
 TEST_FILES:=$(wildcard $(TEST_DIR)/*.blki)

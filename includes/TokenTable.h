@@ -63,7 +63,7 @@
 		XX(underscore, "_", TT_OTHER)	\
 		XX(null, "\0", TT_OTHER)  \
 		XX(newline, "\n", TT_OTHER)  \
-		XX(empty, "\n", TT_OTHER)  \
+		XX(empty, "", TT_OTHER)  \
 
 enum {
 #define XX(a, b, c) TN_##a,
