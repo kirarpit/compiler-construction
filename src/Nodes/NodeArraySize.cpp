@@ -1,5 +1,4 @@
-#include "NodeArraySize.h"
-#include "NodeExpr.h"
+#include <AllNodeHeaders.h>
 
 Node* NodeArraySize::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
