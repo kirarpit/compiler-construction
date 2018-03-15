@@ -9,8 +9,7 @@ public:
 	}
 
 	static Node* parse(CompilerState &cs);
-	void print(CompilerState &cs) {
-	}
+	void print(CompilerState &cs);
 };
 
 #endif /* SRC_NODES_NODEOPTELSE_H_ */

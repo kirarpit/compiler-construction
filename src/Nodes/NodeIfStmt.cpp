@@ -47,3 +47,17 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return ifStmt;
 }
+
+void NodeIfStmt::print(CompilerState &cs) {
+	for (unsigned int i = 0; i < children.size(); i++) {
+		if (i == 1)
+			cs.os << " ";
+		if (i == 4) {
+			cs.os << "\n";
+			cs.os.indent();
+		}
+		if (i == 5)
+			cs.os.deindent();
+		children[i]->print(cs);
+	}
+}

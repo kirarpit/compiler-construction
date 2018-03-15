@@ -1,7 +1,7 @@
 #ifndef ALL_NODE_HEADERS_H_
 #define ALL_NODE_HEADERS_H_
 
-#include "Nodes/Nodes.h"
+#include "Nodes.h"
 
 #include "NodeDefs.h"
 #include "NodeBlock.h"

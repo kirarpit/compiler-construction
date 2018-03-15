@@ -56,3 +56,25 @@ Node* NodeStatement::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return statement;
 }
+
+void NodeStatement::print(CompilerState &cs) {
+	if (!children.size())
+		return;
+
+	cs.os.printWhiteSpaces();
+
+	if (children.size() == 3) {
+		cs.os << "{\n";
+
+		cs.os.indent();
+		children[1]->print(cs);
+		cs.os.deindent();
+
+		cs.os.printWhiteSpaces();
+		cs.os << '}';
+	} else
+		printAllChildren(cs);
+
+	if (children.size() != 1)
+		cs.os << '\n';
+}

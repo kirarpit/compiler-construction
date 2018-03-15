@@ -8,28 +8,7 @@ public:
 	~NodeStatement() {
 	}
 
-	void print(CompilerState &cs) {
-		if (!children.size())
-			return;
-
-		cs.os.printWhiteSpaces();
-
-		if (children.size() == 3) {
-			cs.os << '{';
-			cs.os << '\n';
-
-			cs.os.indent();
-			children[1]->print(cs);
-			cs.os.deindent();
-
-			cs.os.printWhiteSpaces();
-			cs.os << '}';
-		} else
-			printAllChildren(cs);
-
-		cs.os << '\n';
-	}
-
+	void print(CompilerState &cs);
 	static Node* parse(CompilerState &cs);
 };
 

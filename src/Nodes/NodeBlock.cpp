@@ -32,3 +32,17 @@ Node* NodeBlock::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return block;
 }
+
+void NodeBlock::print(CompilerState &cs) {
+	printST(cs);
+	cs.os << '\n';
+	for (unsigned int i = 0; i < children.size(); i++) {
+		if (i) {
+			children[i]->print(cs);
+		}
+	}
+}
+
+void NodeBlock::printST(CompilerState &cs) {
+	myST->print(cs);
+}

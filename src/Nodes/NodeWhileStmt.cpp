@@ -42,3 +42,20 @@ Node* NodeWhileStmt::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return whileStmt;
 }
+
+void NodeWhileStmt::print(CompilerState &cs) {
+	unsigned int i = 0;
+
+	for (i = 0; i < children.size(); i++) {
+		if (i == 1)
+			cs.os << " ";
+		if (i == 4) {
+			cs.os.indent();
+			cs.os << "\n";
+		}
+		children[i]->print(cs);
+	}
+
+	if (i && i == children.size())
+		cs.os.deindent();
+}
