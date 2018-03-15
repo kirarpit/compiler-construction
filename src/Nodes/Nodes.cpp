@@ -1,6 +1,6 @@
 #include <AllNodeHeaders.h>
 
-void NodeSpike3::parse(CompilerState &cs) {
+void NodeSpike4::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 

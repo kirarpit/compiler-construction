@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 
 	CompilerState cs(input, output, error, lex);
 
-	NodeSpike3::parse(cs);
+	NodeSpike4::parse(cs);
 
 	exit(cs.es.getErrorCount());
 }

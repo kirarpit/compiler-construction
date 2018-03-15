@@ -5,7 +5,7 @@ SOURCE_DIR:=.
 TEST_DIR:=$(ROOT_DIR)/tests
 
 # The program we will build is defined here
-NAME:=spike3
+NAME:=spike4
 PROGRAM:=$(ROOT_DIR)/$(NAME)
 
 # Some reasonably strict and therefore supportive compilation flags to get us started

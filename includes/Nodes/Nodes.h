@@ -91,11 +91,11 @@ protected:
 	std::vector<Node*> children;
 };
 
-class NodeSpike3: public NonTerminalNode {
+class NodeSpike4: public NonTerminalNode {
 public:
-	NodeSpike3() {
+	NodeSpike4() {
 	}
-	~NodeSpike3() {
+	~NodeSpike4() {
 	}
 	void print(CompilerState &cs) = 0;
 	static void parse(CompilerState &cs);

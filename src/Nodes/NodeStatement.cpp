@@ -9,9 +9,9 @@ Node* NodeStatement::parse(CompilerState &cs) {
 	if (lex.peek().value == TokenTable::TS[TN_opnbrc]) {
 		statement->addNode(new TerminalNode(lex.read()));
 
-		Node *statements = NodeStatements::parse(cs);
-		if (statements) {
-			statement->addNode(statements);
+		Node *block = NodeBlock::parse(cs);
+		if (block) {
+			statement->addNode(block);
 
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
@@ -19,6 +19,19 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				cs.es.reportParseError(cs);
 			}
 		}
+
+	} else if (lex.peek().value == TokenTable::TS[TN_if]) {
+		Node *ifStmt = NodeIfStmt::parse(cs);
+		if (ifStmt) {
+			statement->addNode(ifStmt);
+		}
+
+	} else if (lex.peek().value == TokenTable::TS[TN_while]) {
+		Node *whileStmt = NodeWhileStmt::parse(cs);
+		if (whileStmt) {
+			statement->addNode(whileStmt);
+		}
+
 	} else {
 		Node *expr = NodeExpr::parse(cs);
 
@@ -41,6 +54,5 @@ Node* NodeStatement::parse(CompilerState &cs) {
 	}
 
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
-
 	return statement;
 }
