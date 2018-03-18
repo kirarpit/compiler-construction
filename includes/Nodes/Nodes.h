@@ -19,6 +19,10 @@ public:
 	virtual bool findPostfixExpr() {
 		return false;
 	}
+
+	virtual SymbolTable* getST() {
+		return NULL;
+	}
 };
 
 class TerminalNode: public Node {

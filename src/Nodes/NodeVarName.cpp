@@ -11,7 +11,7 @@ Node* NodeVarName::parse(CompilerState &cs) {
 		Token id = lex.read();
 		varName->addNode(new TerminalNode(id));
 
-		cs.st->insertVar(id);
+		cs.lastBlock->getST()->insertVar(id);
 	} else {
 		cs.es.reportParseError(cs);
 	}

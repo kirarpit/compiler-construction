@@ -4,20 +4,15 @@ Node* NodeBlock::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
-	if (!cs.st) {
-		cs.st = new SymbolTable();
-	} else {
-		cs.st = cs.st->enterScope();
-	}
-
-	Node *block = NULL;
+	SymbolTable *st = SymbolTable::enterScope(cs.lastBlock);
+	Node *block = new NodeBlock(st);
+	cs.lastBlock = block;
 
 	Node *defs = NodeDefs::parse(cs);
 	if (defs) {
-		block = new NodeBlock(cs.st);
 		block->addNode(defs);
 
-		cs.st->isDef = false;
+		st->isDef = false;
 		Node *statements = NodeStatements::parse(cs);
 		if (statements) {
 			block->addNode(statements);
@@ -25,9 +20,12 @@ Node* NodeBlock::parse(CompilerState &cs) {
 			delete block;
 			block = NULL;
 		}
+	} else {
+		delete block;
+		block = NULL;
 	}
 
-	cs.st = cs.st->exitScope();
+	cs.lastBlock = st->exitScope();
 
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return block;
@@ -45,4 +43,8 @@ void NodeBlock::print(CompilerState &cs) {
 
 void NodeBlock::printST(CompilerState &cs) {
 	myST->print(cs);
+}
+
+SymbolTable* NodeBlock::getST() {
+	return myST;
 }

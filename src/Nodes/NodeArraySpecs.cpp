@@ -11,7 +11,7 @@ Node* NodeArraySpecs::parse(CompilerState &cs) {
 		if (arraySpec) {
 			arraySpecs->addNode(arraySpec);
 
-			cs.st->updateVarType(ARRAY, arraySpec);
+			cs.lastBlock->getST()->updateVarType(ARRAY, arraySpec);
 
 			Node *nextArraySpecs = NodeArraySpecs::parse(cs);
 			if (nextArraySpecs) {

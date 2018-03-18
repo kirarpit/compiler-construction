@@ -11,8 +11,8 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		Token id = lex.read();
 		primaryExpr->addNode(new TerminalNode(id));
 
-		if (!cs.st->isDef)
-			cs.st->insertVar(id);
+		if (!cs.lastBlock->getST()->isDef)
+			cs.lastBlock->getST()->insertVar(id);
 	} else if (lex.peek().type == TT_NUM) {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
 	} else if (lex.peek().value == TokenTable::TS[TN_opnpar]) {

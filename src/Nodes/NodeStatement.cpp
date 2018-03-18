@@ -50,7 +50,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		delete statement;
 		statement = new NodeStatement();
 		cs.es.recover(cs);
-		cs.st->flush(true);
+		cs.lastBlock->getST()->flush(true);
 	}
 
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());

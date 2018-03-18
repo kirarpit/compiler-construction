@@ -20,14 +20,15 @@ public:
 			delete varType;
 	}
 
-	SymbolTable *parent;
+	Node *parent;
 
-	SymbolTable* enterScope();
-	SymbolTable* exitScope();
+	static SymbolTable* enterScope(Node *nodeBlock);
+	Node* exitScope();
 	void updateVarType(int name, Node* node);
 	void insertVar(Token id);
 	void flush(bool error);
 	void print(CompilerState &cs);
+	SymbolTable* lookup(Token id);
 
 	bool isDef;
 

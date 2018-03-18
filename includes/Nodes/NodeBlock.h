@@ -18,6 +18,7 @@ public:
 	void print(CompilerState &cs);
 	void printST(CompilerState &cs);
 	static Node* parse(CompilerState &cs);
+	SymbolTable* getST();
 
 	SymbolTable *myST;
 };

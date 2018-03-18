@@ -13,7 +13,7 @@ class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
 			Lexer &lex) :
-			is(in), os(out), es(err), lexer(lex), st(NULL), crntBlk(NULL) {
+			is(in), os(out), es(err), lexer(lex), lastBlock(NULL) {
 	}
 	virtual ~CompilerState() {
 	}
@@ -22,8 +22,7 @@ public:
 	OutputStream &os;
 	ErrorStream &es;
 	Lexer &lexer;
-	SymbolTable *st;
-	Node *crntBlk;
+	Node *lastBlock;
 };
 
 #endif /* SRC_COMPILERSTATE_H_ */

@@ -1,12 +1,12 @@
 #include "SymbolTable.h"
 
-SymbolTable* SymbolTable::enterScope() {
+SymbolTable* SymbolTable::enterScope(Node *nodeBlock) {
 	SymbolTable *newST = new SymbolTable();
-	newST->parent = this;
+	newST->parent = nodeBlock;
 	return newST;
 }
 
-SymbolTable* SymbolTable::exitScope() {
+Node* SymbolTable::exitScope() {
 	return parent;
 }
 
@@ -29,12 +29,16 @@ void SymbolTable::insertVar(Token id) {
 			varIDs.push_back(id.value);
 		}
 	} else {
-		if (variables.find(id.value) == variables.end()) {
-			variables[id.value] = VariableInfo(VS_UNDEC);
-			variables.find(id.value)->second.setType(NULL);
+		if (variables.find(id.value) != variables.end()) {
+			variables.find(id.value)->second.status = VS_OKAY;
 		} else {
-			if (variables.find(id.value)->second.status == VS_UNUSED)
-				variables.find(id.value)->second.status = VS_OKAY;
+			SymbolTable *foundST = lookup(id);
+			if (foundST) {
+				foundST->variables.find(id.value)->second.status = VS_OKAY;
+			} else {
+				variables[id.value] = VariableInfo(VS_UNDEC);
+				variables.find(id.value)->second.setType(NULL);
+			}
 		}
 	}
 }
@@ -76,4 +80,17 @@ TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
 	TypeInfo *temp = new TypeInfo(type->name, type->value);
 	temp->typeOf = newType;
 	return temp;
+}
+
+SymbolTable* SymbolTable::lookup(Token id) {
+	if (!parent) {
+		return NULL;
+	}
+
+	if (parent->getST()->variables.find(id.value)
+			!= parent->getST()->variables.end()) {
+		return parent->getST();
+	}
+
+	return parent->getST()->lookup(id);
 }
