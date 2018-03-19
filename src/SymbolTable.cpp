@@ -22,22 +22,23 @@ void SymbolTable::insertVar(Token id) {
 	Logger::log("Inserting an ID: " + id.value);
 
 	if (isDef) {
-		if (variables.find(id.value) == variables.end()) {
+		if (!localLookup(id)) {
 			variables[id.value] = VariableInfo(VS_UNUSED);
-			variables.find(id.value)->second.setType(varType);
+			variables[id.value].setType(varType);
+
 			varType = deepCopy(varType);
 			varIDs.push_back(id.value);
 		}
 	} else {
-		if (variables.find(id.value) != variables.end()) {
-			variables.find(id.value)->second.status = VS_OKAY;
+		if (localLookup(id)) {
+			variables[id.value].status = VS_OKAY;
 		} else {
-			SymbolTable *foundST = lookup(id);
-			if (foundST) {
-				foundST->variables.find(id.value)->second.status = VS_OKAY;
+			VariableInfo *varPtr = lookup(id);
+			if (varPtr) {
+				varPtr->status = VS_OKAY;
 			} else {
 				variables[id.value] = VariableInfo(VS_UNDEC);
-				variables.find(id.value)->second.setType(NULL);
+				variables[id.value].setType(NULL);
 			}
 		}
 	}
@@ -82,15 +83,20 @@ TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
 	return temp;
 }
 
-SymbolTable* SymbolTable::lookup(Token id) {
-	if (!parent) {
+VariableInfo* SymbolTable::lookup(Token id) {
+	if (!parent)
 		return NULL;
-	}
 
-	if (parent->getST()->variables.find(id.value)
-			!= parent->getST()->variables.end()) {
-		return parent->getST();
-	}
+	VariableInfo *varPtr = parent->getST()->localLookup(id);
+	if (varPtr)
+		return varPtr;
 
 	return parent->getST()->lookup(id);
+}
+
+VariableInfo* SymbolTable::localLookup(Token id) {
+	if (variables.find(id.value) != variables.end())
+		return &variables[id.value];
+
+	return NULL;
 }

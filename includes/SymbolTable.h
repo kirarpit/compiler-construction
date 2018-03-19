@@ -28,7 +28,8 @@ public:
 	void insertVar(Token id);
 	void flush(bool error);
 	void print(CompilerState &cs);
-	SymbolTable* lookup(Token id);
+	VariableInfo* lookup(Token id);
+	VariableInfo* localLookup(Token id);
 
 	bool isDef;
 
