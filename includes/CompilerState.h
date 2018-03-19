@@ -3,8 +3,9 @@
 
 #include<cstdlib>
 
-#include<Lexer.h>
-#include<OutputStream.h>
+class Lexer;
+class InputStream;
+class OutputStream;
 class ErrorStream;
 class SymbolTable;
 class Node;
@@ -12,11 +13,8 @@ class Node;
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
-			Lexer &lex) :
-			is(in), os(out), es(err), lexer(lex), lastBlock(NULL) {
-	}
-	virtual ~CompilerState() {
-	}
+			Lexer &lex);
+	virtual ~CompilerState();
 
 	InputStream &is;
 	OutputStream &os;

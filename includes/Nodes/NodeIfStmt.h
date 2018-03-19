@@ -1,6 +1,9 @@
 #ifndef SRC_NODES_NODEIFSTMT_H_
 #define SRC_NODES_NODEIFSTMT_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeIfStmt: public NonTerminalNode {
 public:
 	NodeIfStmt() {

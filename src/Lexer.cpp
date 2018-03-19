@@ -1,4 +1,7 @@
 #include <Lexer.h>
+#include<Token.h>
+#include<InputStream.h>
+#include<TokenTable.h>
 
 Lexer::Lexer(InputStream &in) :
 		input(in), peeked(false) {

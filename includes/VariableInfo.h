@@ -2,8 +2,9 @@
 #define SRC_VARIABLEINFO_H_
 
 #include<string>
-#include<TypeInfo.h>
-#include<Nodes.h>
+
+class TypeInfo;
+class CompilerState;
 
 #define VAR_STAT_LIST \
 	XX(UNUSED, "unused")	\
@@ -19,19 +20,9 @@ enum {
 
 class VariableInfo {
 public:
-	VariableInfo() :
-			type(NULL), status(-1) {
-		Logger::log("VariableInfo Constructor Called w/o arguments");
-	}
-	VariableInfo(int status) :
-			type(NULL), status(status) {
-		Logger::log("VariableInfo Constructor Called w/ 1 argument");
-	}
-	virtual ~VariableInfo() {
-		Logger::log("VariableInfo Destructor Called");
-		if (type)
-			delete type;
-	}
+	VariableInfo();
+	VariableInfo(int status);
+	virtual ~VariableInfo();
 
 	const static std::string VarStatInfo[];
 

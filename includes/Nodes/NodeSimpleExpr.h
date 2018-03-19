@@ -1,6 +1,9 @@
 #ifndef SRC_NodeSimpleExpr_H_
 #define SRC_NodeSimpleExpr_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeSimpleExpr: public NonTerminalNode {
 public:
 	NodeSimpleExpr() {

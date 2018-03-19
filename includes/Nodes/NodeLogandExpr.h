@@ -1,6 +1,9 @@
 #ifndef SRC_NodeLogandExpr_H_
 #define SRC_NodeLogandExpr_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeLogandExpr: public NonTerminalNode {
 public:
 	NodeLogandExpr() {

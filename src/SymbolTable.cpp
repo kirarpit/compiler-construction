@@ -1,4 +1,21 @@
-#include "SymbolTable.h"
+#include<Node.h>
+#include<SymbolTable.h>
+#include<Logger.h>
+#include<TypeInfo.h>
+#include<CompilerState.h>
+#include<VariableInfo.h>
+#include<OutputStream.h>
+
+SymbolTable::SymbolTable() :
+		parent(NULL), isDef(true), varType(NULL) {
+	Logger::log("SymbolTable Constructor Called");
+}
+
+SymbolTable::~SymbolTable() {
+	Logger::log("SymbolTable Destructor Called");
+	if (varType)
+		delete varType;
+}
 
 SymbolTable* SymbolTable::enterScope(Node *nodeBlock) {
 	SymbolTable *newST = new SymbolTable();
@@ -30,16 +47,12 @@ void SymbolTable::insertVar(Token id) {
 			varIDs.push_back(id.value);
 		}
 	} else {
-		if (localLookup(id)) {
-			variables[id.value].status = VS_OKAY;
+		VariableInfo *varPtr = lookup(id);
+		if (varPtr) {
+			varPtr->status = VS_OKAY;
 		} else {
-			VariableInfo *varPtr = lookup(id);
-			if (varPtr) {
-				varPtr->status = VS_OKAY;
-			} else {
-				variables[id.value] = VariableInfo(VS_UNDEC);
-				variables[id.value].setType(NULL);
-			}
+			variables[id.value] = VariableInfo(VS_UNDEC);
+			variables[id.value].setType(NULL);
 		}
 	}
 }
@@ -84,12 +97,12 @@ TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
 }
 
 VariableInfo* SymbolTable::lookup(Token id) {
+	VariableInfo *var = localLookup(id);
+	if (var)
+		return var;
+
 	if (!parent)
 		return NULL;
-
-	VariableInfo *varPtr = parent->getST()->localLookup(id);
-	if (varPtr)
-		return varPtr;
 
 	return parent->getST()->lookup(id);
 }

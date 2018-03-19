@@ -1,4 +1,7 @@
 #include<ErrorStream.h>
+#include<CompilerState.h>
+#include<Logger.h>
+#include<Lexer.h>
 
 void ErrorStream::reportParseError(CompilerState &cs) {
 	reportError();

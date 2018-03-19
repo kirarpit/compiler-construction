@@ -1,6 +1,9 @@
 #ifndef SRC_NodeTerm_H_
 #define SRC_NodeTerm_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeTerm: public NonTerminalNode {
 public:
 	NodeTerm() {

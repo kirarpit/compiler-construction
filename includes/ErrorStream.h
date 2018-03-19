@@ -2,8 +2,8 @@
 #define INCLUDES_ERRORSTREAM_H_
 
 #include<iostream>
-#include<Logger.h>
-#include<CompilerState.h>
+
+class CompilerState;
 
 class ErrorStream {
 public:

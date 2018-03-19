@@ -1,6 +1,9 @@
 #ifndef SRC_NodeTypeSpec_H_
 #define SRC_NodeTypeSpec_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeTypeSpec: public NonTerminalNode {
 public:
 	NodeTypeSpec() {

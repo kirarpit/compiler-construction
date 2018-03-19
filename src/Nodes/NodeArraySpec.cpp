@@ -1,4 +1,5 @@
-#include <AllNodeHeaders.h>
+#include<NodeArraySpec.h>
+#include<NodeArraySize.h>
 
 Node* NodeArraySpec::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;

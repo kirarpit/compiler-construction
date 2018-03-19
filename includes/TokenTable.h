@@ -102,7 +102,6 @@ public:
 	}
 
 	const static std::string TS[];
-	const static std::string TyInfo[];
 };
 
 #endif /* SRC_TOKENTABLE_H_ */

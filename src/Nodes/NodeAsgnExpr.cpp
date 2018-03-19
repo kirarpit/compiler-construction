@@ -40,3 +40,16 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return asgnExpr;
 }
+
+//void NodeAsgnExpr::walk() {
+//	TypeInfo *types[children.size()];
+//
+//	for (unsigned int i = 0; i < children.size(); i++) {
+//		types[i] = children[i]->walk();
+//	}
+//
+//	if (children.size > 1)
+//		type = children[0]->getType();
+//	else
+//		type = TypeInfo::getOperandType(TN_equal, types[0], types[2]);
+//}

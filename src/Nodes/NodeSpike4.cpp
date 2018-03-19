@@ -1,4 +1,9 @@
-#include <AllNodeHeaders.h>
+#include<NodeSpike4.h>
+#include<Lexer.h>
+#include<CompilerState.h>
+#include<Logger.h>
+#include<NodeBlock.h>
+#include<ErrorStream.h>
 
 void NodeSpike4::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
@@ -14,6 +19,6 @@ void NodeSpike4::parse(CompilerState &cs) {
 		cs.es.reportParseError(cs);
 	}
 
-	Logger::logConsTerm(lex.peek());
+	Logger::logTerminal(lex.peek());
 	lex.read();
 }

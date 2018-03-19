@@ -1,6 +1,9 @@
 #ifndef SRC_NodeVarName_H_
 #define SRC_NodeVarName_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeVarName: public NonTerminalNode {
 public:
 	NodeVarName() {

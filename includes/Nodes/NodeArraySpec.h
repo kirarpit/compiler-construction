@@ -1,6 +1,9 @@
 #ifndef SRC_NodeArraySpec_H_
 #define SRC_NodeArraySpec_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeArraySpec: public NonTerminalNode {
 public:
 	NodeArraySpec() {

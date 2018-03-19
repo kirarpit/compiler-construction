@@ -10,8 +10,9 @@
 #include<sstream>
 
 #include<Token.h>
-#include<InputStream.h>
-#include<TokenTable.h>
+
+class InputStream;
+class TokenTable;
 
 class Lexer {
 
@@ -26,6 +27,7 @@ public:
 	bool isKeyword(std::string str);
 
 	Token tokenInit(int type, std::string val);
+
 private:
 	InputStream &input;
 

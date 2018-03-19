@@ -3,22 +3,14 @@
 
 #include<map>
 #include<vector>
-#include<CompilerState.h>
-#include<VariableInfo.h>
 
-class Node;
+class VariableInfo;
+class Token;
 
 class SymbolTable {
 public:
-	SymbolTable() :
-			parent(NULL), isDef(true), varType(NULL) {
-		Logger::log("SymbolTable Constructor Called");
-	}
-	virtual ~SymbolTable() {
-		Logger::log("SymbolTable Destructor Called");
-		if (varType)
-			delete varType;
-	}
+	SymbolTable();
+	virtual ~SymbolTable();
 
 	Node *parent;
 

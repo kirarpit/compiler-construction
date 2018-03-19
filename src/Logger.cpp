@@ -20,7 +20,7 @@ void Logger::log(std::string str, int i) {
 		std::cout << str << '\n';
 	}
 }
-void Logger::logConsTerm(Token tkn) {
+void Logger::logTerminal(Token tkn) {
 	log("Consumed Terminal. Token:" + tkn.print());
 }
 

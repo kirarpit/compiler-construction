@@ -1,6 +1,9 @@
 #ifndef SRC_NODES_NODEOPTELSE_H_
 #define SRC_NODES_NODEOPTELSE_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodeOptElse: public NonTerminalNode {
 public:
 	NodeOptElse() {

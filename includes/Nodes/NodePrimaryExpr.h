@@ -1,6 +1,9 @@
 #ifndef SRC_NodePrimaryExpr_H_
 #define SRC_NodePrimaryExpr_H_
 
+#include<NonTerminalNode.h>
+class CompilerState;
+
 class NodePrimaryExpr: public NonTerminalNode {
 public:
 	NodePrimaryExpr() {

@@ -5,11 +5,11 @@
 #include<fstream>
 #include<cstdlib>
 
-#include<Nodes.h>
 #include<CompilerState.h>
 #include<InputStream.h>
 #include<Lexer.h>
 #include<OutputStream.h>
 #include<ErrorStream.h>
+#include <Node.h>
 
 #endif /* INCLUDES_MAIN_H_ */

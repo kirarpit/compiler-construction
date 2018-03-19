@@ -30,8 +30,8 @@ ALL_DEP:=$(HDR_FILES) Makefile
 INCLUDES:=-I $(INCLUDE_DIR) -I $(INCLUDE_DIR)/Nodes
 
 # Test files info
-TEST_FILES:=$(wildcard $(TEST_DIR)/*.blki)
-TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.blki,$(TEST_DIR)/%.blko,$(TEST_FILES))
+TEST_FILES:=$(wildcard $(TEST_DIR)/*.s4i)
+TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.s4i, $(TEST_DIR)/%.s4u, $(TEST_FILES))
 
 # Dependencies generation
 DEPDIR := .d
@@ -54,7 +54,7 @@ $(DEPDIR)/%.d:	;
 
 test:	$(PROGRAM) $(TEST_RESULTS)
 
-$(TEST_DIR)/%.blko:	$(TEST_DIR)/%.blki FORCE
+$(TEST_DIR)/%.s4u:	$(TEST_DIR)/%.s4i FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
 	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null | diff $(@F) -
 	@echo "OK]"
