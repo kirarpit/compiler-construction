@@ -1,5 +1,6 @@
 #include<NonTerminalNode.h>
 #include<CompilerState.h>
+#include<OutputStream.h>
 
 NonTerminalNode::NonTerminalNode() {
 }

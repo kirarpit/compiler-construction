@@ -3,6 +3,7 @@
 #include<Logger.h>
 #include<CompilerState.h>
 #include<TypeInfo.h>
+#include<OutputStream.h>
 
 #define XX(a, b) b,
 const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {

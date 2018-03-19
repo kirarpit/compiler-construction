@@ -10,6 +10,6 @@
 #include<Lexer.h>
 #include<OutputStream.h>
 #include<ErrorStream.h>
-#include <Node.h>
+#include<NodeSpike4.h>
 
 #endif /* INCLUDES_MAIN_H_ */

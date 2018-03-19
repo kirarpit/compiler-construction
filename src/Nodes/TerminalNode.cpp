@@ -3,6 +3,8 @@
 #include<CompilerState.h>
 #include<VariableInfo.h>
 #include<SymbolTable.h>
+#include<TypeInfo.h>
+#include<OutputStream.h>
 
 TerminalNode::TerminalNode(Token tkn) :
 		token(tkn) {

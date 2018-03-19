@@ -2,8 +2,8 @@
 #define NODES_TERMINALNODE_H_
 
 #include<Node.h>
+#include<Token.h>
 
-class Token;
 class CompilerState;
 class Logger;
 

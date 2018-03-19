@@ -10,6 +10,9 @@
 #include<ErrorStream.h>
 #include<Logger.h>
 #include<TerminalNode.h>
+#include<SymbolTable.h>
+#include<TypeInfo.h>
+#include<OutputStream.h>
 
 class Node;
 class CompilerState;
