@@ -44,3 +44,24 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return postfixExpr;
 }
+
+void NodePostfixExpr::walk(CompilerState &cs) {
+	this->NonTerminalNode::walk(cs);
+
+	if (children.size() == 2) {
+		if (children[1]->isTerminal) {
+			if (children[0]->getType()->isSigned()
+					|| children[0]->getType()->isUnsigned()
+					|| children[0]->getType()->isPointer()) {
+				type = children[0]->getType();
+			} else {
+				//error
+			}
+		} else {
+			if (children[1]->getSize() == 2)
+				type = children[1]->getType()->deref(TP_POINTER);
+			else
+				type = children[1]->getType()->deref(TP_ARRAY);
+		}
+	}
+}

@@ -14,6 +14,7 @@ public:
 
 	void print(CompilerState &cs);
 	void walk(CompilerState &cs);
+	Token getToken();
 
 protected:
 	Token token;

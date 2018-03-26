@@ -18,7 +18,62 @@ void NonTerminalNode::addNode(Node *node) {
 void NonTerminalNode::walk(CompilerState &cs) {
 	for (unsigned int i = 0; i < children.size(); i++) {
 		children[i]->walk(cs);
+
+		if (!children[i]->getSize()) {
+			deleteChild(i);
+		} else if (!children[i]->isTerminal && children[i]->getSize() == 1) {
+			Node *temp = children[i];
+			children[i] = temp->getChild(0);
+			temp->clearChildren();
+			delete temp;
+		}
 	}
+
+	if (children.size() == 1) {
+		type = children[0]->getType();
+	}
+}
+
+void NonTerminalNode::operatorWalk(CompilerState &cs) {
+	if (children.size() == 3) {
+		type = TypeInfo::getOperandType(children[1]->getToken(),
+				children[0]->getType(), children[2]->getType());
+
+		if (children[0]->isConstant && children[2]->isConstant) {
+			Node* terminalNode = TypeInfo::constantFold(children[1]->getToken(),
+					children[0], children[2]);
+
+			if (terminalNode) {
+				terminalNode->setType(type);
+				deleteChildren();
+				addNode(terminalNode);
+			}
+		}
+	}
+}
+
+Node* NonTerminalNode::getChild(int index) {
+	return children[index];
+}
+
+int NonTerminalNode::getSize() {
+	return children.size();
+}
+
+void NonTerminalNode::clearChildren() {
+	children.clear();
+}
+
+void NonTerminalNode::deleteChildren() {
+	for (unsigned int i = 0; i < children.size(); i++) {
+		delete children[i];
+	}
+	clearChildren();
+}
+
+void NonTerminalNode::deleteChild(int i) {
+	delete children[i];
+	children.erase(children.begin() + i);
 }
 
 bool NonTerminalNode::findPostfixExpr() {
@@ -51,5 +106,18 @@ void NonTerminalNode::printFPIF(CompilerState &cs) {
 		printParenthesised(cs);
 	} else {
 		printAllChildren(cs);
+	}
+}
+
+void NonTerminalNode::printType(CompilerState &cs) {
+	cs.os << " ";
+	cs.os << "S/U/whatever/shit";
+	cs.os << ":";
+}
+
+void NonTerminalNode::printBOTLPIF(CompilerState &cs) {
+	if (type) {
+		printType(cs);
+		printParenthesised(cs);
 	}
 }

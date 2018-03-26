@@ -1,14 +1,14 @@
-#ifndef SRC_NodeArraySpecs_H_
-#define SRC_NodeArraySpecs_H_
+#ifndef SRC_NodeArraySize_H_
+#define SRC_NodeArraySize_H_
 
 #include<NonTerminalNode.h>
 class CompilerState;
 
-class NodeArraySpecs: public NonTerminalNode {
+class NodeOptArraySize: public NonTerminalNode {
 public:
-	NodeArraySpecs() {
+	NodeOptArraySize() {
 	}
-	~NodeArraySpecs() {
+	~NodeOptArraySize() {
 	}
 
 	void print(CompilerState &cs) {

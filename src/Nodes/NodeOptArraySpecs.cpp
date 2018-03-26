@@ -1,19 +1,17 @@
 #include <AllNodeHeaders.h>
 
-Node* NodeArraySpecs::parse(CompilerState &cs) {
+Node* NodeOptArraySpecs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
-	Node *arraySpecs = new NodeArraySpecs();
+	Node *arraySpecs = new NodeOptArraySpecs();
 
 	if (lex.peek().value == TokenTable::TS[TN_opnbrk]) {
 		Node *arraySpec = NodeArraySpec::parse(cs);
 		if (arraySpec) {
 			arraySpecs->addNode(arraySpec);
 
-			cs.lastBlock->getST()->updateVarType(ARRAY, arraySpec);
-
-			Node *nextArraySpecs = NodeArraySpecs::parse(cs);
+			Node *nextArraySpecs = NodeOptArraySpecs::parse(cs);
 			if (nextArraySpecs) {
 				arraySpecs->addNode(nextArraySpecs);
 			} else {

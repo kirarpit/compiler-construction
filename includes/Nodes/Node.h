@@ -6,6 +6,7 @@
 class CompilerState;
 class SymbolTable;
 class TypeInfo;
+class Token;
 
 class Node {
 public:
@@ -17,8 +18,15 @@ public:
 	virtual void addNode(Node *node);
 	virtual bool findPostfixExpr();
 	virtual SymbolTable* getST();
+	virtual Node* getChild(int index);
+	virtual void clearChildren();
+	virtual Token getToken();
+	virtual int getSize();
 
 	TypeInfo* getType();
+	void setType(TypeInfo *t);
+	bool isConstant;
+	bool isTerminal;
 
 protected:
 	TypeInfo *type;

@@ -8,6 +8,12 @@
 
 TerminalNode::TerminalNode(Token tkn) :
 		token(tkn) {
+	isTerminal = true;
+
+	if ((tkn.type & TT_NUM)) {
+		isConstant = true;
+	}
+
 	Logger::logTerminal(tkn);
 }
 
@@ -19,9 +25,12 @@ void TerminalNode::print(CompilerState &cs) {
 }
 
 void TerminalNode::walk(CompilerState &cs) {
-	VariableInfo *var = cs.lastBlock->getST()->lookup(token);
-	if (var)
-		type = var->type;
+	if (token.type == TT_ID)
+		type = cs.lastBlock->getST()->lookup(token)->type;
 	else if (token.type == TT_NUM)
-		type = new TypeInfo(TP_SIGNED, new TerminalNode(token));
+		type = new TypeInfo(TP_SIGNED, 0);
+}
+
+Token TerminalNode::getToken() {
+	return token;
 }

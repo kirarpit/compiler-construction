@@ -49,3 +49,35 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return condExpr;
 }
+
+void NodeCondExpr::walk(CompilerState &cs) {
+	this->NonTerminalNode::walk(cs);
+
+	if (children.size() == 5) {
+		if (children[2]->getType()->isEqual(children[4]->getType())
+				&& children[0]->getType()->isBool()) {
+			type = children[2]->getType();
+		} else {
+			//error
+		}
+
+		if (children[0]->isConstant) {
+
+			deleteChild(0);
+			deleteChild(1);
+			deleteChild(3);
+
+			Node *temp = NULL;
+			if (children[0]->getToken().value == "1") {
+				temp = children[2];
+				deleteChild(4);
+			} else {
+				temp = children[4];
+				deleteChild(2);
+			}
+
+			clearChildren();
+			addNode(temp);
+		}
+	}
+}

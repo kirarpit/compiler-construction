@@ -11,10 +11,20 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	if (primType == TypeInfo::Type[TP_BOOL]
 			|| primType == TypeInfo::Type[TP_SIGNED]
 			|| primType == TypeInfo::Type[TP_UNSIGNED]) {
+
+		int name;
+		if (primType == TypeInfo::Type[TP_SIGNED]) {
+			name = TP_SIGNED;
+		} else if (primType == TypeInfo::Type[TP_UNSIGNED]) {
+			name = TP_UNSIGNED;
+		} else {
+			name = TP_BOOL;
+		}
+		cs.lastBlock->getST()->updateVarType(name, 0);
+
 		typeName = new NodeTypeName();
 		typeName->addNode(new TerminalNode(lex.read()));
 
-		cs.lastBlock->getST()->updateVarType(PRIM, typeName);
 	} else {
 		cs.es.reportParseError(cs);
 	}

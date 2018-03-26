@@ -26,6 +26,13 @@ public:
 
 	void addNode(Node *node);
 	void walk(CompilerState &cs);
+	Node* getChild(int index);
+	int getSize();
+	void clearChildren();
+	void deleteChildren();
+
+	void deleteChild(int index);
+
 	bool findPostfixExpr();
 	std::string getName();
 
@@ -33,6 +40,10 @@ protected:
 	void printAllChildren(CompilerState &cs);
 	void printParenthesised(CompilerState &cs);
 	void printFPIF(CompilerState &cs);
+	void printBOTLPIF(CompilerState &cs);
+	void printType(CompilerState &cs);
+
+	void operatorWalk(CompilerState &cs);
 
 	std::vector<Node*> children;
 };

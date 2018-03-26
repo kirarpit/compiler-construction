@@ -15,7 +15,7 @@ public:
 		printFPIF(cs);
 	}
 	static Node* parse(CompilerState &cs);
-//	void walk();
+	void walk(CompilerState &cs);
 };
 
 #endif

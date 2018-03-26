@@ -11,7 +11,7 @@ Node* NodeTypeSpec::parse(CompilerState &cs) {
 		typeSpec = new NodeTypeSpec();
 		typeSpec->addNode(typeName);
 
-		Node *arraySpecs = NodeArraySpecs::parse(cs);
+		Node *arraySpecs = NodeOptArraySpecs::parse(cs);
 		if (arraySpecs) {
 			typeSpec->addNode(arraySpecs);
 		} else {

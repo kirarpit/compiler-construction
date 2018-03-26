@@ -10,6 +10,7 @@ void NodeSpike4::parse(CompilerState &cs) {
 	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
 
 	Node *block = NodeBlock::parse(cs);
+	block->walk(cs);
 	if (block)
 		block->print(cs);
 	Logger::log("Deleting Block");

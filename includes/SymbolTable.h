@@ -6,6 +6,7 @@
 
 class VariableInfo;
 class Token;
+class TypeInfo;
 
 class SymbolTable {
 public:
@@ -16,7 +17,7 @@ public:
 
 	static SymbolTable* enterScope(Node *nodeBlock);
 	Node* exitScope();
-	void updateVarType(int name, Node* node);
+	void updateVarType(int name, int size);
 	void insertVar(Token id);
 	void flush(bool error);
 	void print(CompilerState &cs);

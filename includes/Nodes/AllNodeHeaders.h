@@ -1,6 +1,8 @@
 #ifndef ALL_NODE_HEADERS_H_
 #define ALL_NODE_HEADERS_H_
 
+#include <NodeOptArraySize.h>
+#include <NodeOptArraySpecs.h>
 #include "NodeDefs.h"
 #include "NodeBlock.h"
 #include "NodeStatement.h"
@@ -16,8 +18,6 @@
 #include "NodeTypeSpec.h"
 #include "NodeTypeName.h"
 
-#include "NodeArraySize.h"
-#include "NodeArraySpecs.h"
 #include "NodeArraySpec.h"
 #include "NodeAsgnExpr.h"
 #include "NodeCondExpr.h"

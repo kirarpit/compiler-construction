@@ -33,3 +33,8 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
 	return relExpr;
 }
+
+void NodeRelExpr::walk(CompilerState &cs) {
+	this->NonTerminalNode::walk(cs);
+	operatorWalk(cs);
+}

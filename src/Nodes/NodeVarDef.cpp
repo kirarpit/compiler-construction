@@ -30,7 +30,6 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 	if (cs.es.error) {
 		cs.es.recover(cs);
-		cs.lastBlock->getST()->flush(true);
 		varDef = new NodeVarDef();
 	}
 

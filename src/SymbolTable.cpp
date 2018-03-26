@@ -27,10 +27,10 @@ Node* SymbolTable::exitScope() {
 	return parent;
 }
 
-void SymbolTable::updateVarType(int name, Node* node) {
+void SymbolTable::updateVarType(int name, int size = 0) {
 	Logger::log("Updating Type of type: %d", name);
 
-	TypeInfo *newType = new TypeInfo(name, node);
+	TypeInfo *newType = new TypeInfo(name, size);
 	newType->typeOf = varType;
 	varType = newType;
 }
@@ -91,7 +91,7 @@ TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
 		return NULL;
 
 	TypeInfo *newType = deepCopy(type->typeOf);
-	TypeInfo *temp = new TypeInfo(type->name, type->value);
+	TypeInfo *temp = new TypeInfo(type->type, type->size);
 	temp->typeOf = newType;
 	return temp;
 }

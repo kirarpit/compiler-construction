@@ -2,6 +2,9 @@
 #include<CompilerState.h>
 #include<Logger.h>
 #include<Lexer.h>
+#include<SymbolTable.h>
+#include<TypeInfo.h>
+#include<Node.h>
 
 void ErrorStream::reportParseError(CompilerState &cs) {
 	reportError();
@@ -38,4 +41,5 @@ void ErrorStream::recover(CompilerState &cs) {
 		cs.lexer.read();
 
 	error = false;
+	cs.lastBlock->getST()->flush(true);
 }

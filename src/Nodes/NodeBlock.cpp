@@ -48,3 +48,11 @@ void NodeBlock::printST(CompilerState &cs) {
 SymbolTable* NodeBlock::getST() {
 	return myST;
 }
+
+void NodeBlock::walk(CompilerState &cs) {
+	cs.lastBlock = this;
+	for (unsigned int i = 0; i < children.size(); i++) {
+		children[i]->walk(cs);
+	}
+	cs.lastBlock = cs.lastBlock->getST()->exitScope();
+}
