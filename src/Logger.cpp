@@ -1,7 +1,7 @@
 #include<Logger.h>
 #include<Node.h>
 
-bool Logger::debug = false;
+bool Logger::debug = true;
 
 Logger::~Logger() {
 }
@@ -26,15 +26,15 @@ void Logger::logTerminal(Token tkn) {
 }
 
 void Logger::logParseEntry(std::string name, Token tkn) {
-	log("ParseEntry " + name + " @ " + tkn.print());
+//	log("ParseEntry " + name + " @ " + tkn.print());
 }
 
 void Logger::logParseExit(std::string name, Token tkn) {
-	log("ParseExit " + name + " @ " + tkn.print());
+//	log("ParseExit " + name + " @ " + tkn.print());
 }
 
 void Logger::logWalkEntry(std::string name, Node *node) {
-	log("WalkEntry " + name);
+	log("WalkEntry " + name + ", Token:" + node->getToken().print());
 }
 
 void Logger::logWalkExit(std::string name, Node *node) {

@@ -43,6 +43,35 @@ Node* NodeWhileStmt::parse(CompilerState &cs) {
 	return whileStmt;
 }
 
+void NodeWhileStmt::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	if (children.size() == 5) {
+		if (children[2]->isConstant) {
+
+			Node *temp = NULL;
+			if (children[2]->getToken().value == "1") {
+				temp = children[4];
+				deleteChild(5);
+			} else {
+				if (children[5]->getSize()) {
+					temp = children[5]->getChild(1);
+				} else {
+					temp = children[5];
+				}
+				deleteChild(4);
+			}
+
+			clearChildren();
+			addNode(temp);
+		}
+	}
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}
+
 void NodeWhileStmt::print(CompilerState &cs) {
 	unsigned int i = 0;
 

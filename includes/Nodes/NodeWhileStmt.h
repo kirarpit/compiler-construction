@@ -13,6 +13,7 @@ public:
 
 	static Node* parse(CompilerState &cs);
 	void print(CompilerState &cs);
+	void walk(CompilerState &cs);
 };
 
 #endif /* SRC_NODES_NODEWHILESTMT_H_ */

@@ -27,6 +27,7 @@ void TypeInfo::print(CompilerState &cs) {
 void TypeInfo::shortPrint(CompilerState &cs) {
 	cs.os << " ";
 	recursivePrint(cs, this, true);
+	cs.os << ":";
 }
 
 void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type,
@@ -44,18 +45,18 @@ void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type,
 		cs.os << "[]";
 	} else if (type->type == TP_BOOL) {
 		if (shortForm)
-			cs.os << "B:";
+			cs.os << "B";
 		else
 			cs.os << "bool";
 
 	} else if (type->type == TP_SIGNED) {
 		if (shortForm)
-			cs.os << "S:";
+			cs.os << "S";
 		else
 			cs.os << "signed";
 	} else if (type->type == TP_UNSIGNED) {
 		if (shortForm)
-			cs.os << "U:";
+			cs.os << "U";
 		else
 			cs.os << "unsigned";
 	}

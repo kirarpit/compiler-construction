@@ -21,6 +21,14 @@ Node* NodeOptElse::parse(CompilerState &cs) {
 	return optElse;
 }
 
+void NodeOptElse::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}
+
 void NodeOptElse::print(CompilerState &cs) {
 	unsigned int i = 0;
 

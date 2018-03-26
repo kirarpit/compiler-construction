@@ -28,7 +28,7 @@ void TerminalNode::print(CompilerState &cs) {
 
 void TerminalNode::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
-	Logger::log("Token value:" + token.value);
+	Logger::log("Terminal Node Token value:" + token.value);
 
 	if (token.type == TT_ID)
 		type = cs.lastBlock->getST()->lookup(token)->type;

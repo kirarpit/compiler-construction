@@ -48,6 +48,33 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 	return ifStmt;
 }
 
+void NodeIfStmt::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	if (children.size() >= 5) {
+		if (children[2]->isConstant) {
+			Logger::log(__CLASS_NAME__ + ", Starting constant folding");
+
+			Node *temp = NULL;
+			if (children[2]->getToken().value == "0") {
+				if (children.size() == 6) {
+					temp = children[5]->getChild(1);
+				}
+			} else {
+				temp = children[4];
+			}
+
+			clearChildren();
+			if (temp)
+				addNode(temp);
+		}
+	}
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}
+
 void NodeIfStmt::print(CompilerState &cs) {
 	for (unsigned int i = 0; i < children.size(); i++) {
 		if (i == 1)

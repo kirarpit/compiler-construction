@@ -65,10 +65,6 @@ void NodeCondExpr::walk(CompilerState &cs) {
 
 		if (children[0]->isConstant) {
 
-			deleteChild(0);
-			deleteChild(1);
-			deleteChild(3);
-
 			Node *temp = NULL;
 			if (children[0]->getToken().value == "1") {
 				temp = children[2];
