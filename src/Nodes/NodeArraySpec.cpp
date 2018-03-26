@@ -29,7 +29,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 				if (arraySpec->getSize() == 3
 						&& arraySpec->getChild(1)->isConstant) {
 					cs.lastBlock->getST()->updateVarType(TP_ARRAY,
-							stoi(arraySpec->getChild(1)->getToken().value));
+							arraySpec->getChild(1)->getToken().getIntVal());
 				} else if (arraySpec->getSize() == 2) {
 					cs.lastBlock->getST()->updateVarType(TP_POINTER, 0);
 				} else {

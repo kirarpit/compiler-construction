@@ -170,64 +170,48 @@ TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
 	return NULL;
 }
 
-Node* TypeInfo::constantFold(Token tkn, Node *n1, Node *n2) {
+Node* TypeInfo::constantFold(Token tkn, Token t1, Token t2) {
 	int val = -1;
 	std::ostringstream output;
 
-	if ((n1->getToken().type & TT_NUM) && (n2->getToken().type & TT_NUM)) {
+	if ((t1.type & TT_NUM) && (t2.type & TT_NUM)) {
 
 		if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 			if (tkn.value == "+") {
-				val = stoi(n1->getToken().value) + stoi(n1->getToken().value);
+				val = t1.getIntVal() + t2.getIntVal();
 			} else if (tkn.value == "-") {
-				val = stoi(n1->getToken().value) - stoi(n1->getToken().value);
+				val = t1.getIntVal() - t2.getIntVal();
 			} else if (tkn.value == "*") {
-				val = stoi(n1->getToken().value) * stoi(n1->getToken().value);
+				val = t1.getIntVal() * t2.getIntVal();
 			} else if (tkn.value == "/") {
-				val = stoi(n1->getToken().value) / stoi(n1->getToken().value);
+				val = t1.getIntVal() / t2.getIntVal();
 			}
 		} else if (tkn.type & TT_REL_OP) {
 			if (tkn.value == "<") {
-				val =
-						(stoi(n1->getToken().value) < stoi(n1->getToken().value)) ?
-								1 : 0;
+				val = (t1.getIntVal() < t2.getIntVal()) ? 1 : 0;
 			} else if (tkn.value == "<=") {
-				val =
-						(stoi(n1->getToken().value)
-								<= stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() <= t2.getIntVal()) ? 1 : 0;
 			} else if (tkn.value == ">") {
-				val =
-						(stoi(n1->getToken().value) > stoi(n1->getToken().value)) ?
-								1 : 0;
+				val = (t1.getIntVal() > t2.getIntVal()) ? 1 : 0;
 			} else if (tkn.value == ">=") {
-				val =
-						(stoi(n1->getToken().value)
-								>= stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() >= t2.getIntVal()) ? 1 : 0;
 			}
 		} else if (tkn.type & TT_EQ_OP) {
 			if (tkn.value == "==") {
-				val =
-						(stoi(n1->getToken().value)
-								== stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() == t2.getIntVal()) ? 1 : 0;
 			} else if (tkn.value == "!=") {
-				val =
-						(stoi(n1->getToken().value)
-								!= stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() != t2.getIntVal()) ? 1 : 0;
 			}
 		} else if (tkn.value == "&&" || tkn.value == "||") {
 			if (tkn.value == "&&") {
-				val =
-						(stoi(n1->getToken().value)
-								&& stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() && t2.getIntVal()) ? 1 : 0;
 			} else if (tkn.value == "||") {
-				val =
-						(stoi(n1->getToken().value)
-								|| stoi(n1->getToken().value)) ? 1 : 0;
+				val = (t1.getIntVal() || t2.getIntVal()) ? 1 : 0;
 			}
 		} else if (tkn.value == "=") {
 			//error
 		} else if (tkn.value == ",") {
-			val = stoi(n1->getToken().value), stoi(n1->getToken().value);
+			val = t1.getIntVal(), t2.getIntVal();
 		}
 	} else {
 		//error

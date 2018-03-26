@@ -51,7 +51,7 @@ void NonTerminalNode::operatorWalk(CompilerState &cs) {
 
 		if (children[0]->isConstant && children[2]->isConstant) {
 			Node* terminalNode = TypeInfo::constantFold(children[1]->getToken(),
-					children[0], children[2]);
+					children[0]->getToken(), children[2]->getToken());
 
 			if (terminalNode) {
 				Logger::log(

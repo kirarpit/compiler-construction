@@ -40,7 +40,7 @@ public:
 	bool isEqual(TypeInfo *t1);
 
 	static TypeInfo* getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2);
-	static Node* constantFold(Token tkn, Node *n1, Node *n2);
+	static Node* constantFold(Token tkn, Token t1, Token t2);
 
 	int type;
 	int size;

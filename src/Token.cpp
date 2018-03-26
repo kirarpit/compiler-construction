@@ -1,4 +1,6 @@
-#include "Token.h"
+#include<Token.h>
+#include<string>
+#include<sstream>
 
 Token::~Token() {
 }
@@ -20,4 +22,12 @@ std::string Token::print() {
 
 	output << value;
 	return output.str();
+}
+
+int Token::getIntVal() {
+	std::stringstream s(value);
+	int intVal = 0;
+	s >> intVal;
+
+	return intVal;
 }

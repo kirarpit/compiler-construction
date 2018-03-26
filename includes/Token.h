@@ -20,6 +20,7 @@ public:
 	}
 	virtual ~Token();
 	std::string print();
+	int getIntVal();
 
 	std::string filename;
 	int line;
