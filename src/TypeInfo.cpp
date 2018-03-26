@@ -21,15 +21,21 @@ const std::string TypeInfo::Type[] = { TYPE_LIST };
 #undef XX
 
 void TypeInfo::print(CompilerState &cs) {
-	recursivePrint(cs, this);
+	recursivePrint(cs, this, false);
 }
 
-void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type) {
+void TypeInfo::shortPrint(CompilerState &cs) {
+	cs.os << " ";
+	recursivePrint(cs, this, true);
+}
+
+void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type,
+		bool shortForm) {
 	if (!type) {
 		return;
 	}
 
-	recursivePrint(cs, type->typeOf);
+	recursivePrint(cs, type->typeOf, shortForm);
 	if (type->type == TP_ARRAY) {
 		std::ostringstream output;
 		output << type->size;
@@ -37,11 +43,21 @@ void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type) {
 	} else if (type->type == TP_POINTER) {
 		cs.os << "[]";
 	} else if (type->type == TP_BOOL) {
-		cs.os << "bool";
+		if (shortForm)
+			cs.os << "B:";
+		else
+			cs.os << "bool";
+
 	} else if (type->type == TP_SIGNED) {
-		cs.os << "signed";
+		if (shortForm)
+			cs.os << "S:";
+		else
+			cs.os << "signed";
 	} else if (type->type == TP_UNSIGNED) {
-		cs.os << "unsigned";
+		if (shortForm)
+			cs.os << "U:";
+		else
+			cs.os << "unsigned";
 	}
 }
 

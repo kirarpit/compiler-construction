@@ -21,6 +21,8 @@ TerminalNode::~TerminalNode() {
 }
 
 void TerminalNode::print(CompilerState &cs) {
+	if (type)
+		type->shortPrint(cs);
 	cs.os << token.value;
 }
 

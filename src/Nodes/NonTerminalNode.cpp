@@ -109,6 +109,7 @@ void NonTerminalNode::printAllChildren(CompilerState &cs) {
 }
 
 void NonTerminalNode::printParenthesised(CompilerState &cs) {
+	type->shortPrint(cs);
 	cs.os << '(';
 	printAllChildren(cs);
 	cs.os << ')';
@@ -119,18 +120,5 @@ void NonTerminalNode::printFPIF(CompilerState &cs) {
 		printParenthesised(cs);
 	} else {
 		printAllChildren(cs);
-	}
-}
-
-void NonTerminalNode::printType(CompilerState &cs) {
-	cs.os << " ";
-	cs.os << "S/U/whatever/shit";
-	cs.os << ":";
-}
-
-void NonTerminalNode::printBOTLPIF(CompilerState &cs) {
-	if (type) {
-		printType(cs);
-		printParenthesised(cs);
 	}
 }

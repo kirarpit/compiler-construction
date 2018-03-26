@@ -31,7 +31,7 @@ INCLUDES:=-I $(INCLUDE_DIR) -I $(INCLUDE_DIR)/Nodes
 
 # Test files info
 TEST_FILES:=$(wildcard $(TEST_DIR)/*.s4i)
-TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.s4i, $(TEST_DIR)/%.s4u, $(TEST_FILES))
+TEST_RESULTS:=$(patsubst $(TEST_DIR)/%.s4i, $(TEST_DIR)/%.s4o, $(TEST_FILES))
 
 # Dependencies generation
 DEPDIR := .d
@@ -54,9 +54,9 @@ $(DEPDIR)/%.d:	;
 
 test:	$(PROGRAM) $(TEST_RESULTS)
 
-$(TEST_DIR)/%.s4u:	$(TEST_DIR)/%.s4i FORCE
+$(TEST_DIR)/%.s4o:	$(TEST_DIR)/%.s4i FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
-	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null | diff $(@F) -
+	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null | diff -w $(@F) -
 	@echo "OK]"
 
 clean:	

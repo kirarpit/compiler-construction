@@ -28,7 +28,8 @@ public:
 	const static std::string Type[];
 
 	void print(CompilerState &cs);
-	void recursivePrint(CompilerState &cs, TypeInfo *type);
+	void shortPrint(CompilerState &cs);
+	void recursivePrint(CompilerState &cs, TypeInfo *type, bool shortForm);
 	TypeInfo* addr();
 	TypeInfo* deref(int type);
 	bool isSigned();

@@ -40,8 +40,6 @@ protected:
 	void printAllChildren(CompilerState &cs);
 	void printParenthesised(CompilerState &cs);
 	void printFPIF(CompilerState &cs);
-	void printBOTLPIF(CompilerState &cs);
-	void printType(CompilerState &cs);
 
 	void operatorWalk(CompilerState &cs);
 
