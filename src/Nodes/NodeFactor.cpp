@@ -52,6 +52,18 @@ void NodeFactor::walk(CompilerState &cs) {
 			} else {
 				//error
 			}
+
+			if (children[1]->isConstant) {
+				int val = -1 * children[1]->getToken().getIntVal();
+				std::ostringstream oss;
+				oss << val;
+
+				Node *terminalNode = new TerminalNode(Token(TT_NUM, oss.str()));
+				terminalNode->setType(type);
+				deleteChildren();
+				addNode(terminalNode);
+			}
+
 		} else if (children[0]->getToken().value == "&") {
 			if (!children[1]->isConstant) { //or maybe this should be ID only
 				type = children[1]->getType()->addr();
