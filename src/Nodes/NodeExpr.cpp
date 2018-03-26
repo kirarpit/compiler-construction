@@ -2,7 +2,7 @@
 
 Node* NodeExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *expr = new NodeExpr();
 
@@ -30,11 +30,15 @@ Node* NodeExpr::parse(CompilerState &cs) {
 		expr = tempExpr;
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return expr;
 }
 
 void NodeExpr::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
 	this->NonTerminalNode::walk(cs);
 	operatorWalk(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }

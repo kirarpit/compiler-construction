@@ -4,6 +4,7 @@
 #include<string>
 class Node;
 class Token;
+class CompilerState;
 
 #define TYPE_LIST \
 	XX(ARRAY, "array")	\
@@ -21,11 +22,13 @@ enum {
 
 class TypeInfo {
 public:
-	TypeInfo(int name, int size = 0);
+	TypeInfo(int name, int size = -1);
 	virtual ~TypeInfo();
 
 	const static std::string Type[];
 
+	void print(CompilerState &cs);
+	void recursivePrint(CompilerState &cs, TypeInfo *type);
 	TypeInfo* addr();
 	TypeInfo* deref(int type);
 	bool isSigned();

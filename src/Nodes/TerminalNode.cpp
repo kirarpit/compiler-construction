@@ -25,10 +25,15 @@ void TerminalNode::print(CompilerState &cs) {
 }
 
 void TerminalNode::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+	Logger::log("Token value:" + token.value);
+
 	if (token.type == TT_ID)
 		type = cs.lastBlock->getST()->lookup(token)->type;
 	else if (token.type == TT_NUM)
 		type = new TypeInfo(TP_SIGNED, 0);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
 Token TerminalNode::getToken() {

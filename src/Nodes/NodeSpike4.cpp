@@ -7,10 +7,14 @@
 
 void NodeSpike4::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *block = NodeBlock::parse(cs);
+	Logger::log("Parsing Complete");
+
 	block->walk(cs);
+	Logger::log("Type Propagation and Constant Folding Complete");
+
 	if (block)
 		block->print(cs);
 	Logger::log("Deleting Block");

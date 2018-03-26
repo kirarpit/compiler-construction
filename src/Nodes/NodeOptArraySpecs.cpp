@@ -2,7 +2,7 @@
 
 Node* NodeOptArraySpecs::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *arraySpecs = new NodeOptArraySpecs();
 
@@ -24,6 +24,14 @@ Node* NodeOptArraySpecs::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return arraySpecs;
+}
+
+void NodeOptArraySpecs::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }

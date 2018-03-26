@@ -2,7 +2,7 @@
 
 Node* NodeIfStmt::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *ifStmt = new NodeIfStmt();
 
@@ -44,7 +44,7 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 		ifStmt = NULL;
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return ifStmt;
 }
 

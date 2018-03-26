@@ -7,6 +7,8 @@
 #include<string>
 #include<Token.h>
 
+class Node;
+
 inline std::string className(const std::string& prettyFunction) {
 	size_t colons = prettyFunction.find("::");
 	if (colons == std::string::npos)
@@ -25,8 +27,10 @@ public:
 	static void log(std::string str);
 	static void log(std::string str, int i);
 	static void logTerminal(Token tkn);
-	static void logNodeEntry(std::string name, Token tkn);
-	static void logNodeExit(std::string name, Token tkn);
+	static void logParseEntry(std::string name, Token tkn);
+	static void logParseExit(std::string name, Token tkn);
+	static void logWalkEntry(std::string name, Node *node);
+	static void logWalkExit(std::string name, Node *node);
 
 	static bool debug;
 

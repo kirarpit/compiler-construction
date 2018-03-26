@@ -29,7 +29,6 @@ public:
 	void setType(TypeInfo *type);
 
 	void print(CompilerState &cs);
-	void recursiveTypePrint(CompilerState &cs, TypeInfo *type);
 	TypeInfo *type;
 	int status;
 };

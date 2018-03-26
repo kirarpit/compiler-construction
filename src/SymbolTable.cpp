@@ -36,7 +36,7 @@ void SymbolTable::updateVarType(int name, int size = 0) {
 }
 
 void SymbolTable::insertVar(Token id) {
-	Logger::log("Inserting an ID: " + id.value);
+	Logger::log("Inserting/Updating an ID: " + id.value);
 
 	if (isDef) {
 		if (!localLookup(id)) {
@@ -74,8 +74,6 @@ void SymbolTable::flush(bool error) {
 }
 
 void SymbolTable::print(CompilerState &cs) {
-	Logger::log("Printing SymbolTable");
-
 	for (std::map<std::string, VariableInfo>::iterator i = variables.begin();
 			i != variables.end(); i++) {
 		cs.os.printWhiteSpaces();

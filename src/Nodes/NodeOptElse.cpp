@@ -2,7 +2,7 @@
 
 Node* NodeOptElse::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *optElse = new NodeOptElse();
 	if (lex.peek().value == TokenTable::TS[TN_else]) {
@@ -17,7 +17,7 @@ Node* NodeOptElse::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return optElse;
 }
 

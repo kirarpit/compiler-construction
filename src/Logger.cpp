@@ -1,4 +1,5 @@
-#include "Logger.h"
+#include<Logger.h>
+#include<Node.h>
 
 bool Logger::debug = false;
 
@@ -24,10 +25,18 @@ void Logger::logTerminal(Token tkn) {
 	log("Consumed Terminal. Token:" + tkn.print());
 }
 
-void Logger::logNodeEntry(std::string name, Token tkn) {
-	log("Parsing " + name + " @ " + tkn.print());
+void Logger::logParseEntry(std::string name, Token tkn) {
+//	log("ParseEntry " + name + " @ " + tkn.print());
 }
 
-void Logger::logNodeExit(std::string name, Token tkn) {
-	log("Returning " + name + " @ " + tkn.print());
+void Logger::logParseExit(std::string name, Token tkn) {
+//	log("ParseExit " + name + " @ " + tkn.print());
+}
+
+void Logger::logWalkEntry(std::string name, Node *node) {
+	log("WalkEntry " + name);
+}
+
+void Logger::logWalkExit(std::string name, Node *node) {
+	log("WalkExit " + name);
 }

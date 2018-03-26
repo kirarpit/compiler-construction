@@ -31,24 +31,12 @@ void VariableInfo::setType(TypeInfo *typeInfo) {
 }
 
 void VariableInfo::print(CompilerState &cs) {
-	Logger::log("Printing VariableInfo");
-
 	cs.os << VarStatInfo[status];
 	cs.os << " ";
 
 	if (type == NULL) {
 		cs.os << "unknown";
 	} else {
-		recursiveTypePrint(cs, type);
+		type->print(cs);
 	}
-}
-
-void VariableInfo::recursiveTypePrint(CompilerState &cs, TypeInfo *type) {
-	Logger::log("Recursively Printing Type");
-	if (!type) {
-		return;
-	}
-
-	recursiveTypePrint(cs, type->typeOf);
-	type->value->print(cs);
 }

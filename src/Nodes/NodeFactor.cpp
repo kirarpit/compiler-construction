@@ -2,7 +2,7 @@
 
 Node* NodeFactor::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *factor = new NodeFactor();
 
@@ -25,11 +25,13 @@ Node* NodeFactor::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return factor;
 }
 
 void NodeFactor::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
 	this->NonTerminalNode::walk(cs);
 
 	if (children.size() == 2) {
@@ -58,4 +60,6 @@ void NodeFactor::walk(CompilerState &cs) {
 			}
 		}
 	}
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }

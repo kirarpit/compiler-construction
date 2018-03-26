@@ -1,6 +1,7 @@
 #include<NonTerminalNode.h>
 #include<CompilerState.h>
 #include<OutputStream.h>
+#include<Logger.h>
 
 NonTerminalNode::NonTerminalNode() {
 }
@@ -20,8 +21,17 @@ void NonTerminalNode::walk(CompilerState &cs) {
 		children[i]->walk(cs);
 
 		if (!children[i]->getSize()) {
+			Logger::log("Empty Node Found and Deleted");
+
 			deleteChild(i);
-		} else if (!children[i]->isTerminal && children[i]->getSize() == 1) {
+		} else if (children[i]->getSize() == 1) {
+			if (children[i]->getChild(0)->isTerminal)
+				Logger::log(
+						"Terminal Node shifted up, Token Value: "
+								+ children[i]->getChild(0)->getToken().value);
+			else
+				Logger::log("NonTerminal Node shifted up");
+
 			Node *temp = children[i];
 			children[i] = temp->getChild(0);
 			temp->clearChildren();
@@ -44,6 +54,9 @@ void NonTerminalNode::operatorWalk(CompilerState &cs) {
 					children[0], children[2]);
 
 			if (terminalNode) {
+				Logger::log(
+						"Constant Folded " + terminalNode->getToken().value);
+
 				terminalNode->setType(type);
 				deleteChildren();
 				addNode(terminalNode);

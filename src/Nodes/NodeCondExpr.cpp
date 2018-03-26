@@ -2,7 +2,7 @@
 
 Node* NodeCondExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	bool errorFlag = false;
 	Node *condExpr = new NodeCondExpr();
@@ -46,11 +46,13 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 		return NULL;
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return condExpr;
 }
 
 void NodeCondExpr::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
 	this->NonTerminalNode::walk(cs);
 
 	if (children.size() == 5) {
@@ -80,4 +82,6 @@ void NodeCondExpr::walk(CompilerState &cs) {
 			addNode(temp);
 		}
 	}
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }

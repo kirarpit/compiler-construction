@@ -2,9 +2,11 @@
 #include<Logger.h>
 #include<Node.h>
 #include<TerminalNode.h>
+#include<CompilerState.h>
+#include<OutputStream.h>
 
 TypeInfo::TypeInfo(int name, int size) :
-		type(name), size(0), typeOf(NULL) {
+		type(name), size(size), typeOf(NULL) {
 	Logger::log("TypeInfo Constructor Called");
 }
 
@@ -18,6 +20,31 @@ TypeInfo::~TypeInfo() {
 const std::string TypeInfo::Type[] = { TYPE_LIST };
 #undef XX
 
+void TypeInfo::print(CompilerState &cs) {
+	recursivePrint(cs, this);
+}
+
+void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type) {
+	if (!type) {
+		return;
+	}
+
+	recursivePrint(cs, type->typeOf);
+	if (type->type == TP_ARRAY) {
+		std::ostringstream output;
+		output << type->size;
+		cs.os << "[" << output.str() << "]";
+	} else if (type->type == TP_POINTER) {
+		cs.os << "[]";
+	} else if (type->type == TP_BOOL) {
+		cs.os << "bool";
+	} else if (type->type == TP_SIGNED) {
+		cs.os << "signed";
+	} else if (type->type == TP_UNSIGNED) {
+		cs.os << "unsigned";
+	}
+}
+
 TypeInfo* TypeInfo::addr() {
 	TypeInfo *t = new TypeInfo(TP_POINTER, 0);
 	t->typeOf = this;
@@ -25,6 +52,8 @@ TypeInfo* TypeInfo::addr() {
 }
 
 TypeInfo* TypeInfo::deref(int tp) {
+	Logger::log("TypeInfo deref");
+
 	if (typeOf == NULL) {
 		//error
 	}
@@ -59,7 +88,7 @@ bool TypeInfo::isPointer() {
 }
 
 bool TypeInfo::isNumericType() {
-	if (isSigned || isBool || isUnsigned) {
+	if (isSigned() || isBool() || isUnsigned()) {
 		return true;
 	}
 	return false;

@@ -2,7 +2,7 @@
 
 Node* NodeBlock::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	SymbolTable *st = SymbolTable::enterScope(cs.lastBlock);
 	Node *block = new NodeBlock(st);
@@ -27,7 +27,7 @@ Node* NodeBlock::parse(CompilerState &cs) {
 
 	cs.lastBlock = st->exitScope();
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return block;
 }
 
@@ -50,9 +50,11 @@ SymbolTable* NodeBlock::getST() {
 }
 
 void NodeBlock::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
 	cs.lastBlock = this;
-	for (unsigned int i = 0; i < children.size(); i++) {
-		children[i]->walk(cs);
-	}
+	this->NonTerminalNode::walk(cs);
 	cs.lastBlock = cs.lastBlock->getST()->exitScope();
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }

@@ -2,7 +2,7 @@
 
 Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logNodeEntry(__CLASS_NAME__, lex.peek());
+	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *postfixExpr = new NodePostfixExpr();
 
@@ -41,14 +41,18 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 		}
 	}
 
-	Logger::logNodeExit(__CLASS_NAME__, lex.peek());
+	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return postfixExpr;
 }
 
 void NodePostfixExpr::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
 	this->NonTerminalNode::walk(cs);
 
 	if (children.size() == 2) {
+		Logger::log(__CLASS_NAME__ + " typeProp for size 2");
+
 		if (children[1]->isTerminal) {
 			if (children[0]->getType()->isSigned()
 					|| children[0]->getType()->isUnsigned()
@@ -59,9 +63,11 @@ void NodePostfixExpr::walk(CompilerState &cs) {
 			}
 		} else {
 			if (children[1]->getSize() == 2)
-				type = children[1]->getType()->deref(TP_POINTER);
+				type = children[0]->getType()->deref(TP_POINTER);
 			else
-				type = children[1]->getType()->deref(TP_ARRAY);
+				type = children[0]->getType()->deref(TP_ARRAY);
 		}
 	}
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
 }
