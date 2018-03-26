@@ -1,6 +1,7 @@
 #ifndef SRC_SYMBOLTABLE_H_
 #define SRC_SYMBOLTABLE_H_
 
+#include<string>
 #include<map>
 #include<vector>
 
