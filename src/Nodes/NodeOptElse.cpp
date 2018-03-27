@@ -30,18 +30,16 @@ void NodeOptElse::walk(CompilerState &cs) {
 }
 
 void NodeOptElse::print(CompilerState &cs) {
-	unsigned int i = 0;
-
-	for (i = 0; i < children.size(); i++) {
-		if (i == 0)
-			cs.os.printWhiteSpaces();
+	cs.os.printWhiteSpaces();
+	for (unsigned int i = 0; i < children.size(); i++) {
 		if (i == 1) {
 			cs.os << "\n";
 			cs.os.indent();
 		}
 		children[i]->print(cs);
-	}
 
-	if (i && i == children.size())
-		cs.os.deindent();
+		if (i == 1) {
+			cs.os.deindent();
+		}
+	}
 }

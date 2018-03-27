@@ -62,18 +62,19 @@ void NodeWhileStmt::walk(CompilerState &cs) {
 }
 
 void NodeWhileStmt::print(CompilerState &cs) {
-	unsigned int i = 0;
-
-	for (i = 0; i < children.size(); i++) {
+	cs.os.printWhiteSpaces();
+	for (unsigned int i = 0; i < children.size(); i++) {
 		if (i == 1)
 			cs.os << " ";
 		if (i == 4) {
-			cs.os.indent();
 			cs.os << "\n";
+			cs.os.indent();
 		}
-		children[i]->print(cs);
-	}
 
-	if (i && i == children.size())
-		cs.os.deindent();
+		children[i]->print(cs);
+
+		if (i == 4) {
+			cs.os.deindent();
+		}
+	}
 }

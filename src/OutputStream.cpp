@@ -9,7 +9,7 @@ void OutputStream::deindent() {
 }
 
 void OutputStream::printWhiteSpaces() {
-	if (indentLevel) {
+	if (indentLevel > 0) {
 		os << std::string(2 * indentLevel, ' ');
 	}
 }

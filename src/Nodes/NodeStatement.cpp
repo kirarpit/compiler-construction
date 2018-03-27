@@ -65,23 +65,31 @@ void NodeStatement::walk(CompilerState &cs) {
 }
 
 void NodeStatement::print(CompilerState &cs) {
-	if (!children.size())
+	if (children.size() == 1) {
+		children[0]->print(cs);
 		return;
-
+	}
 	cs.os.printWhiteSpaces();
 
-	if (children.size() == 3) {
-		cs.os << "{\n";
-
-		cs.os.indent();
-		children[1]->print(cs);
-		cs.os.deindent();
-
-		cs.os.printWhiteSpaces();
-		cs.os << '}';
-	} else
+	if (children.size() == 2 && children[1]->getToken().value == ";") {
 		printAllChildren(cs);
-
-	if (children.size() != 1)
 		cs.os << '\n';
+		return;
+	}
+
+	for (unsigned int i = 0; i < children.size(); i++) {
+		if (i == children.size() - 1) {
+			cs.os.deindent();
+			cs.os.printWhiteSpaces();
+		}
+
+		children[i]->print(cs);
+
+		if (i == 0) {
+			cs.os << "\n";
+			cs.os.indent();
+		}
+	}
+
+	cs.os << '\n';
 }

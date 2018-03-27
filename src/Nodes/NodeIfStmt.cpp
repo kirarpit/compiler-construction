@@ -76,6 +76,7 @@ void NodeIfStmt::walk(CompilerState &cs) {
 }
 
 void NodeIfStmt::print(CompilerState &cs) {
+	cs.os.printWhiteSpaces();
 	for (unsigned int i = 0; i < children.size(); i++) {
 		if (i == 1)
 			cs.os << " ";
@@ -83,8 +84,11 @@ void NodeIfStmt::print(CompilerState &cs) {
 			cs.os << "\n";
 			cs.os.indent();
 		}
-		if (i == 5)
-			cs.os.deindent();
+
 		children[i]->print(cs);
+
+		if (i == 4) {
+			cs.os.deindent();
+		}
 	}
 }
