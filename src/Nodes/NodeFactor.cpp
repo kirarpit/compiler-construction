@@ -43,6 +43,7 @@ void NodeFactor::walk(CompilerState &cs) {
 				type = children[1]->getType();
 			} else {
 				//error
+				exit(1);
 			}
 
 		} else if (children[0]->getToken().value == "-") {
@@ -51,6 +52,7 @@ void NodeFactor::walk(CompilerState &cs) {
 				type = children[1]->getType();
 			} else {
 				//error
+				exit(1);
 			}
 
 			if (children[1]->isConstant) {
@@ -69,6 +71,7 @@ void NodeFactor::walk(CompilerState &cs) {
 				type = children[1]->getType()->addr();
 			} else {
 				//error
+				exit(1);
 			}
 		}
 	}

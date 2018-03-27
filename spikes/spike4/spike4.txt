@@ -1,0 +1,432 @@
+SPIKE4 - LOBO-C TYPE PROPAGATION AND CONSTANT FOLDING - VERSION spike4-10
+
+((s4.0)) Key dates
+
+  ((s4.0.1)) spike4 is due on Monday March 26, 2018 at 5pm.
+
+  ((s4.0.2)) The spike4 code turn-in mechanism will be similar to that
+             of the previous spikes, and any significant changes will
+             be detailed in class.
+
+((s4.1)) Overview: spike4 builds on and extends the previous spikes,
+adding four new aspects:
+
+ ((s4.1.1)) Nested symbol tables (see (s4.4.1) for details),
+ ((s4.1.2)) Control statements (see (s4.4.2) for details),
+ ((s4.1.3)) Type propagation (see (s4.4.3) for details), and
+ ((s4.1.4)) constant folding (see (s4.4.4) for details).
+
+((s4.1.5)) This spike4 spec focuses primarily on those four aspects,
+rather than providing a standing-start description of the entire
+compiler.
+
+((s4.1.6)) spike4 is a standalone program -- written in C, C++, or
+Java -- that reads a legal LOBO-C block from a filename supplied on
+the command line, or from standard input, then prints, to standard
+output, a variety of information about the LOBO-C code The output
+format for spike4 is called 'BOTLPIF', which stands for
+'block-oriented type-labeled parenthesized infix form'.
+
+((s4.1.7)) Note that spike4 programs SHOULD include and make use of
+essentially all of the code developed in spike3.  The top-level
+'driver' or main program will necessarily be different, since the
+spike4 input-output requirements are different, but the spike3
+specification _remains_normative_ for spike4 unless explicitly
+overruled in this document.  (And since the spike3 specification
+defaults to the spike2 and spike1 specifications, by transitivity they
+are normative here as well.)
+
+((s4.2)) This task is described by a 'spec package', which is a zip
+file named 'spike4-' plus a version number, such as 'spike4-10.zip'.
+
+  ((s4.2.1.1)) A spike4 spec package with a larger version number
+               supercedes any with a smaller version number.
+
+  ((s4.2.1.2)) See (s4.9) below for details of any spec package
+               revisions.
+
+  ((s4.2.2)) Files in the spike4 spec package include:
+
+   ((s4.2.2.1)) spike4.txt: This file.  Everything in spike4.txt is
+                normative for the spike4 task, unless otherwise noted.
+
+   ((s4.2.2.2)) A separate file, spike4-grammar.txt, which contains the
+                entire grammar for spike4.  Everything in
+                spike4-grammar.txt is normative for the spike4 task,
+                unless otherwise noted here
+
+   ((s4.2.2.3)) A separate file, spike4-type-rules.txt, detailing the
+                type propagation rules for spike4.
+
+   ((s4.2.2.4)) implementation-notes.txt: Some suggestions and
+                discussion about implementation choices.  Everything
+                in implementation-notes.txt is advisory for spike4.
+
+   ((s4.2.2.5)) tests/*.(s4i|s4o): Files containing legal spike4 test
+                input (.s4i files) according to the specification
+                below (s4.3), and their corresponding required BOTLPIF
+                outputs (.s4o files).
+
+    ((s4.2.2.5.1)) Note that only 'correct input' files in are
+                   provided in the supplied tests. All supplied .s4i
+                   files are intended to be correct by this
+                   specification, and spike4 is expected to exit with
+                   status zero (s4.5.4) after processing such files.
+
+    ((s4.2.2.5.2)) Note that the '.s4o' files are intended to provide
+                   EXACT BYTE-FOR-BYTE target output for the
+                   corresponding '.s4i', EXCEPT POSSIBLY for
+                   differences in whitespace.
+
+      ((s4.2.2.5.2.1)) Still, however, if your spike4 outputs any
+                       prompts or debug messages -- or anything else,
+                       except the required output -- to standard
+                       output, that is a spec violation!
+
+      ((s4.2.2.5.2.2)) Note this specification says nothing about any
+                       output -- or the lack thereof -- sent to
+                       standard error.  Any and all output sent to
+                       standard error will be ignored during testing
+                       and therefore cannot affect the test results.
+
+    ((s4.2.2.5.3)) Note also there are _many_ aspects of the spike4
+                   token specification that the provided examples do
+                   not test!  You are expected to develop additional
+                   .s4i/.s4o files of your own!
+
+((s4.3)) This section describes the DIFFERENCES between the spike4
+target grammar and the spike3 target grammar.  See separate file
+'spike4-grammar.txt' (s4.2.2.2) for the entire grammar.  With minor
+exceptions, this grammar describes the legal expressions in LOBO-C.
+
+((s4.3.1)) Here are the differences between the spike3 and spike4
+target grammars.
+
+((s4.3.1.1)) The SPIKE3 rule, which also defined the start symbol, is
+replaced with the SPIKE4 rule, which now defines the start symbol:
+
+    1c1
+    <    SPIKE3         <- BLOCK EOF
+    ---
+    >    SPIKE4         <- BLOCK EOF
+
+((s4.3.1.2)) The STATEMENT rule changes and expands, and three new
+rules -- IF_STMT, OPT_ELSE, and WHITE_STMT -- are added:
+
+    15c15,18
+    <    STATEMENT      <- "{" STATEMENTS "}" | EXPR ";"
+    ---
+    >    STATEMENT      <- "{" BLOCK "}" | EXPR ";" | IF_STMT | WHILE_STMT
+    >    IF_STMT        <- "if" "(" EXPR ")" STATEMENT OPT_ELSE
+    >    OPT_ELSE       <- | "else" STATEMENT
+    >    WHILE_STMT     <- "while" "(" EXPR ")" STATEMENT
+
+((s4.3.1.3)) A new 'else' token is added, and the handling of
+'dangling elses' is described:
+
+    40a44,50
+    >
+    > NOTES:
+    >
+    >  - An 'else' keyword token is added in spike4
+    >
+    >  - The 'dangling else' ambiguity is handled in LOBO-C as in regular C
+    >    (and just about every other language to which it applies).
+
+((s4.4)) DETAILS OF NEW SPIKE4 ELEMENTS
+
+((s4.4.1)) NESTED SYMBOL TABLES.  Each {}-delimited STATEMENT now
+contains a BLOCK rather than STATEMENTS, meaning that DEFS can appear
+after any '{'.  Declarations follow the normal C scope rules, meaning
+basically that:
+
+ ((s4.4.1.1)) A name can be declared at most once in a single DEFS.
+
+ ((s4.4.1.2)) Each use of a name is matched to the nearest enclosing
+              BLOCK that declares it.
+
+ ((s4.4.1.3)) A name declared in inner DEFS (of a more-nested BLOCK)
+              will 'shadow' any other declaration(s) of the same name
+              in outer BLOCKs, meaning the inner declaration of the
+              name will be used until that BLOCK ends, at which point
+              the next-outermost declaration of the same name will
+              again become visible.
+
+((s4.4.1.4)) See (s4.4.5.3) below for an example of shadowing.
+
+((s4.4.2)) CONTROL STATEMENTS.  spike4 adds an 'if' statement and a
+'while' statement.  See (s4.4.5.5) for an example.
+
+((s4.4.2.1)) The 'if' statement contains a 'condition' EXPR, a 'then'
+STATEMENT, and an optional 'else' STATEMENT, with the typical C
+semantics both regarding the interpretation of the condition (0 means
+'false', anything non-zero means 'true'), and regarding the
+dangling-else problem (it attaches to the nearest prior 'if').
+
+((s4.4.2.2)) The 'while' statement contains a 'condition' EXPR and a
+'body' STATEMENT, with the typical C semantics.
+
+((s4.4.3)) TYPE PROPAGATION.  spike4 performs 'type propagation' to
+determine the types of operations performed in expressions.  Starting
+with the leaves of the AST, the types of the PRIMARY_EXPRs are
+determined as suggested by (s4.4.5.2.1.2) -- using symbol table lookup
+to determine the types of identifiers, and assuming all numeric
+constants are type signed.
+
+((s4.4.3.1)) Then, once all the operands of an operation have been
+type-labeled, type information is propagated to the operation itself,
+according to the rules in spike4-type-rules.txt.  As seen there,
+sometimes the type of the operation is the same as the type of the
+operands, sometimes other rules determine the operation type, and some
+combinations of operand types may simply be illegal for some
+operations.
+
+((s4.4.3.2)) Type propagation succeeds complete once all top-level
+EXPR nodes have types.  However, as mentioned, type propagation may
+fail due to illegal operand types.  The spike4 program may exits with
+a non-zero status any time after such a type propagation failure has
+occurred, although LOBO-C compiler implementors are ENCOURAGED to
+develop some method to allow multiple such failures to be detected in
+a single compiler execution.
+
+((s4.4.4)) CONSTANT FOLDING.  Once the operand and result types have
+been determined for a given operation, if the operands are determined
+to all be constants, spike4 performs the given operation on the given
+operands, and replaces the AST subtree representing the operation with
+the resulting value.  See (s4.4.5.4) and (s4.4.5.5) for examples.
+
+((s4.4.4.1)) Note that constant folding should probably be performed
+interleaved with type labeling, as suggested by the wording of
+(s4.4.4), rather than expecting to type-label everything before
+beginning to constant-fold anything.  In particular, we need to
+constant-fold the EXPRs used in OPT_ARRAY_SIZEs before we can even
+know precisely what types we are facing.
+
+((s4.4.4.2)) Note also that although the 'obvious' forms of constant
+folding are found in EXPRs, sometimes other constructs can be folded
+as well, as in (s4.4.5.5) where an if-statement is constant-folded
+down to a single STATEMENT.
+
+((s4.4.5)) PRINTING BOTLPIF - BLOCK-ORIENTED TYPE-LABELED PARENTHESIZED INFIX FORM
+
+((s4.4.5.1)) BOTLPIF format is based on the BOFPIF format used in
+spike3, making two significant changes:
+
+  ((s4.4.5.1.1)) Since spike4 supports a symbol table in each block,
+  there is a VSR (s3.4.5) appearing at the beginning of each block,
+  rather than just one VSR at the beginning of the output.  In
+  addition, it is desirable that the VSRs by indented with spaces to
+  match the depth of the associated block, although given
+  (s4.2.2.5.2), such indentation cannot be strictly required by spec.
+
+  ((s4.4.5.1.2)) Each EXPR element of the ASTR is labeled with its
+  type, as determined by performing type propagation (s4.4.3).  Type
+  labels are presented a compressed form in which spaces are
+  eliminated, and the keywords 'signed', 'unsigned', and 'bool' are
+  replaced by the single letters 'S', 'U', and 'B' respectively.
+
+  ((s4.4.5.1.2.1)) Then the compressed type is prepended to the
+  component it is labeling, preceded by a single space and followed by
+  a colon.
+
+((s4.4.5.2)) For concreteness, here is a first example of the spike4
+output format.  For the input:
+
+    ---cut here---
+    signed a; unsigned b; bool c;
+    b = a = c = 1;
+    ---cut here---
+
+the spike4 output is:
+
+    ---cut here---
+    a okay signed
+    b okay unsigned
+    c okay bool
+
+     U:( U:b= S:( S:a= B:( B:c= S:1)));
+    ---cut here---
+
+((s4.4.5.2.1)) Some points to notice in that example:
+
+ ((s4.4.5.2.1.1)) The initial VSR output is the same as in spike3.
+                  Since there are no {}-delimited blocks in this
+                  example, there is only one VSR.
+
+ ((s4.4.5.2.1.2)) The spike3 BOFPIF ASTR for this example would have
+                  been '(b=(a=(c=1)));'.  To turn that into spike4's
+                  BOTLPIF, each PRIMARY_EXPR is labeled with its type,
+                  and each set of parentheses is label with the type
+                  that results from the parenthesized operation:
+
+     /---/----/---/----/---/----/--------> Following colons
+     |   |    |   |    |   |    |
+   /---/----/---/----/---/----/----------> Preceding spaces
+   | | | |  | | | |  | | | |  | |
+   v v v v  v v v v  v v v v  v v
+    U:( U:b= S:( S:a= B:( B:c= S:1)));
+    ^   ^    ^   ^    ^   ^    ^
+    |   |    |   |    |   |    |
+    |   \--------\--------\--------------> PRIMARY_EXPR types from declarations
+    |        |        |        \---------> PRIMARY_EXPR types for numeric constands
+    |        |        \------------------> Type of ASGN_EXPR c=...
+    |        \---------------------------> Type of ASGN_EXPR a=...
+    \------------------------------------> Type of ASGN_EXPR b=...
+
+
+((s4.4.5.3)) This second example shows block structure and variable shadowing.  For the input:
+
+    ---cut here---
+    signed a,b,c; { bool b, c; a = b; } a = c;
+    ---cut here---
+
+((s4.4.5.3.0)) the spike4 output (with line numbers -- THAT DO NOT APPEAR IN
+THE ACTUAL OUTPUT -- added for reference) is:
+
+    ---cut here---
+1   a okay signed
+2   b unused signed
+3   c okay signed
+4
+5   { b okay bool
+6     c unused bool
+7
+8      S:( S:a= B:b);
+9   }
+10   S:( S:a= S:c);
+    ---cut here---
+
+((s4.4.5.3.1)) Some points to notice in that example:
+
+ ((s4.4.5.3.1.1)) The 'b' reported at line 2 is marked 'unused' even
+                  though 'b' is used in line 8, because the line 8 use
+                  is associated with the 'b' reported at line 5.  The
+                  inner 'b' _shadowed_ the outer 'b' in lines 5-9.
+
+ ((s4.4.5.3.1.2)) The 'c' reported at line 6 is marked 'unused' even
+                  though 'c' is used in line 10, because that use is
+                  after the shadowing 'c' reported at line 6 has
+                  gone.
+
+((s4.4.5.4)) This third example shows constant folding and more
+complex types.  For the input:
+
+    ---cut here---
+    bool a; bool[2*3] b; bool[] c; a=4/(1+2); c=&b[3]; c[] = a;
+    ---cut here---
+
+the spike4 output (with line numbers -- THAT DO NOT APPEAR IN
+THE ACTUAL OUTPUT -- added for reference) is:
+
+    ---cut here---
+1   a okay bool
+2   b okay bool[6]
+3   c okay bool[]
+4
+5    B:( B:a= S:1);
+6    B[]:( B[]:c= B[]:(& B:( B[6]:b[ S:3])));
+7    B:( B:( B[]:c[])= B:a);
+    ---cut here---
+
+((s4.4.5.4.1)) Some points to notice in that example:
+
+ ((s4.4.5.4.1.1)) The 'b' array reported at line 2 is of size 6 even
+ though the input was '2*3' -- the latter expression was
+ constant-folded down to 6 to obtain the actual array size.  Likewise,
+ the '4/(1+2)' is constant-folded down to 1 in the line 5 assignment.
+
+ ((s4.4.5.4.1.2)) The type of the assignment operation in line 6 is
+ 'B[]' -- pointer to bool -- as are the types of each operand in the
+ assignment.
+
+ ((s4.4.5.4.1.3)) As seen in line 6, expression '&b[3]' starts with a
+ B[6] -- array of 6 bool -- which is converted to B -- bool -- by
+ array indexing, and then converted to B[] -- pointer to bool -- by
+ the unary '&' operator.
+
+((s4.4.5.5)) This final example shows control statements. For the input:
+
+    ---cut here---
+    bool a,b; if (1==2) b=0; else while(a) a=a==0;
+    ---cut here---
+
+the spike4 output is:
+
+    ---cut here---
+    a okay bool
+    b okay bool
+
+    while ( B:a)
+       B:( B:a= B:( B:a== S:0));
+    ---cut here---
+
+((s4.4.5.5.1)) Some points to notice in that example:
+
+ ((s4.4.5.5.1.1)) Since the 'if' condition was a constant expression,
+ and its value was 0, the if-condition and its corresponding
+ then-statement (the 'b=0;') are both constant-folded away and do not
+ appear in the .s4o output.  All that is left is the else-statement
+ (the while loop) now 'promoted' into the top-level BLOCK.
+
+
+((s4.5)) Overall flow of the spike4 program
+
+((s4.5.1)) The spike4 program may be run with either zero or one
+command line argument.  If one command line argument is supplied, it
+is interpreted as a file path which is opened for reading.  If it
+cannot be opened for reading, spike4 exits with non-zero status.  If
+no command line argument is supplied, spike4 reads from standard
+input.
+
+((s4.5.2)) In either case, spike4 then parses a single BLOCK, and then
+checks for EOF (with appropriate error detection and reporting if
+either of those steps fail).
+
+((s4.5.2.1)) Once the BLOCK has been parsed, symbol table
+construction, type propagation, and constant folding are performed.
+
+((s4.5.2.2)) If the steps in (s4.5.2.1) are successful, the resulting
+AST is then printed out in BOTLPIF, and then spike4 exits with status
+0.
+
+((s4.5.3)) ERROR HANDLING
+
+((s4.5.3.1)) spike4 handles parsing and lexical errors in EXPRs in
+essentially the same manner as spike3, as described in (s3.5.3).
+
+((s4.5.3.2)) spike4 handles analysis and type labeling errors in a
+manner chosen by the spike4 implementor, given ENCOURAGEMENT to detect
+as many distinct errors as reasonably possible in a single
+compilation.
+
+((s4.5.4)) EXIT PROCESSING
+
+((s4.5.4.1)) When spike4 has completed its processing (see
+(s4.5.2.2)), spike4 exits with an exit status determined as follows:
+
+((s4.5.4.1.1)) If the total number of analysis and type labeling
+errors, plus parsing or lexicl error recoveries ((s4.5.3.1) and/or
+(s4.5.3.2)), is more than 9 during this run of spike4, spike4 exits
+with status 10.
+
+((s4.5.4.1.3)) Otherwise, spike4's exit status is the number of errors
+detected and/or error recoveries performed.  
+
+  ((s4.5.4.1.3.1)) Note this implies spike4's exit status is 0 only if
+  no errors were detected and no error recovery needed to be
+  performed.
+
+  ((s4.5.4.1.3.2)) Note that the determination of 'number of errors'
+  is difficult to specify exactly, and implementors are therefore
+  granted reasonable leeway to determine how many errors are
+  recognized by some illegal program or program fragment.
+
+((s4.6)) Unused reserved
+
+((s4.7)) Unused reserved
+
+((s4.8)) Unused reserved
+
+((s4.9)) Spec revision history
+
+((s4.9.1)) Version spike4-10 released Tue Mar 13 01:59:47 2018 

@@ -73,9 +73,11 @@ TypeInfo* TypeInfo::deref(int tp) {
 
 	if (typeOf == NULL) {
 		//error
+		exit(1);
 	}
 	if (type != tp) {
 		//error
+		exit(1);
 	}
 	return typeOf;
 }
@@ -136,6 +138,7 @@ TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
 			return t2;
 		else {
 			//error
+			exit(1);
 		}
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
@@ -143,18 +146,21 @@ TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
 			return new TypeInfo(TP_BOOL, 0);
 		} else {
 			//error
+			exit(1);
 		}
 	} else if (tkn.type & TT_EQ_OP) {
-		if (t2->isEqual(t1)) {
+		if (t2->isEqual(t1) || (t1->isNumericType() && t2->isNumericType())) {
 			return new TypeInfo(TP_BOOL, 0);
 		} else {
 			//error
+			exit(1);
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
 		if (t1->isBool() && t2->isEqual(t1)) {
 			return new TypeInfo(TP_BOOL, 0);
 		} else {
 			//error
+			exit(1);
 		}
 	} else if (tkn.value == "=") {
 		if (t1->isNumericType() && t2->isNumericType()) {
@@ -163,6 +169,7 @@ TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
 			return t1;
 		} else {
 			//error
+			exit(1);
 		}
 	} else if (tkn.value == ",") {
 		return t2;
@@ -211,11 +218,13 @@ Node* TypeInfo::constantFold(Token tkn, Token t1, Token t2) {
 			}
 		} else if (tkn.value == "=") {
 			//error
+			exit(1);
 		} else if (tkn.value == ",") {
 			val = t1.getIntVal(), t2.getIntVal();
 		}
 	} else {
 		//error
+		exit(1);
 	}
 
 	output << val;

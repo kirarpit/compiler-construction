@@ -34,7 +34,8 @@ Node* NodeBlock::parse(CompilerState &cs) {
 void NodeBlock::print(CompilerState &cs) {
 	printST(cs);
 	cs.os << '\n';
-	children[children.size() - 1]->print(cs);
+
+	printAllChildren(cs);
 }
 
 void NodeBlock::printST(CompilerState &cs) {

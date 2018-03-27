@@ -45,12 +45,20 @@ void SymbolTable::insertVar(Token id) {
 
 			varType = deepCopy(varType);
 			varIDs.push_back(id.value);
+		} else {
+			//error
+			//just gotta ignore it and throw std error which will increase the count
+			exit(1);
 		}
 	} else {
 		VariableInfo *varPtr = lookup(id);
 		if (varPtr) {
 			varPtr->status = VS_OKAY;
 		} else {
+			//error
+			//this is still parsing, can return bool and throw an error while parsing
+			//which will hopefully roll back and remove the entire statement
+			exit(1);
 			variables[id.value] = VariableInfo(VS_UNDEC);
 			variables[id.value].setType(NULL);
 		}

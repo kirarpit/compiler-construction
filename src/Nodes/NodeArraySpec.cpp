@@ -34,8 +34,9 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 					cs.lastBlock->getST()->updateVarType(TP_POINTER, 0);
 				} else {
 					//error
-					std::cout
-							<< "array spec size must be a constant during declaration";
+					//well since this is still parsing we can throw and error and roll back
+					//the entire statement
+					exit(1);
 				}
 			}
 		} else {

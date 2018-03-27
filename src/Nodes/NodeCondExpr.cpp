@@ -61,6 +61,7 @@ void NodeCondExpr::walk(CompilerState &cs) {
 			type = children[2]->getType();
 		} else {
 			//error
+			exit(1);
 		}
 
 		if (children[0]->isConstant) {

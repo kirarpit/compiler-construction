@@ -12,7 +12,6 @@ public:
 	}
 
 	void print(CompilerState &cs) {
-		printAllChildren(cs);
 	}
 	static Node* parse(CompilerState &cs);
 };

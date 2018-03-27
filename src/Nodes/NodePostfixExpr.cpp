@@ -58,6 +58,7 @@ void NodePostfixExpr::walk(CompilerState &cs) {
 				type = children[0]->getType();
 			} else {
 				//error
+				exit(1);
 			}
 		} else {
 			if (children[1]->getSize() == 2)
