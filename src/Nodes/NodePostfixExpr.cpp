@@ -51,8 +51,6 @@ void NodePostfixExpr::walk(CompilerState &cs) {
 	this->NonTerminalNode::walk(cs);
 
 	if (children.size() == 2) {
-		Logger::log(__CLASS_NAME__ + " typeProp for size 2");
-
 		if (children[1]->isTerminal) {
 			if (children[0]->getType()->isSigned()
 					|| children[0]->getType()->isUnsigned()

@@ -22,17 +22,21 @@ void NonTerminalNode::walk(CompilerState &cs) {
 	for (unsigned int i = 0; i < children.size(); i++) {
 		children[i]->walk(cs);
 
-		if (!children[i]->getSize() && getST() == NULL) {
+		if (children[i]->getSize() == 0 && children[i]->getST() == NULL) {
 			Logger::log("Empty Node Deleted");
 
 			deleteChild(i);
+			i--;
 		} else if (children[i]->getSize() == 1 && children[i]->getST() == NULL) {
 			if (children[i]->getChild(0)->isTerminal)
 				Logger::log(
 						"Terminal Node shifted up, Token Value: "
 								+ children[i]->getChild(0)->getToken().value);
 			else
-				Logger::log("NonTerminal Node shifted up");
+				Logger::log(
+						"NonTerminal Node shifted up, Token:"
+								+ this->getToken().print() + ", Size: %d",
+						this->getSize());
 
 			Node *temp = children[i];
 			children[i] = temp->getChild(0);
@@ -57,7 +61,8 @@ void NonTerminalNode::operatorWalk(CompilerState &cs) {
 
 			if (terminalNode) {
 				Logger::log(
-						"Constant Folded, Token Value: " + terminalNode->getToken().value);
+						"Constant Folded, Token Value: "
+								+ terminalNode->getToken().value);
 
 				terminalNode->setType(type);
 				deleteChildren();

@@ -56,6 +56,14 @@ Node* NodeStatement::parse(CompilerState &cs) {
 	return statement;
 }
 
+void NodeStatement::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}
+
 void NodeStatement::print(CompilerState &cs) {
 	if (!children.size())
 		return;

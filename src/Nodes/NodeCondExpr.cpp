@@ -68,10 +68,8 @@ void NodeCondExpr::walk(CompilerState &cs) {
 			Node *temp = NULL;
 			if (children[0]->getToken().value == "1") {
 				temp = children[2];
-				deleteChild(4);
 			} else {
 				temp = children[4];
-				deleteChild(2);
 			}
 
 			clearChildren();

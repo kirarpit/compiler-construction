@@ -56,7 +56,7 @@ test:	$(PROGRAM) $(TEST_RESULTS)
 
 $(TEST_DIR)/%.s4o:	$(TEST_DIR)/%.s4i FORCE
 	@/bin/echo -n "[Test $(<F) -> $(@F) file: "
-	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null | diff -w $(@F) -
+	@cd $(TEST_DIR); ./$(PROGRAM) $(<F) 2>/dev/null > .a.out; cp $(@F) .b.out; ./diff.sh
 	@echo "OK]"
 
 clean:	

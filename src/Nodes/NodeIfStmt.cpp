@@ -59,7 +59,7 @@ void NodeIfStmt::walk(CompilerState &cs) {
 
 			Node *temp = NULL;
 			if (children[2]->getToken().value == "0") {
-				if (children.size() == 6) {
+				if (children.size() == 6 && children[5]->getSize() == 2) {
 					temp = children[5]->getChild(1);
 				}
 			} else {

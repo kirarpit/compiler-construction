@@ -29,3 +29,11 @@ Node* NodeDefs::parse(CompilerState &cs) {
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return defs;
 }
+
+void NodeDefs::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	this->NonTerminalNode::walk(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}

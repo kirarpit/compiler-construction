@@ -34,15 +34,12 @@ Node* NodeBlock::parse(CompilerState &cs) {
 void NodeBlock::print(CompilerState &cs) {
 	printST(cs);
 	cs.os << '\n';
-	for (unsigned int i = 0; i < children.size(); i++) {
-		if (i) {
-			children[i]->print(cs);
-		}
-	}
+	children[children.size() - 1]->print(cs);
 }
 
 void NodeBlock::printST(CompilerState &cs) {
-	myST->print(cs);
+	if (myST)
+		myST->print(cs);
 }
 
 SymbolTable* NodeBlock::getST() {
