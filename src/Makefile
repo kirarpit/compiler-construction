@@ -67,8 +67,8 @@ realclean: clean
 	rm -f $(PROGRAM)
 
 tar:	realclean
-	cd ..;
-	tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
+	cd ..; \
+	COPYFILE_DISABLE=1 tar cvf ../$(TARNAME) --exclude='*.tgz' --exclude='.git*' --exclude='Debug' --exclude='.cproject' --exclude='.settings' --exclude='.project' .
 
 include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(CPP_FILES))))
 
