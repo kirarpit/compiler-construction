@@ -67,13 +67,21 @@ void NodeCondExpr::walk(CompilerState &cs) {
 		if (children[0]->isConstant) {
 
 			Node *temp = NULL;
+			int index = -1;
+
 			if (children[0]->getToken().value == "1") {
 				temp = children[2];
+				index = 2;
+
 			} else {
 				temp = children[4];
+				index = 4;
 			}
 
-			clearChildren();
+			if (index != -1)
+				clearChild(index);
+
+			deleteChildren();
 			addNode(temp);
 		}
 	}

@@ -46,17 +46,18 @@ void NonTerminalNode::walk(CompilerState &cs) {
 	}
 
 	if (children.size() == 1) {
-		type = children[0]->getType();
+		type = Type::deepCopy(children[0]->getType());
 	}
 }
 
 void NonTerminalNode::operatorWalk(CompilerState &cs) {
 	if (children.size() == 3) {
-		type = TypeInfo::getOperandType(children[1]->getToken(),
-				children[0]->getType(), children[2]->getType());
+		type = Type::deepCopy(
+				Type::getOperandType(children[1]->getToken(),
+						children[0]->getType(), children[2]->getType()));
 
 		if (children[0]->isConstant && children[2]->isConstant) {
-			Node* terminalNode = TypeInfo::constantFold(children[1]->getToken(),
+			Node* terminalNode = Type::constantFold(children[1]->getToken(),
 					children[0]->getToken(), children[2]->getToken());
 
 			if (terminalNode) {
@@ -93,6 +94,10 @@ void NonTerminalNode::deleteChildren() {
 
 void NonTerminalNode::deleteChild(int i) {
 	delete children[i];
+	children.erase(children.begin() + i);
+}
+
+void NonTerminalNode::clearChild(int i) {
 	children.erase(children.begin() + i);
 }
 

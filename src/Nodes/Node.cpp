@@ -6,6 +6,8 @@ Node::Node() :
 }
 
 Node::~Node() {
+	//if (type)
+		//delete type;
 }
 
 void Node::addNode(Node *node) {
@@ -19,11 +21,11 @@ SymbolTable* Node::getST() {
 	return NULL;
 }
 
-TypeInfo* Node::getType() {
+Type* Node::getType() {
 	return type;
 }
 
-void Node::setType(TypeInfo *t) {
+void Node::setType(Type *t) {
 	type = t;
 }
 

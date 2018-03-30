@@ -1,36 +1,36 @@
-#include<TypeInfo.h>
 #include<Logger.h>
 #include<Node.h>
 #include<TerminalNode.h>
 #include<CompilerState.h>
 #include<OutputStream.h>
+#include <Type.h>
 
-TypeInfo::TypeInfo(int name, int size) :
+Type::Type(int name, int size) :
 		type(name), size(size), typeOf(NULL) {
 	Logger::log("TypeInfo Constructor Called");
 }
 
-TypeInfo::~TypeInfo() {
+Type::~Type() {
 	Logger::log("TypeInfo Destructor Called");
 	if (typeOf)
 		delete typeOf;
 }
 
 #define XX(a, b) b,
-const std::string TypeInfo::Type[] = { TYPE_LIST };
+const std::string Type::TS[] = { TYPE_LIST };
 #undef XX
 
-void TypeInfo::print(CompilerState &cs) {
+void Type::print(CompilerState &cs) {
 	recursivePrint(cs, this, false);
 }
 
-void TypeInfo::shortPrint(CompilerState &cs) {
+void Type::shortPrint(CompilerState &cs) {
 	cs.os << " ";
 	recursivePrint(cs, this, true);
 	cs.os << ":";
 }
 
-void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type,
+void Type::recursivePrint(CompilerState &cs, Type *type,
 		bool shortForm) {
 	if (!type) {
 		return;
@@ -62,13 +62,13 @@ void TypeInfo::recursivePrint(CompilerState &cs, TypeInfo *type,
 	}
 }
 
-TypeInfo* TypeInfo::addr() {
-	TypeInfo *t = new TypeInfo(TP_POINTER, 0);
+Type* Type::addr() {
+	Type *t = new Type(TP_POINTER, 0);
 	t->typeOf = this;
-	return t;
+	return Type::deepCopy(t);
 }
 
-TypeInfo* TypeInfo::deref(int tp) {
+Type* Type::deref(int tp) {
 	Logger::log("TypeInfo deref");
 
 	if (typeOf == NULL) {
@@ -79,41 +79,41 @@ TypeInfo* TypeInfo::deref(int tp) {
 		//error
 		exit(1);
 	}
-	return typeOf;
+	return Type::deepCopy(typeOf);
 }
 
-bool TypeInfo::isSigned() {
+bool Type::isSigned() {
 	if (type == TP_SIGNED && typeOf == NULL)
 		return true;
 	return false;
 }
 
-bool TypeInfo::isUnsigned() {
+bool Type::isUnsigned() {
 	if (type == TP_UNSIGNED && typeOf == NULL)
 		return true;
 	return false;
 }
 
-bool TypeInfo::isBool() {
+bool Type::isBool() {
 	if (type == TP_BOOL && typeOf == NULL)
 		return true;
 	return false;
 }
 
-bool TypeInfo::isPointer() {
+bool Type::isPointer() {
 	if (type == TP_POINTER)
 		return true;
 	return false;
 }
 
-bool TypeInfo::isNumericType() {
+bool Type::isNumericType() {
 	if (isSigned() || isBool() || isUnsigned()) {
 		return true;
 	}
 	return false;
 }
 
-bool TypeInfo::isEqual(TypeInfo *t1) {
+bool Type::isEqual(Type *t1) {
 	if (t1->type == type && t1->size == size) {
 		if (typeOf == NULL && t1->typeOf == NULL)
 			return true;
@@ -126,16 +126,16 @@ bool TypeInfo::isEqual(TypeInfo *t1) {
 	}
 }
 
-TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
+Type* Type::getOperandType(Token tkn, Type *t1, Type *t2) {
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 		if (t1->isSigned() && t2->isSigned())
-			return t1;
+			return new Type(TP_SIGNED, 0);
 		else if (t1->isUnsigned() && t2->isSigned())
-			return t1;
+			return new Type(TP_UNSIGNED, 0);
 		else if (t1->isUnsigned() && t2->isUnsigned())
-			return t1;
+			return new Type(TP_UNSIGNED, 0);
 		else if (t1->isSigned() && t2->isUnsigned())
-			return t2;
+			return new Type(TP_UNSIGNED, 0);
 		else {
 			//error
 			exit(1);
@@ -143,42 +143,42 @@ TypeInfo* TypeInfo::getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2) {
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
 				&& t2->isEqual(t1)) {
-			return new TypeInfo(TP_BOOL, 0);
+			return new Type(TP_BOOL, 0);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.type & TT_EQ_OP) {
 		if (t2->isEqual(t1) || (t1->isNumericType() && t2->isNumericType())) {
-			return new TypeInfo(TP_BOOL, 0);
+			return new Type(TP_BOOL, 0);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
 		if (t1->isBool() && t2->isEqual(t1)) {
-			return new TypeInfo(TP_BOOL, 0);
+			return new Type(TP_BOOL, 0);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "=") {
 		if (t1->isNumericType() && t2->isNumericType()) {
-			return t1;
+			return Type::deepCopy(t1);
 		} else if (t1->isPointer() && t1->isEqual(t2)) {
-			return t1;
+			return Type::deepCopy(t1);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == ",") {
-		return t2;
+		return Type::deepCopy(t2);
 	}
 
 	return NULL;
 }
 
-Node* TypeInfo::constantFold(Token tkn, Token t1, Token t2) {
+Node* Type::constantFold(Token tkn, Token t1, Token t2) {
 	int val = -1;
 	std::ostringstream output;
 
@@ -229,4 +229,14 @@ Node* TypeInfo::constantFold(Token tkn, Token t1, Token t2) {
 
 	output << val;
 	return new TerminalNode(Token(TT_NUM, output.str()));
+}
+
+Type* Type::deepCopy(Type *type) {
+	if (!type)
+		return NULL;
+
+	Type *newType = deepCopy(type->typeOf);
+	Type *temp = new Type(type->type, type->size);
+	temp->typeOf = newType;
+	return temp;
 }

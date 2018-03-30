@@ -20,31 +20,32 @@ enum {
 };
 #undef XX
 
-class TypeInfo {
+class Type {
 public:
-	TypeInfo(int name, int size = -1);
-	virtual ~TypeInfo();
+	Type(int name, int size = -1);
+	virtual ~Type();
 
-	const static std::string Type[];
+	const static std::string TS[];
 
 	void print(CompilerState &cs);
 	void shortPrint(CompilerState &cs);
-	void recursivePrint(CompilerState &cs, TypeInfo *type, bool shortForm);
-	TypeInfo* addr();
-	TypeInfo* deref(int type);
+	void recursivePrint(CompilerState &cs, Type *type, bool shortForm);
+	Type* addr();
+	Type* deref(int type);
+	static Type* deepCopy(Type *t);
 	bool isSigned();
 	bool isUnsigned();
 	bool isBool();
 	bool isPointer();
 	bool isNumericType();
-	bool isEqual(TypeInfo *t1);
+	bool isEqual(Type *t1);
 
-	static TypeInfo* getOperandType(Token tkn, TypeInfo *t1, TypeInfo *t2);
+	static Type* getOperandType(Token tkn, Type *t1, Type *t2);
 	static Node* constantFold(Token tkn, Token t1, Token t2);
 
 	int type;
 	int size;
-	TypeInfo *typeOf;
+	Type *typeOf;
 };
 
 #endif /* SRC_TYPEINFO_H_ */

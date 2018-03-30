@@ -3,8 +3,8 @@
 #include<Logger.h>
 #include<Lexer.h>
 #include<SymbolTable.h>
-#include<TypeInfo.h>
 #include<Node.h>
+#include <Type.h>
 
 void ErrorStream::reportParseError(CompilerState &cs) {
 	reportError();

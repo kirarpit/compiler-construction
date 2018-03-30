@@ -1,5 +1,5 @@
 #include <AllNodeHeaders.h>
-#include "TypeInfo.h"
+#include <Type.h>
 
 Node* NodeTypeName::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
@@ -8,14 +8,14 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	Node *typeName = NULL;
 
 	std::string primType = lex.peek().value;
-	if (primType == TypeInfo::Type[TP_BOOL]
-			|| primType == TypeInfo::Type[TP_SIGNED]
-			|| primType == TypeInfo::Type[TP_UNSIGNED]) {
+	if (primType == Type::TS[TP_BOOL]
+			|| primType == Type::TS[TP_SIGNED]
+			|| primType == Type::TS[TP_UNSIGNED]) {
 
 		int name;
-		if (primType == TypeInfo::Type[TP_SIGNED]) {
+		if (primType == Type::TS[TP_SIGNED]) {
 			name = TP_SIGNED;
-		} else if (primType == TypeInfo::Type[TP_UNSIGNED]) {
+		} else if (primType == Type::TS[TP_UNSIGNED]) {
 			name = TP_UNSIGNED;
 		} else {
 			name = TP_BOOL;

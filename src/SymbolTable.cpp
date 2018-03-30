@@ -1,10 +1,10 @@
 #include<Node.h>
 #include<SymbolTable.h>
 #include<Logger.h>
-#include<TypeInfo.h>
 #include<CompilerState.h>
 #include<VariableInfo.h>
 #include<OutputStream.h>
+#include <Type.h>
 
 SymbolTable::SymbolTable() :
 		parent(NULL), isDef(true), varType(NULL) {
@@ -30,7 +30,7 @@ Node* SymbolTable::exitScope() {
 void SymbolTable::updateVarType(int name, int size = 0) {
 	Logger::log("Updating Type of type: %d", name);
 
-	TypeInfo *newType = new TypeInfo(name, size);
+	Type *newType = new Type(name, size);
 	newType->typeOf = varType;
 	varType = newType;
 }
@@ -91,13 +91,13 @@ void SymbolTable::print(CompilerState &cs) {
 	}
 }
 
-TypeInfo* SymbolTable::deepCopy(TypeInfo *type) {
+Type* SymbolTable::deepCopy(Type *type) {
 	Logger::log("DeepCopying the type");
 	if (!type)
 		return NULL;
 
-	TypeInfo *newType = deepCopy(type->typeOf);
-	TypeInfo *temp = new TypeInfo(type->type, type->size);
+	Type *newType = deepCopy(type->typeOf);
+	Type *temp = new Type(type->type, type->size);
 	temp->typeOf = newType;
 	return temp;
 }

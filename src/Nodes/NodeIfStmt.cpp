@@ -57,16 +57,23 @@ void NodeIfStmt::walk(CompilerState &cs) {
 		if (children[2]->isConstant) {
 			Logger::log(__CLASS_NAME__ + ", Starting constant folding");
 
+			int index = -1;
+
 			Node *temp = NULL;
 			if (children[2]->getToken().value == "0") {
 				if (children.size() == 6 && children[5]->getSize() == 2) {
 					temp = children[5]->getChild(1);
+					index = 5;
 				}
 			} else {
 				temp = children[4];
+				index = 4;
 			}
 
-			clearChildren();
+			if (index != -1)
+				clearChild(index);
+
+			deleteChildren();
 			if (temp)
 				addNode(temp);
 		}

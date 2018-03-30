@@ -5,7 +5,7 @@
 
 class CompilerState;
 class SymbolTable;
-class TypeInfo;
+class Type;
 class Token;
 
 class Node {
@@ -23,13 +23,13 @@ public:
 	virtual Token getToken();
 	virtual int getSize();
 
-	TypeInfo* getType();
-	void setType(TypeInfo *t);
+	Type* getType();
+	void setType(Type *t);
 	bool isConstant;
 	bool isTerminal;
 
 protected:
-	TypeInfo *type;
+	Type *type;
 };
 
 #endif /* SRC_NODES_H_ */

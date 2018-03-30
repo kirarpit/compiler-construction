@@ -11,8 +11,8 @@
 #include<Logger.h>
 #include<TerminalNode.h>
 #include<SymbolTable.h>
-#include<TypeInfo.h>
 #include<OutputStream.h>
+#include <Type.h>
 
 class Node;
 class CompilerState;
@@ -32,6 +32,7 @@ public:
 	void deleteChildren();
 
 	void deleteChild(int index);
+	void clearChild(int index);
 
 	bool findPostfixExpr();
 	std::string getName();

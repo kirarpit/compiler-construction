@@ -2,8 +2,8 @@
 #include<VariableInfo.h>
 #include<Logger.h>
 #include<CompilerState.h>
-#include<TypeInfo.h>
 #include<OutputStream.h>
+#include <Type.h>
 
 #define XX(a, b) b,
 const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
@@ -26,7 +26,7 @@ VariableInfo::~VariableInfo() {
 		delete type;
 }
 
-void VariableInfo::setType(TypeInfo *typeInfo) {
+void VariableInfo::setType(Type *typeInfo) {
 	type = typeInfo;
 }
 

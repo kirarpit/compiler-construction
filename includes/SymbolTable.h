@@ -7,7 +7,7 @@
 
 class VariableInfo;
 class Token;
-class TypeInfo;
+class Type;
 
 class SymbolTable {
 public:
@@ -29,9 +29,9 @@ public:
 
 private:
 	std::map<std::string, VariableInfo> variables;
-	TypeInfo *varType;
+	Type *varType;
 	std::vector<std::string> varIDs;
-	TypeInfo* deepCopy(TypeInfo *type);
+	Type* deepCopy(Type *type);
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

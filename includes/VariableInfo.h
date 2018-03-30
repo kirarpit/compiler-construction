@@ -3,7 +3,7 @@
 
 #include<string>
 
-class TypeInfo;
+class Type;
 class CompilerState;
 
 #define VAR_STAT_LIST \
@@ -26,10 +26,10 @@ public:
 
 	const static std::string VarStatInfo[];
 
-	void setType(TypeInfo *type);
+	void setType(Type *type);
 
 	void print(CompilerState &cs);
-	TypeInfo *type;
+	Type *type;
 	int status;
 };
 
