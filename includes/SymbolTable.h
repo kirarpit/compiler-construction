@@ -2,6 +2,7 @@
 #define SRC_SYMBOLTABLE_H_
 
 #include<string>
+#include<set>
 #include<map>
 #include<vector>
 
