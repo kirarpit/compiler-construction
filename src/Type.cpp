@@ -3,22 +3,27 @@
 #include<TerminalNode.h>
 #include<CompilerState.h>
 #include<OutputStream.h>
-#include <Type.h>
-
-Type::Type(int name, int size) :
-		type(name), size(size), typeOf(NULL) {
-	Logger::log("TypeInfo Constructor Called");
-}
-
-Type::~Type() {
-	Logger::log("TypeInfo Destructor Called");
-	if (typeOf)
-		delete typeOf;
-}
+#include<Type.h>
+#include<TypeFactory.h>
 
 #define XX(a, b) b,
 const std::string Type::TS[] = { TYPE_LIST };
 #undef XX
+
+Type::Type(int name, int size) :
+		typeName(name), size(size), typeOf(NULL) {
+	Logger::logConst(__CLASS_NAME__);
+}
+
+Type::~Type() {
+	Logger::logDest(__CLASS_NAME__);
+}
+
+bool Type::operator<(Type &t) const {
+	if (t.typeName == typeName && t.size == size && t.typeOf == typeOf)
+		return false;
+	return true;
+}
 
 void Type::print(CompilerState &cs) {
 	recursivePrint(cs, this, false);
@@ -30,31 +35,31 @@ void Type::shortPrint(CompilerState &cs) {
 	cs.os << ":";
 }
 
-void Type::recursivePrint(CompilerState &cs, Type *type,
-		bool shortForm) {
+void Type::recursivePrint(CompilerState &cs, Type *type, bool shortForm) {
 	if (!type) {
 		return;
 	}
 
 	recursivePrint(cs, type->typeOf, shortForm);
-	if (type->type == TP_ARRAY) {
+	if (type->typeName == TP_ARRAY) {
 		std::ostringstream output;
 		output << type->size;
 		cs.os << "[" << output.str() << "]";
-	} else if (type->type == TP_POINTER) {
+	} else if (type->typeName == TP_POINTER) {
 		cs.os << "[]";
-	} else if (type->type == TP_BOOL) {
+	} else if (type->typeName == TP_BOOL) {
 		if (shortForm)
 			cs.os << "B";
 		else
 			cs.os << "bool";
 
-	} else if (type->type == TP_SIGNED) {
+	} else if (type->typeName == TP_SIGNED) {
 		if (shortForm)
 			cs.os << "S";
 		else
 			cs.os << "signed";
-	} else if (type->type == TP_UNSIGNED) {
+
+	} else if (type->typeName == TP_UNSIGNED) {
 		if (shortForm)
 			cs.os << "U";
 		else
@@ -63,45 +68,44 @@ void Type::recursivePrint(CompilerState &cs, Type *type,
 }
 
 Type* Type::addr() {
-	Type *t = new Type(TP_POINTER, 0);
-	t->typeOf = this;
-	return Type::deepCopy(t);
+	return TypeFactory::getAddressType(this);
 }
 
 Type* Type::deref(int tp) {
-	Logger::log("TypeInfo deref");
+	Logger::log("Type deref");
 
 	if (typeOf == NULL) {
 		//error
 		exit(1);
 	}
-	if (type != tp) {
+	if (typeName != tp) {
 		//error
 		exit(1);
 	}
-	return Type::deepCopy(typeOf);
+
+	return typeOf;
 }
 
 bool Type::isSigned() {
-	if (type == TP_SIGNED && typeOf == NULL)
+	if (typeName == TP_SIGNED && typeOf == NULL)
 		return true;
 	return false;
 }
 
 bool Type::isUnsigned() {
-	if (type == TP_UNSIGNED && typeOf == NULL)
+	if (typeName == TP_UNSIGNED && typeOf == NULL)
 		return true;
 	return false;
 }
 
 bool Type::isBool() {
-	if (type == TP_BOOL && typeOf == NULL)
+	if (typeName == TP_BOOL && typeOf == NULL)
 		return true;
 	return false;
 }
 
 bool Type::isPointer() {
-	if (type == TP_POINTER)
+	if (typeName == TP_POINTER)
 		return true;
 	return false;
 }
@@ -114,7 +118,7 @@ bool Type::isNumericType() {
 }
 
 bool Type::isEqual(Type *t1) {
-	if (t1->type == type && t1->size == size) {
+	if (t1->typeName == typeName && t1->size == size) {
 		if (typeOf == NULL && t1->typeOf == NULL)
 			return true;
 		if (typeOf == NULL || t1->typeOf == NULL)
@@ -129,13 +133,13 @@ bool Type::isEqual(Type *t1) {
 Type* Type::getOperandType(Token tkn, Type *t1, Type *t2) {
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 		if (t1->isSigned() && t2->isSigned())
-			return new Type(TP_SIGNED, 0);
+			return TypeFactory::getPrimType(TP_SIGNED);
 		else if (t1->isUnsigned() && t2->isSigned())
-			return new Type(TP_UNSIGNED, 0);
+			return TypeFactory::getPrimType(TP_UNSIGNED);
 		else if (t1->isUnsigned() && t2->isUnsigned())
-			return new Type(TP_UNSIGNED, 0);
+			return TypeFactory::getPrimType(TP_UNSIGNED);
 		else if (t1->isSigned() && t2->isUnsigned())
-			return new Type(TP_UNSIGNED, 0);
+			return TypeFactory::getPrimType(TP_UNSIGNED);
 		else {
 			//error
 			exit(1);
@@ -143,36 +147,36 @@ Type* Type::getOperandType(Token tkn, Type *t1, Type *t2) {
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
 				&& t2->isEqual(t1)) {
-			return new Type(TP_BOOL, 0);
+			return TypeFactory::getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.type & TT_EQ_OP) {
 		if (t2->isEqual(t1) || (t1->isNumericType() && t2->isNumericType())) {
-			return new Type(TP_BOOL, 0);
+			return TypeFactory::getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
 		if (t1->isBool() && t2->isEqual(t1)) {
-			return new Type(TP_BOOL, 0);
+			return TypeFactory::getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "=") {
 		if (t1->isNumericType() && t2->isNumericType()) {
-			return Type::deepCopy(t1);
+			return t1;
 		} else if (t1->isPointer() && t1->isEqual(t2)) {
-			return Type::deepCopy(t1);
+			return t1;
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == ",") {
-		return Type::deepCopy(t2);
+		return t2;
 	}
 
 	return NULL;
@@ -229,14 +233,4 @@ Node* Type::constantFold(Token tkn, Token t1, Token t2) {
 
 	output << val;
 	return new TerminalNode(Token(TT_NUM, output.str()));
-}
-
-Type* Type::deepCopy(Type *type) {
-	if (!type)
-		return NULL;
-
-	Type *newType = deepCopy(type->typeOf);
-	Type *temp = new Type(type->type, type->size);
-	temp->typeOf = newType;
-	return temp;
 }

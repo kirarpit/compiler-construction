@@ -31,7 +31,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 					cs.lastBlock->getST()->updateVarType(TP_ARRAY,
 							arraySpec->getChild(1)->getToken().getIntVal());
 				} else if (arraySpec->getSize() == 2) {
-					cs.lastBlock->getST()->updateVarType(TP_POINTER, 0);
+					cs.lastBlock->getST()->updateVarType(TP_POINTER);
 				} else {
 					//error
 					//well since this is still parsing we can throw and error and roll back

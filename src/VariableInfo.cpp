@@ -10,24 +10,13 @@ const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
 VAR_STAT_LIST };
 #undef XX
 
-VariableInfo::VariableInfo() :
-		type(NULL), status(-1) {
-	Logger::log("VariableInfo Constructor Called w/o arguments");
-}
-
-VariableInfo::VariableInfo(int status) :
-		type(NULL), status(status) {
-	Logger::log("VariableInfo Constructor Called w/ 1 argument");
+VariableInfo::VariableInfo(int status, Type *type) :
+		status(status), type(type) {
+	Logger::logConst(__CLASS_NAME__);
 }
 
 VariableInfo::~VariableInfo() {
-	Logger::log("VariableInfo Destructor Called");
-	if (type)
-		delete type;
-}
-
-void VariableInfo::setType(Type *typeInfo) {
-	type = typeInfo;
+	Logger::logDest(__CLASS_NAME__);
 }
 
 void VariableInfo::print(CompilerState &cs) {

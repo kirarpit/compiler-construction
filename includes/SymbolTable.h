@@ -19,9 +19,8 @@ public:
 
 	static SymbolTable* enterScope(Node *nodeBlock);
 	Node* exitScope();
-	void updateVarType(int name, int size);
-	void insertVar(Token id);
-	void flush(bool error);
+	void updateVarType(int name, int size = -1);
+	void insertOrUpdateVar(Token id);
 	void print(CompilerState &cs);
 	VariableInfo* lookup(Token id);
 	VariableInfo* localLookup(Token id);
@@ -31,8 +30,6 @@ public:
 private:
 	std::map<std::string, VariableInfo> variables;
 	Type *varType;
-	std::vector<std::string> varIDs;
-	Type* deepCopy(Type *type);
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

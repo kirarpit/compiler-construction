@@ -46,15 +46,14 @@ void NonTerminalNode::walk(CompilerState &cs) {
 	}
 
 	if (children.size() == 1) {
-		type = Type::deepCopy(children[0]->getType());
+		type = children[0]->getType();
 	}
 }
 
 void NonTerminalNode::operatorWalk(CompilerState &cs) {
 	if (children.size() == 3) {
-		type = Type::deepCopy(
-				Type::getOperandType(children[1]->getToken(),
-						children[0]->getType(), children[2]->getType()));
+		type = Type::getOperandType(children[1]->getToken(),
+				children[0]->getType(), children[2]->getType());
 
 		if (children[0]->isConstant && children[2]->isConstant) {
 			Node* terminalNode = Type::constantFold(children[1]->getToken(),

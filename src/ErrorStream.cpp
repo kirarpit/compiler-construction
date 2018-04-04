@@ -41,5 +41,4 @@ void ErrorStream::recover(CompilerState &cs) {
 		cs.lexer.read();
 
 	error = false;
-	cs.lastBlock->getST()->flush(true);
 }

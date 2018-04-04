@@ -26,9 +26,15 @@ public:
 	virtual ~Logger();
 	static void log(std::string str);
 	static void log(std::string str, int i);
+
+	static void logConst(std::string str);
+	static void logDest(std::string str);
+
 	static void logTerminal(Token tkn);
+
 	static void logParseEntry(std::string name, Token tkn);
 	static void logParseExit(std::string name, Token tkn);
+
 	static void logWalkEntry(std::string name, Node *node);
 	static void logWalkExit(std::string name, Node *node);
 

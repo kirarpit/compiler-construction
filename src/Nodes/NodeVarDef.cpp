@@ -17,8 +17,6 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				varDef->addNode(new TerminalNode(lex.read()));
-
-				cs.lastBlock->getST()->flush(false);
 			} else {
 				cs.es.reportParseError(cs);
 				delete varDef;

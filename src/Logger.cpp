@@ -21,6 +21,15 @@ void Logger::log(std::string str, int i) {
 		std::cout << str << '\n';
 	}
 }
+
+void Logger::logConst(std::string str) {
+	log(str + " Constructor Called");
+}
+
+void Logger::logDest(std::string str) {
+	log(str + " Destructor Called");
+}
+
 void Logger::logTerminal(Token tkn) {
 	log("Consumed Terminal. Token:" + tkn.print());
 }

@@ -8,8 +8,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	Node *typeName = NULL;
 
 	std::string primType = lex.peek().value;
-	if (primType == Type::TS[TP_BOOL]
-			|| primType == Type::TS[TP_SIGNED]
+	if (primType == Type::TS[TP_BOOL] || primType == Type::TS[TP_SIGNED]
 			|| primType == Type::TS[TP_UNSIGNED]) {
 
 		int name;
@@ -20,7 +19,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 		} else {
 			name = TP_BOOL;
 		}
-		cs.lastBlock->getST()->updateVarType(name, 0);
+		cs.lastBlock->getST()->updateVarType(name);
 
 		typeName = new NodeTypeName();
 		typeName->addNode(new TerminalNode(lex.read()));

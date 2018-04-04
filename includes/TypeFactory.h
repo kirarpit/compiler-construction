@@ -5,19 +5,25 @@
 
 class Type;
 
+struct TypeCompare {
+	bool operator()(const Type *lhs, const Type *rhs) const {
+		return true;
+	}
+};
+
 class TypeFactory {
 public:
 	TypeFactory();
 	virtual ~TypeFactory();
 
-	Type* getPrim(int type);
-	Type* getArray(Type *t, int size);
-	Type* getAddress(Type *t);
+	static Type* getPrimType(int primType);
+	static Type* getArrayType(Type *t, int size);
+	static Type* getAddressType(Type *t);
 
 private:
 
-	std::set<int> a;
-	Type* initType(Type *t);
+	static std::set<Type*, TypeCompare> types;
+	static Type* find(Type *type);
 };
 
 #endif /* SRC_TYPEFACTORY_H_ */

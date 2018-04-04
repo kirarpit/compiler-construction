@@ -27,12 +27,15 @@ public:
 
 	const static std::string TS[];
 
+	bool operator<(Type &t) const;
+
 	void print(CompilerState &cs);
 	void shortPrint(CompilerState &cs);
 	void recursivePrint(CompilerState &cs, Type *type, bool shortForm);
+
 	Type* addr();
 	Type* deref(int type);
-	static Type* deepCopy(Type *t);
+
 	bool isSigned();
 	bool isUnsigned();
 	bool isBool();
@@ -43,7 +46,7 @@ public:
 	static Type* getOperandType(Token tkn, Type *t1, Type *t2);
 	static Node* constantFold(Token tkn, Token t1, Token t2);
 
-	int type;
+	int typeName;
 	int size;
 	Type *typeOf;
 };

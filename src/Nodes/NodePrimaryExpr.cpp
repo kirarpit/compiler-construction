@@ -12,7 +12,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		primaryExpr->addNode(new TerminalNode(id));
 
 		if (!cs.lastBlock->getST()->isDef)
-			cs.lastBlock->getST()->insertVar(id);
+			cs.lastBlock->getST()->insertOrUpdateVar(id);
 	} else if (lex.peek().type == TT_NUM) {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
 	} else if (lex.peek().value == TokenTable::TS[TN_opnpar]) {

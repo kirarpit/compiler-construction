@@ -4,7 +4,8 @@
 #include<VariableInfo.h>
 #include<SymbolTable.h>
 #include<OutputStream.h>
-#include <Type.h>
+#include<Type.h>
+#include<TypeFactory.h>
 
 TerminalNode::TerminalNode(Token tkn) :
 		token(tkn) {
@@ -31,9 +32,9 @@ void TerminalNode::walk(CompilerState &cs) {
 	Logger::log("Terminal Node Token value:" + token.value);
 
 	if (token.type == TT_ID)
-		type = Type::deepCopy(cs.lastBlock->getST()->lookup(token)->type);
+		type = cs.lastBlock->getST()->lookup(token)->type;
 	else if (token.type == TT_NUM)
-		type = new Type(TP_SIGNED, 0);
+		type = TypeFactory::getPrimType(TP_SIGNED);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

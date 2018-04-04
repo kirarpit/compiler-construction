@@ -20,17 +20,14 @@ enum {
 
 class VariableInfo {
 public:
-	VariableInfo();
-	VariableInfo(int status);
+	VariableInfo(int status = -1, Type *type = NULL);
 	virtual ~VariableInfo();
 
 	const static std::string VarStatInfo[];
-
-	void setType(Type *type);
-
 	void print(CompilerState &cs);
-	Type *type;
+
 	int status;
+	Type *type;
 };
 
 #endif /* SRC_VARIABLEINFO_H_ */
