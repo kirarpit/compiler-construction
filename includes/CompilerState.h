@@ -9,17 +9,21 @@ class OutputStream;
 class ErrorStream;
 class SymbolTable;
 class Node;
+class TypeFactory;
 
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
-			Lexer &lex);
+			Lexer &lex, TypeFactory &tf);
 	virtual ~CompilerState();
 
 	InputStream &is;
 	OutputStream &os;
 	ErrorStream &es;
 	Lexer &lexer;
+
+	TypeFactory &tf;
+
 	Node *lastBlock;
 };
 

@@ -28,10 +28,10 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 				Logger::log("Array Spec size: %d", arraySpec->getSize());
 				if (arraySpec->getSize() == 3
 						&& arraySpec->getChild(1)->isConstant) {
-					cs.lastBlock->getST()->updateVarType(TP_ARRAY,
+					cs.lastBlock->getST()->updateVarType(cs, TP_ARRAY,
 							arraySpec->getChild(1)->getToken().getIntVal());
 				} else if (arraySpec->getSize() == 2) {
-					cs.lastBlock->getST()->updateVarType(TP_POINTER);
+					cs.lastBlock->getST()->updateVarType(cs, TP_POINTER);
 				} else {
 					//error
 					//well since this is still parsing we can throw and error and roll back

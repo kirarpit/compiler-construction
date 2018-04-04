@@ -19,7 +19,7 @@ public:
 
 	static SymbolTable* enterScope(Node *nodeBlock);
 	Node* exitScope();
-	void updateVarType(int name, int size = -1);
+	void updateVarType(CompilerState &cs, int name, int size = -1);
 	void insertOrUpdateVar(Token id);
 	void print(CompilerState &cs);
 	VariableInfo* lookup(Token id);

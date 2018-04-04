@@ -27,13 +27,12 @@ public:
 
 	const static std::string TS[];
 
-	bool operator<(Type &t) const;
+	bool operator<(const Type &t) const;
 
 	void print(CompilerState &cs);
 	void shortPrint(CompilerState &cs);
 	void recursivePrint(CompilerState &cs, Type *type, bool shortForm);
 
-	Type* addr();
 	Type* deref(int type);
 
 	bool isSigned();
@@ -43,7 +42,8 @@ public:
 	bool isNumericType();
 	bool isEqual(Type *t1);
 
-	static Type* getOperandType(Token tkn, Type *t1, Type *t2);
+	static Type* getOperandType(CompilerState &cs, Token tkn, Type *t1,
+			Type *t2);
 	static Node* constantFold(Token tkn, Token t1, Token t2);
 
 	int typeName;

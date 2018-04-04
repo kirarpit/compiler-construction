@@ -34,7 +34,7 @@ void TerminalNode::walk(CompilerState &cs) {
 	if (token.type == TT_ID)
 		type = cs.lastBlock->getST()->lookup(token)->type;
 	else if (token.type == TT_NUM)
-		type = TypeFactory::getPrimType(TP_SIGNED);
+		type = cs.tf.getPrimType(TP_SIGNED);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

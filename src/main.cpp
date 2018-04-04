@@ -20,8 +20,9 @@ int main(int argc, char **argv) {
 	OutputStream output(std::cout);
 	Lexer lex = Lexer(input);
 	ErrorStream error(std::cerr);
+	TypeFactory typeFactory;
 
-	CompilerState cs(input, output, error, lex);
+	CompilerState cs(input, output, error, lex, typeFactory);
 
 	NodeSpike4::parse(cs);
 

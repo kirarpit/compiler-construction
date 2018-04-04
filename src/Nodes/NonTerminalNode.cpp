@@ -52,7 +52,7 @@ void NonTerminalNode::walk(CompilerState &cs) {
 
 void NonTerminalNode::operatorWalk(CompilerState &cs) {
 	if (children.size() == 3) {
-		type = Type::getOperandType(children[1]->getToken(),
+		type = Type::getOperandType(cs, children[1]->getToken(),
 				children[0]->getType(), children[2]->getType());
 
 		if (children[0]->isConstant && children[2]->isConstant) {

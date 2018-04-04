@@ -19,7 +19,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 		} else {
 			name = TP_BOOL;
 		}
-		cs.lastBlock->getST()->updateVarType(name);
+		cs.lastBlock->getST()->updateVarType(cs, name);
 
 		typeName = new NodeTypeName();
 		typeName->addNode(new TerminalNode(lex.read()));

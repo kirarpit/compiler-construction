@@ -10,6 +10,10 @@ TypeFactory::~TypeFactory() {
 	Logger::logDest(__CLASS_NAME__);
 }
 
+bool TypeCompare::operator()(const Type *lhs, const Type *rhs) const {
+	return (*lhs) < (*rhs);
+}
+
 Type* TypeFactory::find(Type *t) {
 	std::set<Type*>::iterator iter = types.find(t);
 	if (iter != types.end()) {

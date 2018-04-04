@@ -26,15 +26,15 @@ Node* SymbolTable::exitScope() {
 	return parent;
 }
 
-void SymbolTable::updateVarType(int name, int size) {
+void SymbolTable::updateVarType(CompilerState &cs, int name, int size) {
 	Logger::log("Updating Type of type: %d", name);
 
 	if (name == TP_BOOL || name == TP_SIGNED || name == TP_UNSIGNED) {
-		varType = TypeFactory::getPrimType(name);
+		varType = cs.tf.getPrimType(name);
 	} else if (name == TP_ARRAY) {
-		varType = TypeFactory::getArrayType(varType, size);
+		varType = cs.tf.getArrayType(varType, size);
 	} else if (name == TP_POINTER) {
-		varType = TypeFactory::getAddressType(varType);
+		varType = cs.tf.getAddressType(varType);
 	}
 }
 

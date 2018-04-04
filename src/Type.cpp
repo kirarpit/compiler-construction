@@ -19,7 +19,7 @@ Type::~Type() {
 	Logger::logDest(__CLASS_NAME__);
 }
 
-bool Type::operator<(Type &t) const {
+bool Type::operator<(const Type &t) const {
 	if (t.typeName == typeName && t.size == size && t.typeOf == typeOf)
 		return false;
 	return true;
@@ -65,10 +65,6 @@ void Type::recursivePrint(CompilerState &cs, Type *type, bool shortForm) {
 		else
 			cs.os << "unsigned";
 	}
-}
-
-Type* Type::addr() {
-	return TypeFactory::getAddressType(this);
 }
 
 Type* Type::deref(int tp) {
@@ -130,16 +126,16 @@ bool Type::isEqual(Type *t1) {
 	}
 }
 
-Type* Type::getOperandType(Token tkn, Type *t1, Type *t2) {
+Type* Type::getOperandType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 		if (t1->isSigned() && t2->isSigned())
-			return TypeFactory::getPrimType(TP_SIGNED);
+			return cs.tf.getPrimType(TP_SIGNED);
 		else if (t1->isUnsigned() && t2->isSigned())
-			return TypeFactory::getPrimType(TP_UNSIGNED);
+			return cs.tf.getPrimType(TP_UNSIGNED);
 		else if (t1->isUnsigned() && t2->isUnsigned())
-			return TypeFactory::getPrimType(TP_UNSIGNED);
+			return cs.tf.getPrimType(TP_UNSIGNED);
 		else if (t1->isSigned() && t2->isUnsigned())
-			return TypeFactory::getPrimType(TP_UNSIGNED);
+			return cs.tf.getPrimType(TP_UNSIGNED);
 		else {
 			//error
 			exit(1);
@@ -147,21 +143,21 @@ Type* Type::getOperandType(Token tkn, Type *t1, Type *t2) {
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
 				&& t2->isEqual(t1)) {
-			return TypeFactory::getPrimType(TP_BOOL);
+			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.type & TT_EQ_OP) {
 		if (t2->isEqual(t1) || (t1->isNumericType() && t2->isNumericType())) {
-			return TypeFactory::getPrimType(TP_BOOL);
+			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
 		if (t1->isBool() && t2->isEqual(t1)) {
-			return TypeFactory::getPrimType(TP_BOOL);
+			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);

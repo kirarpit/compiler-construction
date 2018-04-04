@@ -1,4 +1,5 @@
-#include <AllNodeHeaders.h>
+#include<AllNodeHeaders.h>
+#include<TypeFactory.h>
 
 Node* NodeFactor::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
@@ -68,7 +69,7 @@ void NodeFactor::walk(CompilerState &cs) {
 
 		} else if (children[0]->getToken().value == "&") {
 			if (!children[1]->isConstant) { //or maybe this should be ID only
-				type = children[1]->getType()->addr();
+				type = cs.tf.getAddressType(children[1]->getType());
 			} else {
 				//error
 				exit(1);
