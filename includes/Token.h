@@ -19,6 +19,9 @@ public:
 					val) {
 	}
 	virtual ~Token();
+
+	bool operator<(const Token &t) const;
+
 	std::string print();
 	int getIntVal();
 

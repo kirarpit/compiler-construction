@@ -16,6 +16,10 @@ SymbolTable::~SymbolTable() {
 	Logger::logDest(__CLASS_NAME__);
 }
 
+bool TokenCompare::operator()(const Token &t1, const Token &t2) const {
+	return t1 < t2;
+}
+
 SymbolTable* SymbolTable::enterScope(Node *nodeBlock) {
 	SymbolTable *newST = new SymbolTable();
 	newST->parent = nodeBlock;
@@ -44,7 +48,7 @@ void SymbolTable::insertOrUpdateVar(Token id) {
 
 	if (isDef) {
 		if (!localLookup(id)) {
-			variables[id.value] = VariableInfo(VS_UNUSED, varType);
+			variables[id] = VariableInfo(VS_UNUSED, varType);
 		} else {
 			//error
 			//just gotta ignore it and throw std error which will increase the count
@@ -64,10 +68,10 @@ void SymbolTable::insertOrUpdateVar(Token id) {
 }
 
 void SymbolTable::print(CompilerState &cs) {
-	for (std::map<std::string, VariableInfo>::iterator i = variables.begin();
+	for (std::map<Token, VariableInfo>::iterator i = variables.begin();
 			i != variables.end(); i++) {
 		cs.os.printWhiteSpaces();
-		cs.os << i->first << " ";
+		cs.os << i->first.value << " ";
 		i->second.print(cs);
 		cs.os << '\n';
 	}
@@ -85,8 +89,8 @@ VariableInfo* SymbolTable::lookup(Token id) {
 }
 
 VariableInfo* SymbolTable::localLookup(Token id) {
-	if (variables.find(id.value) != variables.end())
-		return &variables[id.value];
+	if (variables.find(id) != variables.end())
+		return &variables[id];
 
 	return NULL;
 }

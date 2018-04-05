@@ -24,8 +24,7 @@ inline std::string className(const std::string& prettyFunction) {
 class Logger {
 public:
 	virtual ~Logger();
-	static void log(std::string str);
-	static void log(std::string str, int i);
+	static void log(std::string str, int i = -1);
 
 	static void logConst(std::string str);
 	static void logDest(std::string str);

@@ -5,6 +5,10 @@
 Token::~Token() {
 }
 
+bool Token::operator<(const Token &t) const {
+	return value < t.value;
+}
+
 std::string Token::print() {
 	std::ostringstream output;
 

@@ -1,7 +1,6 @@
 #ifndef SRC_SYMBOLTABLE_H_
 #define SRC_SYMBOLTABLE_H_
 
-#include<string>
 #include<set>
 #include<map>
 #include<vector>
@@ -9,6 +8,10 @@
 class VariableInfo;
 class Token;
 class Type;
+
+struct TokenCompare {
+	bool operator()(const Token &t1, const Token &t2) const;
+};
 
 class SymbolTable {
 public:
@@ -28,7 +31,7 @@ public:
 	bool isDef;
 
 private:
-	std::map<std::string, VariableInfo> variables;
+	std::map<Token, VariableInfo, TokenCompare> variables;
 	Type *varType;
 };
 

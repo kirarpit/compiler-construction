@@ -25,6 +25,7 @@ public:
 
 	Type* getType();
 	void setType(Type *t);
+
 	bool isConstant;
 	bool isTerminal;
 
