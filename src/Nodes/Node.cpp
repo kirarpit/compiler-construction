@@ -6,8 +6,6 @@ Node::Node() :
 }
 
 Node::~Node() {
-	//if (type)
-		//delete type;
 }
 
 void Node::addNode(Node *node) {

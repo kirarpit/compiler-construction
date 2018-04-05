@@ -12,5 +12,6 @@
 #include<ErrorStream.h>
 #include<NodeSpike4.h>
 #include<TypeFactory.h>
+#include<Logger.h>
 
 #endif /* INCLUDES_MAIN_H_ */

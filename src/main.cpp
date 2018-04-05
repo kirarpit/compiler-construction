@@ -17,15 +17,22 @@ int main(int argc, char **argv) {
 	InputStream input((filename == "<stdin>") ? std::cin : fileStream);
 	input.setStreamName(filename);
 
-	OutputStream output(std::cout);
-	Lexer lex = Lexer(input);
-	ErrorStream error(std::cerr);
-	TypeFactory typeFactory;
+	int errorCount;
 
-	CompilerState cs(input, output, error, lex, typeFactory);
+	{
+		OutputStream output(std::cout);
+		Lexer lex = Lexer(input);
+		ErrorStream error(std::cerr);
+		TypeFactory typeFactory;
 
-	NodeSpike4::parse(cs);
+		CompilerState cs(input, output, error, lex, typeFactory);
 
-	exit(cs.es.getErrorCount());
+		NodeSpike4::parse(cs);
+		Logger::log("outside parsing");
+
+		errorCount = cs.es.getErrorCount();
+	}
+
+	exit(errorCount);
 }
 

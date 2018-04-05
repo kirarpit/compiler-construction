@@ -20,9 +20,26 @@ Type::~Type() {
 }
 
 bool Type::operator<(const Type &t) const {
-	if (t.typeName == typeName && t.size == size && t.typeOf == typeOf)
+	if (size < t.size)
+		return true;
+	else if (size > t.size)
 		return false;
-	return true;
+
+	if (typeName < t.typeName)
+		return true;
+	else if (typeName > t.typeName)
+		return false;
+
+	if (typeOf != t.typeOf) {
+		if (typeOf == NULL)
+			return true;
+		if (t.typeOf == NULL)
+			return false;
+
+		return typeOf < t.typeOf;
+	}
+
+	return false;
 }
 
 void Type::print(CompilerState &cs) {

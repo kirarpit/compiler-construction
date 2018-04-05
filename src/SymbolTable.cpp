@@ -28,6 +28,7 @@ Node* SymbolTable::exitScope() {
 
 void SymbolTable::updateVarType(CompilerState &cs, int name, int size) {
 	Logger::log("Updating Type of type: %d", name);
+	Logger::log("and size %d", size);
 
 	if (name == TP_BOOL || name == TP_SIGNED || name == TP_UNSIGNED) {
 		varType = cs.tf.getPrimType(name);
