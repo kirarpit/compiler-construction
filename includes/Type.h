@@ -2,6 +2,7 @@
 #define SRC_TYPEINFO_H_
 
 #include<string>
+
 class Node;
 class Token;
 class CompilerState;

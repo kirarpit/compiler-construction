@@ -32,6 +32,16 @@ OutputStream& OutputStream::operator<<(char ch) {
 	return *this;
 }
 
+OutputStream& OutputStream::operator<<(int num) {
+	if (buffer) {
+		std::string str;
+		str.push_back(num);
+		bufferOutput += str;
+	} else
+		os << num;
+	return *this;
+}
+
 void OutputStream::startBuffer() {
 	buffer = true;
 	bufferOutput = "";

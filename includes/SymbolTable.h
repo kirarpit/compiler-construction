@@ -8,6 +8,8 @@
 class VariableInfo;
 class Token;
 class Type;
+class Node;
+class CompilerState;
 
 struct TokenCompare {
 	bool operator()(const Token &t1, const Token &t2) const;
@@ -27,12 +29,15 @@ public:
 	void print(CompilerState &cs);
 	VariableInfo* lookup(Token id);
 	VariableInfo* localLookup(Token id);
+	int computeOffset(VariableInfo &var);
+	VariableInfo* getLastVar();
 
 	bool isDef;
 
 private:
 	std::map<Token, VariableInfo, TokenCompare> variables;
 	Type *varType;
+	VariableInfo *lastVar;
 };
 
 #endif /* SRC_SYMBOLTABLE_H_ */

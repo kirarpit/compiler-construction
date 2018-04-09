@@ -3,15 +3,15 @@
 #include<Logger.h>
 #include<CompilerState.h>
 #include<OutputStream.h>
-#include <Type.h>
+#include<Type.h>
 
 #define XX(a, b) b,
 const std::string VariableInfo::VarStatInfo[VAR_STAT_CNT] = {
 VAR_STAT_LIST };
 #undef XX
 
-VariableInfo::VariableInfo(int status, Type *type) :
-		status(status), type(type) {
+VariableInfo::VariableInfo(int status, Type *type, int offset) :
+		status(status), type(type), offset(offset) {
 	Logger::logConst(__CLASS_NAME__);
 }
 
@@ -28,4 +28,53 @@ void VariableInfo::print(CompilerState &cs) {
 	} else {
 		type->print(cs);
 	}
+
+	cs.os << " ";
+	cs.os << offset;
+}
+
+int VariableInfo::getSize() {
+	int size = 1;
+	Type *temp = type;
+	while (temp) {
+
+		if (temp->typeName == TP_POINTER) {
+			size *= 4;
+			break;
+
+		} else if (temp->typeName == TP_ARRAY) {
+			size *= temp->size;
+
+		} else if (temp->typeName == TP_BOOL) {
+			size *= 1;
+
+		} else if (temp->typeName == TP_SIGNED
+				|| temp->typeName == TP_UNSIGNED) {
+			size *= 4;
+		}
+
+		temp = temp->typeOf;
+	}
+	return size;
+}
+
+int VariableInfo::getAlignment() {
+	int alig = 1;
+	Type *temp = type;
+	while (temp) {
+
+		if (temp->typeName == TP_POINTER) {
+			alig = 4;
+			break;
+
+		} else if (temp->typeName == TP_BOOL) {
+			alig = 1;
+
+		} else if (temp->typeName == TP_SIGNED
+				|| temp->typeName == TP_UNSIGNED) {
+			alig = 4;
+		}
+		temp = temp->typeOf;
+	}
+	return alig;
 }

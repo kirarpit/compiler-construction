@@ -14,6 +14,7 @@ public:
 
 	OutputStream& operator<<(std::string str);
 	OutputStream& operator<<(char ch);
+	OutputStream& operator<<(int num);
 	void indent();
 	void deindent();
 	void printWhiteSpaces();

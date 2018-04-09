@@ -22,7 +22,7 @@ public:
 
 	bool operator<(const Token &t) const;
 
-	std::string print();
+	std::string stringify();
 	int getIntVal();
 
 	std::string filename;

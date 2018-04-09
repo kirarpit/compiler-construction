@@ -9,7 +9,7 @@ bool Token::operator<(const Token &t) const {
 	return value < t.value;
 }
 
-std::string Token::print() {
+std::string Token::stringify() {
 	std::ostringstream output;
 
 	output << filename << ':' << line << ':' << position << ':';

@@ -1,5 +1,5 @@
-#include<Node.h>
 #include<SymbolTable.h>
+#include<Node.h>
 #include<Logger.h>
 #include<CompilerState.h>
 #include<VariableInfo.h>
@@ -8,7 +8,7 @@
 #include<TypeFactory.h>
 
 SymbolTable::SymbolTable() :
-		parent(NULL), isDef(true), varType(NULL) {
+		parent(NULL), isDef(true), varType(NULL), lastVar(NULL) {
 	Logger::logConst(__CLASS_NAME__);
 }
 
@@ -48,7 +48,11 @@ void SymbolTable::insertOrUpdateVar(Token id) {
 
 	if (isDef) {
 		if (!localLookup(id)) {
-			variables[id] = VariableInfo(VS_UNUSED, varType);
+			VariableInfo newVar(VS_UNUSED, varType);
+			newVar.offset = computeOffset(newVar);
+			variables[id] = newVar;
+			lastVar = &variables[id];
+
 		} else {
 			//error
 			//just gotta ignore it and throw std error which will increase the count
@@ -93,4 +97,27 @@ VariableInfo* SymbolTable::localLookup(Token id) {
 		return &variables[id];
 
 	return NULL;
+}
+
+int SymbolTable::computeOffset(VariableInfo &var) {
+	Logger::log("Computing Offset");
+
+	VariableInfo *varX = getLastVar();
+	if (varX)
+		return (getLastVar()->offset + getLastVar()->getSize()
+				+ var.getAlignment() - 1) / var.getAlignment()
+				* var.getAlignment();
+	else
+		return (var.getAlignment() - 1) / var.getAlignment()
+				* var.getAlignment();
+}
+
+VariableInfo* SymbolTable::getLastVar() {
+	if (lastVar)
+		return lastVar;
+
+	if (!parent)
+		return NULL;
+
+	return parent->getST()->getLastVar();
 }

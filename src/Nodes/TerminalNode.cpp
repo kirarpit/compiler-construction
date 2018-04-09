@@ -11,7 +11,7 @@ TerminalNode::TerminalNode(Token tkn) :
 		token(tkn) {
 	isTerminal = true;
 
-	if ((tkn.type & TT_NUM)) {
+	if (tkn.type & TT_NUM) {
 		isConstant = true;
 	}
 
@@ -29,7 +29,6 @@ void TerminalNode::print(CompilerState &cs) {
 
 void TerminalNode::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
-	Logger::log("Terminal Node Token value:" + token.value);
 
 	if (token.type == TT_ID)
 		type = cs.lastBlock->getST()->lookup(token)->type;

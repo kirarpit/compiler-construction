@@ -8,7 +8,7 @@
 
 void ErrorStream::reportParseError(CompilerState &cs) {
 	reportError();
-	es << "Error while parsing AST @ " << cs.lexer.peek().print() << "\n";
+	es << "Error while parsing AST @ " << cs.lexer.peek().stringify() << "\n";
 }
 
 void ErrorStream::reportError() {

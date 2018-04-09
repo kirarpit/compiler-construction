@@ -27,25 +27,25 @@ void Logger::logDest(std::string str) {
 }
 
 void Logger::logTerminal(Token tkn) {
-	log("Consumed Terminal. Token:" + tkn.print());
+	log("Consumed Terminal. Token:" + tkn.stringify());
 }
 
 void Logger::logParseEntry(std::string name, Token tkn) {
-	log("ParseEntry " + name + " @ " + tkn.print());
+	log("ParseEntry " + name + " @ " + tkn.stringify());
 }
 
 void Logger::logParseExit(std::string name, Token tkn) {
-	log("ParseExit " + name + " @ " + tkn.print());
+	log("ParseExit " + name + " @ " + tkn.stringify());
 }
 
 void Logger::logWalkEntry(std::string name, Node *node) {
 	log(
-			"WalkEntry " + name + ", Token:" + node->getToken().print()
+			"WalkEntry " + name + ", Token:" + node->getToken().stringify()
 					+ ", Size: %d", node->getSize());
 }
 
 void Logger::logWalkExit(std::string name, Node *node) {
 	log(
-			"WalkExit " + name + ", Token:" + node->getToken().print()
+			"WalkExit " + name + ", Token:" + node->getToken().stringify()
 					+ ", Size: %d", node->getSize());
 }

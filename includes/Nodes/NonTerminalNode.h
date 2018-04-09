@@ -12,7 +12,7 @@
 #include<TerminalNode.h>
 #include<SymbolTable.h>
 #include<OutputStream.h>
-#include <Type.h>
+#include<Type.h>
 
 class Node;
 class CompilerState;
@@ -23,9 +23,9 @@ public:
 	~NonTerminalNode();
 
 	void print(CompilerState &cs) = 0;
+	void walk(CompilerState &cs);
 
 	void addNode(Node *node);
-	void walk(CompilerState &cs);
 	Node* getChild(int index);
 	int getSize();
 	void clearChildren();
@@ -38,6 +38,8 @@ public:
 	std::string getName();
 
 protected:
+	void walkAllChildren(CompilerState &cs);
+
 	void printAllChildren(CompilerState &cs);
 	void printParenthesised(CompilerState &cs);
 	void printFPIF(CompilerState &cs);

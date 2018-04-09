@@ -14,13 +14,13 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 			//check if it's indeed PE
 			if (!condOrPostfixExpr->findPostfixExpr()) {
 				Logger::log(
-						"CE can't be PE, Token Value: " + lex.peek().print());
+						"CE can't be PE, Token Value: " + lex.peek().stringify());
 
 				cs.es.reportParseError(cs);
 				delete asgnExpr;
 				return NULL;
 			}
-			Logger::log("CE can be PE, Token Value: " + lex.peek().print());
+			Logger::log("CE can be PE, Token Value: " + lex.peek().stringify());
 
 			asgnExpr->addNode(new TerminalNode(lex.read()));
 
