@@ -48,7 +48,7 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 void NodePostfixExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
+	smartWalk(cs);
 
 	if (children.size() == 2) {
 		if (children[1]->isTerminal) {

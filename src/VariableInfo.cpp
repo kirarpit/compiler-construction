@@ -29,8 +29,8 @@ void VariableInfo::print(CompilerState &cs) {
 		type->print(cs);
 	}
 
-	cs.os << " ";
-	cs.os << offset;
+//	cs.os << " ";
+//	cs.os << offset;
 }
 
 int VariableInfo::getSize() {

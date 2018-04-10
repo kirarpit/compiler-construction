@@ -51,33 +51,37 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 void NodeIfStmt::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
+	children[2]->walk(cs);
+	Node *temp = reduceBranch(children[2]);
+	if (temp)
+		children[2] = temp;
 
-	if (children.size() >= 5) {
-		if (children[2]->isConstant) {
-			Logger::log(__CLASS_NAME__ + ", Starting constant folding");
+	if (children[2]->isConstant) {
+		Logger::log(__CLASS_NAME__ + ", constant folding");
 
-			int index = -1;
+		int index = -1;
 
-			Node *temp = NULL;
-			if (children[2]->getToken().value == "0") {
-				if (children.size() == 6 && children[5]->getSize() == 2) {
-					temp = children[5]->getChild(1);
-					index = 5;
-				}
-			} else {
-				temp = children[4];
-				index = 4;
+		Node *temp = NULL;
+		if (children[2]->getToken().value == "0") {
+			if (children.size() == 6 && children[5]->getSize() == 2) {
+				children[5]->deleteChild(0);
+				temp = children[5];
+				index = 5;
 			}
-
-			if (index != -1)
-				clearChild(index);
-
-			deleteChildren();
-			if (temp)
-				addNode(temp);
+		} else {
+			temp = children[4];
+			index = 4;
 		}
+
+		if (index != -1)
+			clearChild(index);
+
+		deleteChildren();
+		if (temp)
+			addNode(temp);
+
 	}
+	walkAllChildren(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

@@ -22,8 +22,8 @@ public:
 	NonTerminalNode();
 	~NonTerminalNode();
 
+	void walk(CompilerState &cs) = 0;
 	void print(CompilerState &cs) = 0;
-	void walk(CompilerState &cs);
 
 	void addNode(Node *node);
 	Node* getChild(int index);
@@ -38,13 +38,15 @@ public:
 	std::string getName();
 
 protected:
+	void smartWalk(CompilerState &cs);
 	void walkAllChildren(CompilerState &cs);
+	Node* reduceBranch(Node *node);
+	void typeProp(CompilerState &cs);
+	void constFold(CompilerState &cs);
 
 	void printAllChildren(CompilerState &cs);
 	void printParenthesised(CompilerState &cs);
 	void printFPIF(CompilerState &cs);
-
-	void operatorWalk(CompilerState &cs);
 
 	std::vector<Node*> children;
 };

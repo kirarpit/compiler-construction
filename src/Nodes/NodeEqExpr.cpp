@@ -37,8 +37,7 @@ Node* NodeEqExpr::parse(CompilerState &cs) {
 void NodeEqExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
-	operatorWalk(cs);
+	smartWalk(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

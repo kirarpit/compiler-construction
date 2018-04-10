@@ -46,17 +46,19 @@ Node* NodeWhileStmt::parse(CompilerState &cs) {
 void NodeWhileStmt::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
+	children[2]->walk(cs);
+	Node *temp = reduceBranch(children[2]);
+	if (temp)
+		children[2] = temp;
 
-	if (children.size() == 5) {
-		if (children[2]->isConstant) {
-			Logger::log(__CLASS_NAME__ + ", Starting constant folding");
+	if (children[2]->isConstant) {
+		Logger::log(__CLASS_NAME__ + ", constant folding");
 
-			if (children[2]->getToken().value == "0") {
-				deleteChildren();
-			}
+		if (children[2]->getToken().value == "0") {
+			deleteChildren();
 		}
 	}
+	walkAllChildren(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

@@ -31,3 +31,11 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return typeName;
 }
+
+void NodeTypeName::walk(CompilerState &cs) {
+	Logger::logWalkEntry(__CLASS_NAME__, this);
+
+	walkAllChildren(cs);
+
+	Logger::logWalkExit(__CLASS_NAME__, this);
+}

@@ -144,6 +144,8 @@ bool Type::isEqual(Type *t1) {
 }
 
 Type* Type::getOperandType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
+	Logger::log("Get Operand Type");
+
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 		if (t1->isSigned() && t2->isSigned())
 			return cs.tf.getPrimType(TP_SIGNED);

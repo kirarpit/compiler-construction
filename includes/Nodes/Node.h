@@ -20,6 +20,7 @@ public:
 	virtual SymbolTable* getST();
 	virtual Node* getChild(int index);
 	virtual void clearChildren();
+	virtual void deleteChild(int index);
 	virtual Token getToken();
 	virtual int getSize();
 

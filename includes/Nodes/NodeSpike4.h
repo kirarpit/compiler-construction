@@ -13,7 +13,8 @@ public:
 	~NodeSpike4() {
 	}
 	void print(CompilerState &cs) = 0;
-	static void parse(CompilerState &cs);
+	static void compile(CompilerState &cs);
+	void walk(CompilerState &cs);
 };
 
 #endif /* SRC_NODES_NODESPIKE4_H_ */

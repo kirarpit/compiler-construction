@@ -18,34 +18,57 @@ void NonTerminalNode::addNode(Node *node) {
 	children.push_back(node);
 }
 
-void NonTerminalNode::walk(CompilerState &cs) {
+void NonTerminalNode::smartWalk(CompilerState &cs) {
+	walkAllChildren(cs);
+	typeProp(cs);
+	constFold(cs);
+}
+
+void NonTerminalNode::walkAllChildren(CompilerState &cs) {
 	for (unsigned int i = 0; i < children.size(); i++) {
 		children[i]->walk(cs);
 
 		if (children[i]->getSize() == 0 && children[i]->getST() == NULL) { //implement is empty instead
-			Logger::log("Empty Node Deleted");
-
 			deleteChild(i);
 			i--;
-		} else if (children[i]->getSize() == 1 && children[i]->getST() == NULL) { //implement "is reducable"
 
-			Node *temp = children[i];
-			children[i] = temp->getChild(0);
-			temp->clearChildren();
-			delete temp;
+		} else {
+			Node *temp = reduceBranch(children[i]);
+			if (temp)
+				children[i] = temp;
 		}
-	}
-
-	if (children.size() == 1) {
-		type = children[0]->getType();
 	}
 }
 
-void NonTerminalNode::operatorWalk(CompilerState &cs) {
-	if (children.size() == 3) {
+Node* NonTerminalNode::reduceBranch(Node *node) {
+	if (node->getSize() == 1 && node->getST() == NULL) { //implement "is reducable/removable"
+		Node *temp = node;
+		node = temp->getChild(0);
+		temp->clearChildren();
+		delete temp;
+
+		return node;
+	}
+
+	return NULL;
+}
+
+void NonTerminalNode::typeProp(CompilerState &cs) {
+	Logger::log("Type Propagating");
+
+	if (children.size() == 1) {
+		type = children[0]->getType();
+
+	} else if (children.size() == 3) {
 		type = Type::getOperandType(cs, children[1]->getToken(),
 				children[0]->getType(), children[2]->getType());
+	}
+}
 
+void NonTerminalNode::constFold(CompilerState &cs) {
+	Logger::log("Constant Folding");
+
+	if (children.size() == 3) {
 		if (children[0]->isConstant && children[2]->isConstant) {
 			Node* terminalNode = Type::constantFold(children[1]->getToken(),
 					children[0]->getToken(), children[2]->getToken());

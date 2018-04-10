@@ -53,19 +53,13 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 void NodeCondExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
-
 	if (children.size() == 5) {
-		if (children[2]->getType()->isEqual(children[4]->getType())
-				&& children[0]->getType()->isBool()) {
-			type = children[2]->getType();
-		} else {
-			//error
-			exit(1);
-		}
+		children[0]->walk(cs);
+		Node *temp = reduceBranch(children[0]);
+		if (temp)
+			children[0] = temp;
 
 		if (children[0]->isConstant) {
-
 			Node *temp = NULL;
 			int index = -1;
 
@@ -78,13 +72,12 @@ void NodeCondExpr::walk(CompilerState &cs) {
 				index = 4;
 			}
 
-			if (index != -1)
-				clearChild(index);
-
+			clearChild(index);
 			deleteChildren();
 			addNode(temp);
 		}
 	}
+	smartWalk(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

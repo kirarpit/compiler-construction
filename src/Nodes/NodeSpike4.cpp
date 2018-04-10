@@ -5,25 +5,17 @@
 #include<NodeBlock.h>
 #include<ErrorStream.h>
 
-void NodeSpike4::parse(CompilerState &cs) {
+void NodeSpike4::compile(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
-	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *block = NodeBlock::parse(cs);
-	Logger::log("Parsing Complete");
-
-	block->walk(cs);
-	Logger::log("Type Propagation and Constant Folding Complete");
-
-	if (block)
+	if (block) {
+		block->walk(cs);
 		block->print(cs);
-	Logger::log("Deleting Block");
-	delete block;
-
-	if (cs.lexer.peek().type != TT_EOF) {
-		cs.es.reportParseError(cs);
+		delete block;
 	}
 
-	Logger::logTerminal(lex.peek());
-	lex.read();
+	if (lex.peek().type != TT_EOF) {
+		cs.es.reportParseError(cs);
+	}
 }

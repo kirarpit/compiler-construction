@@ -14,7 +14,8 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 			//check if it's indeed PE
 			if (!condOrPostfixExpr->findPostfixExpr()) {
 				Logger::log(
-						"CE can't be PE, Token Value: " + lex.peek().stringify());
+						"CE can't be PE, Token Value: "
+								+ lex.peek().stringify());
 
 				cs.es.reportParseError(cs);
 				delete asgnExpr;
@@ -44,8 +45,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 void NodeAsgnExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
-	operatorWalk(cs);
+	smartWalk(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

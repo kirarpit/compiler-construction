@@ -34,6 +34,9 @@ Node* Node::getChild(int index) {
 void Node::clearChildren() {
 }
 
+void Node::deleteChild(int index){
+}
+
 Token Node::getToken() {
 	return Token();
 }

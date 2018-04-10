@@ -24,9 +24,7 @@ int main(int argc, char **argv) {
 
 	CompilerState cs(input, output, error, lex, typeFactory);
 
-	NodeSpike4::parse(cs);
-	Logger::log("outside parsing");
-
+	NodeSpike4::compile(cs);
 	exit(cs.es.getErrorCount());
 }
 

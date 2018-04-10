@@ -31,7 +31,7 @@ Node* NodeOptArraySpecs::parse(CompilerState &cs) {
 void NodeOptArraySpecs::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	walkAllChildren(cs);
+	smartWalk(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

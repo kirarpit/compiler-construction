@@ -65,19 +65,19 @@ void NodeStatement::walk(CompilerState &cs) {
 }
 
 void NodeStatement::print(CompilerState &cs) {
-	if (children.size() == 1) {
+	if (children.size() == 1) { //if or while statements
 		children[0]->print(cs);
 		return;
 	}
 	cs.os.printWhiteSpaces();
 
-	if (children.size() == 2 && children[1]->getToken().value == ";") {
+	if (children.size() == 2 && children[1]->getToken().value == ";") { //expression
 		printAllChildren(cs);
 		cs.os << '\n';
 		return;
 	}
 
-	for (unsigned int i = 0; i < children.size(); i++) {
+	for (unsigned int i = 0; i < children.size(); i++) { //block
 		if (i == children.size() - 1) {
 			cs.os.deindent();
 			cs.os.printWhiteSpaces();
@@ -89,7 +89,8 @@ void NodeStatement::print(CompilerState &cs) {
 			cs.os << "\n";
 			cs.os.indent();
 		}
-	}
 
-	cs.os << '\n';
+		if (i == children.size() - 1)
+			cs.os << '\n';
+	}
 }
