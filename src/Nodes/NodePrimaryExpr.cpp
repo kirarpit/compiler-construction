@@ -50,7 +50,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 void NodePrimaryExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

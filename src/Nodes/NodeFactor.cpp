@@ -33,7 +33,7 @@ Node* NodeFactor::parse(CompilerState &cs) {
 void NodeFactor::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	if (children.size() == 2) {
 		if (children[0]->getToken().value == "--"

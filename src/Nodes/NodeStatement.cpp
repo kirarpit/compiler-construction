@@ -59,7 +59,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 void NodeStatement::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

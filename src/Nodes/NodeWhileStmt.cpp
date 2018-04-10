@@ -46,7 +46,7 @@ Node* NodeWhileStmt::parse(CompilerState &cs) {
 void NodeWhileStmt::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	if (children.size() == 5) {
 		if (children[2]->isConstant) {

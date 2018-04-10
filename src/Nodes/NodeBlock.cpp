@@ -51,7 +51,7 @@ void NodeBlock::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
 	cs.lastBlock = this;
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 	cs.lastBlock = cs.lastBlock->getST()->exitScope();
 
 	Logger::logWalkExit(__CLASS_NAME__, this);

@@ -37,7 +37,7 @@ Node* NodeRelExpr::parse(CompilerState &cs) {
 void NodeRelExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 	operatorWalk(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);

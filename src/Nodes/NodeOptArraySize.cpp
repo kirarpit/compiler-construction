@@ -24,7 +24,7 @@ Node* NodeOptArraySize::parse(CompilerState &cs) {
 void NodeOptArraySize::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

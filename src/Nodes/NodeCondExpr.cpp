@@ -53,7 +53,7 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 void NodeCondExpr::walk(CompilerState &cs) {
 	Logger::logWalkEntry(__CLASS_NAME__, this);
 
-	this->NonTerminalNode::walk(cs);
+	walkAllChildren(cs);
 
 	if (children.size() == 5) {
 		if (children[2]->getType()->isEqual(children[4]->getType())
