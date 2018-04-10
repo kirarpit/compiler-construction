@@ -28,10 +28,9 @@ void NonTerminalNode::walkAllChildren(CompilerState &cs) {
 	for (unsigned int i = 0; i < children.size(); i++) {
 		children[i]->walk(cs);
 
-		if (children[i]->getSize() == 0 && children[i]->getST() == NULL) { //implement is empty instead
+		if (children[i]->isEmpty()) {
 			deleteChild(i);
 			i--;
-
 		} else {
 			Node *temp = reduceBranch(children[i]);
 			if (temp)
@@ -41,7 +40,7 @@ void NonTerminalNode::walkAllChildren(CompilerState &cs) {
 }
 
 Node* NonTerminalNode::reduceBranch(Node *node) {
-	if (node->getSize() == 1 && node->getST() == NULL) { //implement "is reducable/removable"
+	if (node->isRemovable()) {
 		Node *temp = node;
 		node = temp->getChild(0);
 		temp->clearChildren();
@@ -108,6 +107,20 @@ void NonTerminalNode::deleteChild(int i) {
 
 void NonTerminalNode::clearChild(int i) {
 	children.erase(children.begin() + i);
+}
+
+bool NonTerminalNode::isRemovable() {
+	if (children.size() == 1) {
+		return true;
+	}
+	return false;
+}
+
+bool NonTerminalNode::isEmpty() {
+	if (children.size() == 0) {
+		return true;
+	}
+	return false;
 }
 
 bool NonTerminalNode::findPostfixExpr() {

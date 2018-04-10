@@ -34,7 +34,7 @@ Node* Node::getChild(int index) {
 void Node::clearChildren() {
 }
 
-void Node::deleteChild(int index){
+void Node::deleteChild(int index) {
 }
 
 Token Node::getToken() {
@@ -43,4 +43,12 @@ Token Node::getToken() {
 
 int Node::getSize() {
 	return -1;
+}
+
+bool Node::isRemovable() {
+	return false;
+}
+
+bool Node::isEmpty() {
+	return false;
 }

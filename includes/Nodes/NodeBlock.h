@@ -17,6 +17,8 @@ public:
 		delete myST;
 	}
 
+	bool isRemovable();
+	bool isEmpty();
 	void print(CompilerState &cs);
 	void printST(CompilerState &cs);
 	static Node* parse(CompilerState &cs);

@@ -15,17 +15,21 @@ public:
 
 	virtual void print(CompilerState &cs) = 0;
 	virtual void walk(CompilerState &cs) = 0;
+
 	virtual void addNode(Node *node);
-	virtual bool findPostfixExpr();
-	virtual SymbolTable* getST();
-	virtual Node* getChild(int index);
 	virtual void clearChildren();
 	virtual void deleteChild(int index);
+	virtual Node* getChild(int index);
 	virtual Token getToken();
 	virtual int getSize();
-
 	Type* getType();
 	void setType(Type *t);
+
+	virtual bool isRemovable();
+	virtual bool isEmpty();
+
+	virtual SymbolTable* getST();
+	virtual bool findPostfixExpr();
 
 	bool isConstant;
 	bool isTerminal;

@@ -31,6 +31,14 @@ Node* NodeBlock::parse(CompilerState &cs) {
 	return block;
 }
 
+bool NodeBlock::isRemovable() {
+	return false;
+}
+
+bool NodeBlock::isEmpty() {
+	return false;
+}
+
 void NodeBlock::print(CompilerState &cs) {
 	printST(cs);
 	cs.os << '\n';

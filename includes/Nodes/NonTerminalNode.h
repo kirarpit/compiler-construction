@@ -34,6 +34,9 @@ public:
 	void deleteChild(int index);
 	void clearChild(int index);
 
+	bool isRemovable();
+	bool isEmpty();
+
 	bool findPostfixExpr();
 	std::string getName();
 
