@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
 	CompilerState cs(input, output, error, lex, typeFactory);
 
-	NodeSpike4::compile(cs);
+	NodeSpike5::compile(cs);
 	exit(cs.es.getErrorCount());
 }
 

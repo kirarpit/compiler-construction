@@ -10,8 +10,8 @@
 #include<Lexer.h>
 #include<OutputStream.h>
 #include<ErrorStream.h>
-#include<NodeSpike4.h>
 #include<TypeFactory.h>
 #include<Logger.h>
+#include<NodeSpike5.h>
 
 #endif /* INCLUDES_MAIN_H_ */

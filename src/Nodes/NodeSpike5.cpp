@@ -1,11 +1,11 @@
-#include<NodeSpike4.h>
 #include<Lexer.h>
 #include<CompilerState.h>
 #include<Logger.h>
 #include<NodeBlock.h>
 #include<ErrorStream.h>
+#include<NodeSpike5.h>
 
-void NodeSpike4::compile(CompilerState &cs) {
+void NodeSpike5::compile(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 
 	Node *block = NodeBlock::parse(cs);

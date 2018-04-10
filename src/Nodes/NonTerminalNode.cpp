@@ -2,7 +2,6 @@
 #include<CompilerState.h>
 #include<OutputStream.h>
 #include<Logger.h>
-
 #include<typeinfo>
 
 NonTerminalNode::NonTerminalNode() {

@@ -6,11 +6,11 @@
 
 class CompilerState;
 
-class NodeSpike4: public NonTerminalNode {
+class NodeSpike5: public NonTerminalNode {
 public:
-	NodeSpike4() {
+	NodeSpike5() {
 	}
-	~NodeSpike4() {
+	~NodeSpike5() {
 	}
 	void print(CompilerState &cs) = 0;
 	static void compile(CompilerState &cs);
