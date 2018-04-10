@@ -58,7 +58,7 @@ void NonTerminalNode::typeProp(CompilerState &cs) {
 		type = children[0]->getType();
 
 	} else if (children.size() == 3) {
-		type = Type::getOperandType(cs, children[1]->getToken(),
+		type = Type::getOperatorType(cs, children[1]->getToken(),
 				children[0]->getType(), children[2]->getType());
 	}
 }

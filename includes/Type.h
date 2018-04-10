@@ -41,9 +41,8 @@ public:
 	bool isBool();
 	bool isPointer();
 	bool isNumericType();
-	bool isEqual(Type *t1);
 
-	static Type* getOperandType(CompilerState &cs, Token tkn, Type *t1,
+	static Type* getOperatorType(CompilerState &cs, Token tkn, Type *t1,
 			Type *t2);
 	static Node* constantFold(Token tkn, Token t1, Token t2);
 

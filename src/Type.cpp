@@ -130,52 +130,37 @@ bool Type::isNumericType() {
 	return false;
 }
 
-bool Type::isEqual(Type *t1) {
-	if (t1->typeName == typeName && t1->size == size) {
-		if (typeOf == NULL && t1->typeOf == NULL)
-			return true;
-		if (typeOf == NULL || t1->typeOf == NULL)
-			return false;
-
-		return typeOf->isEqual(t1->typeOf);
-	} else {
-		return false;
-	}
-}
-
-Type* Type::getOperandType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
-	Logger::log("Get Operand Type");
+Type* Type::getOperatorType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
+	Logger::log("Getting Operator Type");
 
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
-		if (t1->isSigned() && t2->isSigned())
-			return cs.tf.getPrimType(TP_SIGNED);
+		if ((t1->isSigned() || t1->isUnsigned()) && t1 == t2)
+			return t1;
 		else if (t1->isUnsigned() && t2->isSigned())
-			return cs.tf.getPrimType(TP_UNSIGNED);
-		else if (t1->isUnsigned() && t2->isUnsigned())
-			return cs.tf.getPrimType(TP_UNSIGNED);
+			return t1;
 		else if (t1->isSigned() && t2->isUnsigned())
-			return cs.tf.getPrimType(TP_UNSIGNED);
+			return t2;
 		else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
-				&& t2->isEqual(t1)) {
+				&& t2 == t1) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.type & TT_EQ_OP) {
-		if (t2->isEqual(t1) || (t1->isNumericType() && t2->isNumericType())) {
+		if (t2 == t1 || (t1->isNumericType() && t2->isNumericType())) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
 			exit(1);
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
-		if (t1->isBool() && t2->isEqual(t1)) {
+		if (t1->isBool() && t2 == t1) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
 			//error
@@ -184,7 +169,7 @@ Type* Type::getOperandType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
 	} else if (tkn.value == "=") {
 		if (t1->isNumericType() && t2->isNumericType()) {
 			return t1;
-		} else if (t1->isPointer() && t1->isEqual(t2)) {
+		} else if (t1->isPointer() && t1 == t2) {
 			return t1;
 		} else {
 			//error
@@ -201,47 +186,36 @@ Node* Type::constantFold(Token tkn, Token t1, Token t2) {
 	int val = -1;
 	std::ostringstream output;
 
-	if ((t1.type & TT_NUM) && (t2.type & TT_NUM)) {
+	int lhs = t1.getIntVal();
+	int rhs = t2.getIntVal();
 
-		if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
-			if (tkn.value == "+") {
-				val = t1.getIntVal() + t2.getIntVal();
-			} else if (tkn.value == "-") {
-				val = t1.getIntVal() - t2.getIntVal();
-			} else if (tkn.value == "*") {
-				val = t1.getIntVal() * t2.getIntVal();
-			} else if (tkn.value == "/") {
-				val = t1.getIntVal() / t2.getIntVal();
-			}
-		} else if (tkn.type & TT_REL_OP) {
-			if (tkn.value == "<") {
-				val = (t1.getIntVal() < t2.getIntVal()) ? 1 : 0;
-			} else if (tkn.value == "<=") {
-				val = (t1.getIntVal() <= t2.getIntVal()) ? 1 : 0;
-			} else if (tkn.value == ">") {
-				val = (t1.getIntVal() > t2.getIntVal()) ? 1 : 0;
-			} else if (tkn.value == ">=") {
-				val = (t1.getIntVal() >= t2.getIntVal()) ? 1 : 0;
-			}
-		} else if (tkn.type & TT_EQ_OP) {
-			if (tkn.value == "==") {
-				val = (t1.getIntVal() == t2.getIntVal()) ? 1 : 0;
-			} else if (tkn.value == "!=") {
-				val = (t1.getIntVal() != t2.getIntVal()) ? 1 : 0;
-			}
-		} else if (tkn.value == "&&" || tkn.value == "||") {
-			if (tkn.value == "&&") {
-				val = (t1.getIntVal() && t2.getIntVal()) ? 1 : 0;
-			} else if (tkn.value == "||") {
-				val = (t1.getIntVal() || t2.getIntVal()) ? 1 : 0;
-			}
-		} else if (tkn.value == "=") {
-			//error
-			exit(1);
-		} else if (tkn.value == ",") {
-			val = t1.getIntVal(), t2.getIntVal();
-		}
-	} else {
+	if (tkn.value == "+") {
+		val = lhs + rhs;
+	} else if (tkn.value == "-") {
+		val = lhs - rhs;
+	} else if (tkn.value == "*") {
+		val = lhs * rhs;
+	} else if (tkn.value == "/") {
+		val = lhs / rhs;
+	} else if (tkn.value == "<") {
+		val = (lhs < rhs) ? 1 : 0;
+	} else if (tkn.value == "<=") {
+		val = (lhs <= rhs) ? 1 : 0;
+	} else if (tkn.value == ">") {
+		val = (lhs > rhs) ? 1 : 0;
+	} else if (tkn.value == ">=") {
+		val = (lhs >= rhs) ? 1 : 0;
+	} else if (tkn.value == "==") {
+		val = (lhs == rhs) ? 1 : 0;
+	} else if (tkn.value == "!=") {
+		val = (lhs != rhs) ? 1 : 0;
+	} else if (tkn.value == "&&") {
+		val = (lhs && rhs) ? 1 : 0;
+	} else if (tkn.value == "||") {
+		val = (lhs || rhs) ? 1 : 0;
+	} else if (tkn.value == ",") {
+		val = rhs;
+	} else if (tkn.value == "=") {
 		//error
 		exit(1);
 	}
