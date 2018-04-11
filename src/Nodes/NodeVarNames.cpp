@@ -15,8 +15,8 @@ Node* NodeVarNames::parse(CompilerState &cs) {
 		if (optVarNames) {
 			varNames->addNode(optVarNames);
 		} else {
-			delete varNames;
-			return NULL;
+			varNames->addNode(new NodeOptVarNames());
+			cs.es.recover(cs);
 		}
 	}
 

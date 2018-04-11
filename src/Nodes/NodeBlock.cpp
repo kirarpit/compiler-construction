@@ -4,6 +4,8 @@ Node* NodeBlock::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
+	bool error = false;
+
 	SymbolTable *st = SymbolTable::enterScope(cs.lastBlock);
 	Node *block = new NodeBlock(st);
 	cs.lastBlock = block;
@@ -17,15 +19,18 @@ Node* NodeBlock::parse(CompilerState &cs) {
 		if (statements) {
 			block->addNode(statements);
 		} else {
-			delete block;
-			block = NULL;
+			error = true;
 		}
 	} else {
-		delete block;
-		block = NULL;
+		error = true;
 	}
 
 	cs.lastBlock = st->exitScope();
+
+	if (error) {
+		delete block;
+		block = NULL;
+	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());
 	return block;

@@ -34,6 +34,9 @@ Node* Node::getChild(int index) {
 void Node::clearChildren() {
 }
 
+void Node::deleteChildren() {
+}
+
 void Node::deleteChild(int index) {
 }
 

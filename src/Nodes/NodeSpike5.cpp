@@ -13,9 +13,13 @@ void NodeSpike5::compile(CompilerState &cs) {
 		block->walk(cs);
 		block->print(cs);
 		delete block;
-	}
-
-	if (lex.peek().type != TT_EOF) {
-		cs.es.reportParseError(cs);
+	} else {
+		cs.es.recover(cs);
+		if (lex.peek().type != TT_EOF) {
+			cs.es.reportParseError(cs);
+		} else {
+			Logger::logTerminal(lex.peek());
+			lex.read();
+		}
 	}
 }

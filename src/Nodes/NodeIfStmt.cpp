@@ -35,8 +35,6 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 		} else {
 			cs.es.reportParseError(cs);
 		}
-	} else {
-		cs.es.reportParseError(cs);
 	}
 
 	if (cs.es.error) {

@@ -35,7 +35,7 @@ bool Lexer::isKeyword(std::string str) {
 
 Token Lexer::tokenInit(int type, std::string val) {
 	Token token(input.getStreamName(), input.getLineNumber(),
-			input.getLocation() - 1, type, val);
+			input.getLocation() - val.length(), type, val);
 
 	return token;
 }

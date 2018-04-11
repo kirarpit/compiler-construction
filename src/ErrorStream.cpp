@@ -8,7 +8,9 @@
 
 void ErrorStream::reportParseError(CompilerState &cs) {
 	reportError();
-	es << "Error while parsing AST @ " << cs.lexer.peek().stringify() << "\n";
+	es << "\033[1m" << cs.lexer.peek().stringify()
+			<< " \033[1;31merror:\033[0m\033[1m while parsing AST\033[0m"
+			<< "\n";
 }
 
 void ErrorStream::reportError() {
@@ -25,20 +27,14 @@ int ErrorStream::getErrorCount() {
 	return errorCount;
 }
 
-void ErrorStream::recover(CompilerState &cs) {
-	Logger::log("Error Recovery Started");
+void ErrorStream::recover(CompilerState &cs, std::string str) {
+	Logger::log("Error Recovery Started: " + str);
 
 	while (cs.lexer.peek().value != TokenTable::TS[TN_semi]
 			&& cs.lexer.peek().value != TokenTable::TS[TN_clsbrc]
 			&& cs.lexer.peek().type != TT_EOF) {
 		cs.lexer.read();
 	}
-
-	if (cs.lexer.peek().value != TokenTable::TS[TN_semi])
-		reportParseError(cs);
-
-	if (cs.lexer.peek().value != TokenTable::TS[TN_clsbrc])
-		cs.lexer.read();
 
 	error = false;
 }

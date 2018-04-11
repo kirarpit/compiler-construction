@@ -17,11 +17,11 @@ Node* NodeStatements::parse(CompilerState &cs) {
 				statements->addNode(nextStatements);
 			} else {
 				delete statements;
-				return NULL;
+				statements = NULL;
 			}
 		} else {
 			delete statements;
-			return NULL;
+			statements = NULL;
 		}
 	}
 

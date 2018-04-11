@@ -9,12 +9,29 @@ Node* NodeStatement::parse(CompilerState &cs) {
 	if (lex.peek().value == TokenTable::TS[TN_opnbrc]) {
 		statement->addNode(new TerminalNode(lex.read()));
 
+		bool blockError = false;
 		Node *block = NodeBlock::parse(cs);
+
 		if (block) {
 			statement->addNode(block);
 
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
+			} else
+				blockError = true;
+
+		} else
+			blockError = true;
+
+		if (blockError) {
+			delete statement;
+			statement = NULL;
+
+			cs.es.recover(cs, "recovering block error @ " + __CLASS_NAME__);
+			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
+				Logger::logTerminal(lex.peek());
+				lex.read();
+				statement = new NodeStatement();
 			} else {
 				cs.es.reportParseError(cs);
 			}
@@ -33,6 +50,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 		}
 
 	} else {
+		bool exprError = false;
 		Node *expr = NodeExpr::parse(cs);
 
 		if (expr) {
@@ -41,6 +59,21 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
+				exprError = true;
+			}
+		} else
+			exprError = true;
+
+		if (exprError) {
+			delete statement;
+			statement = NULL;
+
+			cs.es.recover(cs, "recovering expression error @ " + __CLASS_NAME__);
+			if (lex.peek().value == TokenTable::TS[TN_semi]) {
+				Logger::logTerminal(lex.peek());
+				lex.read();
+				statement = new NodeStatement();
+			} else {
 				cs.es.reportParseError(cs);
 			}
 		}
@@ -48,8 +81,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 
 	if (cs.es.error) {
 		delete statement;
-		statement = new NodeStatement();
-		cs.es.recover(cs);
+		statement = NULL;
 	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());

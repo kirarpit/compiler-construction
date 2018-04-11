@@ -18,11 +18,11 @@ Node* NodeDefs::parse(CompilerState &cs) {
 				defs->addNode(nextDefs);
 			} else {
 				delete defs;
-				return NULL;
+				defs = NULL;
 			}
 		} else {
 			delete defs;
-			return NULL;
+			defs = NULL;
 		}
 	}
 

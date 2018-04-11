@@ -52,21 +52,21 @@ Node* NonTerminalNode::reduceBranch(Node *node) {
 }
 
 void NonTerminalNode::typeProp(CompilerState &cs) {
-	Logger::log("Type Propagating");
-
 	if (children.size() == 1) {
 		type = children[0]->getType();
 
 	} else if (children.size() == 3) {
+		Logger::log("Type Propagating");
+
 		type = Type::getOperatorType(cs, children[1]->getToken(),
 				children[0]->getType(), children[2]->getType());
 	}
 }
 
 void NonTerminalNode::constFold(CompilerState &cs) {
-	Logger::log("Constant Folding");
-
 	if (children.size() == 3) {
+		Logger::log("Constant Folding");
+
 		if (children[0]->isConstant && children[2]->isConstant) {
 			Node* terminalNode = Type::constantFold(children[1]->getToken(),
 					children[0]->getToken(), children[2]->getToken());

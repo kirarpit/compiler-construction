@@ -4,6 +4,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 	Lexer &lex = cs.lexer;
 	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
+	bool error = false;
 	Node *varDef = NULL;
 
 	Node *typeSpec = NodeTypeSpec::parse(cs);
@@ -18,17 +19,24 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				varDef->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportParseError(cs);
-				delete varDef;
+				error = true;
 			}
-		} else {
-			delete varDef;
-		}
-	}
+		} else
+			error = true;
+	} else
+		error = true;
 
-	if (cs.es.error) {
+	if (error) {
+		delete varDef;
+		varDef = NULL;
+
 		cs.es.recover(cs);
-		varDef = new NodeVarDef();
+		if (lex.peek().value == TokenTable::TS[TN_semi]) {
+			lex.read();
+			varDef = new NodeVarDef();
+		} else {
+			cs.es.reportParseError(cs);
+		}
 	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());

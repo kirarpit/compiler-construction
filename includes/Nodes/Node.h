@@ -18,6 +18,7 @@ public:
 
 	virtual void addNode(Node *node);
 	virtual void clearChildren();
+	virtual void deleteChildren();
 	virtual void deleteChild(int index);
 	virtual Node* getChild(int index);
 	virtual Token getToken();

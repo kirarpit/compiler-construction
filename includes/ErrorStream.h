@@ -14,7 +14,7 @@ public:
 	void reportParseError(CompilerState &cs);
 	void reportError();
 	int getErrorCount();
-	void recover(CompilerState &cs);
+	void recover(CompilerState &cs, std::string str = "");
 
 	bool error;
 private:
