@@ -24,14 +24,14 @@ Node* NodeWhileStmt::parse(CompilerState &cs) {
 						whileStmt->addNode(statement);
 					}
 				} else {
-					cs.es.reportParseError(cs, "expecting ')'");
+					cs.es.reportError(cs, "expecting ')'");
 				}
 			}
 		} else {
-			cs.es.reportParseError(cs, "expecting '('");
+			cs.es.reportError(cs, "expecting '('");
 		}
 	} else {
-		cs.es.reportParseError(cs, "expecting 'while'");
+		cs.es.reportError(cs, "expecting 'while'");
 	}
 
 	if (cs.es.error) {

@@ -1,0 +1,32 @@
+
+{
+  a okay bool
+  b okay bool
+  g okay signed
+  g2 okay bool
+  v unused signed
+  x unused signed
+  z okay signed
+
+  {
+    a okay bool[2]
+    c okay bool[]
+
+     :( B[2]:a< B[]:c);
+     B:( B:b&& B:g2);
+     S:( S:g--);
+     S:( S:1= S:2);
+     S:(++ S:g);
+     :(- B[]:c);
+     B:( B[]:c[ S:1]);
+     B:( B[2]:a[]);
+     S:(- S:g);
+     :( B[2]:a++);
+     B[]:( B[]:c= B[]:(& B:( B[2]:a[ S:1])));
+     :( S:g= :(& S:1));
+     B:( B:( B[2]:a[ S:1])= B:b);
+     :( B[2]:a= S:z);
+  }
+   B:( B:a= B:1);
+   B:( B:b= B:a);
+}

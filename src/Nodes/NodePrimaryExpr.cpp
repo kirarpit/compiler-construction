@@ -33,14 +33,14 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 				lex.read();
 			} else {
 				errorFlag = true;
-				cs.es.reportParseError(cs, "expecting ')'");
+				cs.es.reportError(cs, "expecting ')'");
 			}
 		} else {
 			errorFlag = true;
 		}
 	} else {
 		errorFlag = true;
-		cs.es.reportParseError(cs, "expecting ID or a Num");
+		cs.es.reportError(cs, "expecting ID or a Num");
 	}
 
 	if (errorFlag) {

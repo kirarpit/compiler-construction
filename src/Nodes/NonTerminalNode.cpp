@@ -58,8 +58,9 @@ void NonTerminalNode::typeProp(CompilerState &cs) {
 	} else if (children.size() == 3) {
 		Logger::log("Type Propagating");
 
-		type = Type::getOperatorType(cs, children[1]->getToken(),
-				children[0]->getType(), children[2]->getType());
+		if (children[0]->getType() && children[2]->getType())
+			type = Type::getOperatorType(cs, children[1]->getToken(),
+					children[0]->getType(), children[2]->getType());
 	}
 }
 
@@ -68,7 +69,7 @@ void NonTerminalNode::constFold(CompilerState &cs) {
 		Logger::log("Constant Folding");
 
 		if (children[0]->isConstant && children[2]->isConstant) {
-			Node* terminalNode = Type::constantFold(children[1]->getToken(),
+			Node* terminalNode = Type::constantFold(cs, children[1]->getToken(),
 					children[0]->getToken(), children[2]->getToken());
 
 			if (terminalNode) {

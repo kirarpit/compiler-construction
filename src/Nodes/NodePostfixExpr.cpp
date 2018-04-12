@@ -52,18 +52,20 @@ void NodePostfixExpr::walk(CompilerState &cs) {
 
 	if (children.size() == 2) {
 		if (children[1]->isTerminal) {
-			Type *t = children[0]->getType();
-			if (t->isSigned() || t->isUnsigned() || t->isPointer()) {
-				type = t;
+			Type *tp = children[0]->getType();
+			if (tp->isSigned() || tp->isUnsigned() || tp->isPointer()) {
+				type = tp;
 			} else {
-				//error
-				exit(1);
+				cs.es.reportTypeError(cs, children[1]->getToken(), tp,
+						"cannot post increment/decrement value of type '%t'");
 			}
 		} else {
 			if (children[1]->getSize() == 2)
-				type = children[0]->getType()->deref(TP_POINTER);
+				type = children[0]->getType()->deref(cs,
+						children[1]->getChild(0)->getToken(), TP_POINTER);
 			else
-				type = children[0]->getType()->deref(TP_ARRAY);
+				type = children[0]->getType()->deref(cs,
+						children[1]->getChild(0)->getToken(), TP_ARRAY);
 		}
 	}
 

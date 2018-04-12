@@ -12,7 +12,7 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 
 		if (lex.peek().value == TokenTable::TS[TN_equal]) {
 			if (!condOrPostfixExpr->findPostfixExpr()) {
-				cs.es.reportParseError(cs, "expecting '='");
+				cs.es.reportError(cs, "invalid assignment left-hand side");
 				delete asgnExpr;
 				return NULL;
 			}

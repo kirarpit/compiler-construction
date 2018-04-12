@@ -6,7 +6,6 @@ Node* NodeFactor::parse(CompilerState &cs) {
 	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	Node *factor = new NodeFactor();
-
 	if (lex.peek().type & TT_PREUN_OP) {
 		factor->addNode(new TerminalNode(lex.read()));
 		Node *nextFactor = NodeFactor::parse(cs);
@@ -35,25 +34,26 @@ void NodeFactor::walk(CompilerState &cs) {
 
 	smartWalk(cs);
 
+	std::string val = children[0]->getToken().value;
 	if (children.size() == 2) {
-		if (children[0]->getToken().value == "--"
-				|| children[0]->getToken().value == "++") {
-			if (children[1]->getType()->isSigned()
-					|| children[1]->getType()->isUnsigned()
-					|| children[1]->getType()->isPointer()) {
-				type = children[1]->getType();
+		Type *tp = children[1]->getType();
+
+		if (val == TokenTable::TS[TN_minusminus]
+				|| val == TokenTable::TS[TN_plusplus]) {
+
+			if (tp->isSigned() || tp->isUnsigned() || tp->isPointer()) {
+				type = tp;
 			} else {
-				//error
-				exit(1);
+				cs.es.reportTypeError(cs, children[0]->getToken(), tp,
+						"cannot pre increment/decrement value of type '%t'");
 			}
 
-		} else if (children[0]->getToken().value == "-") {
-			if (children[1]->getType()->isSigned()
-					|| children[1]->getType()->isUnsigned()) {
-				type = children[1]->getType();
+		} else if (val == TokenTable::TS[TN_minus]) {
+			if (tp->isSigned() || tp->isUnsigned()) {
+				type = tp;
 			} else {
-				//error
-				exit(1);
+				cs.es.reportTypeError(cs, children[0]->getToken(), tp,
+						"invalid argument type '%t' to unary expression");
 			}
 
 			if (children[1]->isConstant) {
@@ -67,12 +67,12 @@ void NodeFactor::walk(CompilerState &cs) {
 				addNode(terminalNode);
 			}
 
-		} else if (children[0]->getToken().value == "&") {
+		} else if (val == TokenTable::TS[TN_and]) {
 			if (!children[1]->isConstant) { //or maybe this should be ID only
-				type = cs.tf.getAddressType(children[1]->getType());
+				type = cs.tf.getAddressType(tp);
 			} else {
-				//error
-				exit(1);
+				cs.es.reportTypeError(cs, children[0]->getToken(), tp,
+						"cannot take the address of an rvalue of type '%t'");
 			}
 		}
 	}

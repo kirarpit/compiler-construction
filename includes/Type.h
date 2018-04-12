@@ -34,7 +34,7 @@ public:
 	void shortPrint(CompilerState &cs);
 	void recursivePrint(CompilerState &cs, Type *type, bool shortForm);
 
-	Type* deref(int type);
+	Type* deref(CompilerState &cs, Token tn, int type);
 
 	bool isSigned();
 	bool isUnsigned();
@@ -44,7 +44,7 @@ public:
 
 	static Type* getOperatorType(CompilerState &cs, Token tkn, Type *t1,
 			Type *t2);
-	static Node* constantFold(Token tkn, Token t1, Token t2);
+	static Node* constantFold(CompilerState &cs, Token tkn, Token t1, Token t2);
 
 	int typeName;
 	int size;

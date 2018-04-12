@@ -5,6 +5,7 @@
 #include<OutputStream.h>
 #include<Type.h>
 #include<TypeFactory.h>
+#include<ErrorStream.h>
 
 #define XX(a, b) b,
 const std::string Type::TS[] = { TYPE_LIST };
@@ -84,16 +85,13 @@ void Type::recursivePrint(CompilerState &cs, Type *type, bool shortForm) {
 	}
 }
 
-Type* Type::deref(int tp) {
-	Logger::log("Type deref");
-
+Type* Type::deref(CompilerState &cs, Token tn, int tp) {
 	if (typeOf == NULL) {
-		//error
-		exit(1);
+		cs.es.reportTypeError(cs, tn, this,
+				"indirection requires pointer operand");
 	}
 	if (typeName != tp) {
-		//error
-		exit(1);
+		cs.es.reportTypeError(cs, tn, this, "type array and pointer mismatch");
 	}
 
 	return typeOf;
@@ -133,6 +131,7 @@ bool Type::isNumericType() {
 Type* Type::getOperatorType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
 	Logger::log("Getting Operator Type");
 
+	bool error = false;
 	if ((tkn.type & TT_TERM_OP) || (tkn.type & TT_FACTOR_OP)) {
 		if ((t1->isSigned() || t1->isUnsigned()) && t1 == t2)
 			return t1;
@@ -141,30 +140,26 @@ Type* Type::getOperatorType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
 		else if (t1->isSigned() && t2->isUnsigned())
 			return t2;
 		else {
-			//error
-			exit(1);
+			error = true;
 		}
 	} else if (tkn.type & TT_REL_OP) {
 		if ((t1->isSigned() || t1->isUnsigned() || t1->isPointer())
 				&& t2 == t1) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
-			//error
-			exit(1);
+			error = true;
 		}
 	} else if (tkn.type & TT_EQ_OP) {
 		if (t2 == t1 || (t1->isNumericType() && t2->isNumericType())) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
-			//error
-			exit(1);
+			error = true;
 		}
 	} else if (tkn.value == "&&" || tkn.value == "||") {
 		if (t1->isBool() && t2 == t1) {
 			return cs.tf.getPrimType(TP_BOOL);
 		} else {
-			//error
-			exit(1);
+			error = true;
 		}
 	} else if (tkn.value == "=") {
 		if (t1->isNumericType() && t2->isNumericType()) {
@@ -172,17 +167,21 @@ Type* Type::getOperatorType(CompilerState &cs, Token tkn, Type *t1, Type *t2) {
 		} else if (t1->isPointer() && t1 == t2) {
 			return t1;
 		} else {
-			//error
-			exit(1);
+			error = true;
 		}
 	} else if (tkn.value == ",") {
 		return t2;
 	}
 
+	if (error) {
+		cs.es.reportOpTypeError(cs, tkn, t1, t2,
+				"invalid operands to binary expression ('%t1' and '%t2')");
+	}
+
 	return NULL;
 }
 
-Node* Type::constantFold(Token tkn, Token t1, Token t2) {
+Node* Type::constantFold(CompilerState &cs, Token tkn, Token t1, Token t2) {
 	int val = -1;
 	std::ostringstream output;
 
@@ -216,8 +215,8 @@ Node* Type::constantFold(Token tkn, Token t1, Token t2) {
 	} else if (tkn.value == ",") {
 		val = rhs;
 	} else if (tkn.value == "=") {
-		//error
-		exit(1);
+		cs.es.reportTypeError(cs, tkn, NULL, "expression is not assignable");
+		return NULL;
 	}
 
 	output << val;

@@ -18,7 +18,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else
-				cs.es.reportParseError(cs, "expecting '}'");
+				cs.es.reportError(cs, "expecting '}'");
 		} else
 			blockError = true;
 
@@ -33,7 +33,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				statement = new NodeStatement();
 			} else {
 				if (blockError)
-					cs.es.reportParseError(cs, "expecting '}'");
+					cs.es.reportError(cs, "expecting '}'");
 			}
 		}
 
@@ -59,7 +59,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				cs.es.reportParseError(cs, "expecting ';'");
+				cs.es.reportError(cs, "expecting ';'");
 			}
 		} else
 			exprError = true;
@@ -76,7 +76,7 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				statement = new NodeStatement();
 			} else {
 				if (exprError)
-					cs.es.reportParseError(cs, "expecting ';'");
+					cs.es.reportError(cs, "expecting ';'");
 			}
 		}
 	}

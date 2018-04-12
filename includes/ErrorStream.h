@@ -5,6 +5,7 @@
 
 class CompilerState;
 class Token;
+class Type;
 
 class ErrorStream {
 public:
@@ -12,9 +13,12 @@ public:
 			error(false), es(s), errorCount(0) {
 	}
 
-	void reportParseError(CompilerState &cs, std::string message = "");
+	void reportError(CompilerState &cs, std::string message = "");
 	void reportDeclError(CompilerState &cs, Token t);
-	void reportError();
+	void reportTypeError(CompilerState &cs, Token t, Type *type,
+			std::string message = "");
+	void reportOpTypeError(CompilerState &cs, Token t, Type *type1, Type *type2,
+			std::string message = "");
 	int getErrorCount();
 	void recover(CompilerState &cs, std::string message = "");
 
@@ -23,8 +27,10 @@ private:
 	std::ostream &es;
 	int errorCount;
 
+	void incrErrorCnt();
 	void printErrorEnd();
 	void printTokenError(Token t);
+	std::string replaceType(CompilerState &cs, std::string message, std::string replace, Type *type);
 };
 
 #endif /* INCLUDES_ERRORSTREAM_H_ */

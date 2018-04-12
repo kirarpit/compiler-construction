@@ -19,7 +19,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				varDef->addNode(new TerminalNode(lex.read()));
 			} else
-				cs.es.reportParseError(cs, "expecting ';'");
+				cs.es.reportError(cs, "expecting ';'");
 		} else
 			error = true;
 	} else
@@ -35,7 +35,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 			varDef = new NodeVarDef();
 		} else {
 			if (error)
-				cs.es.reportParseError(cs, "expecting ';'");
+				cs.es.reportError(cs, "expecting ';'");
 		}
 	}
 

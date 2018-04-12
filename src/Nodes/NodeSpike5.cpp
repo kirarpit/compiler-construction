@@ -16,7 +16,7 @@ void NodeSpike5::compile(CompilerState &cs) {
 	} else {
 		cs.es.recover(cs);
 		if (lex.peek().type != TT_EOF) {
-			cs.es.reportParseError(cs, "expecting EOF");
+			cs.es.reportError(cs, "expecting EOF");
 		} else {
 			Logger::logTerminal(lex.peek());
 			lex.read();

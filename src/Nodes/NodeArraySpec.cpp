@@ -48,7 +48,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 	}
 
 	if (errorFlag) {
-		cs.es.reportParseError(cs, em);
+		cs.es.reportError(cs, em);
 		delete arraySpec;
 		return NULL;
 	}

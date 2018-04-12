@@ -13,7 +13,7 @@ Node* NodeVarName::parse(CompilerState &cs) {
 
 		cs.lastBlock->getST()->insertOrUpdateVar(cs, id);
 	} else {
-		cs.es.reportParseError(cs, "expecting ID");
+		cs.es.reportError(cs, "expecting ID");
 	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());

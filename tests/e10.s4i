@@ -1,0 +1,28 @@
+{
+	signed g,z,x,v;
+	bool a,g2,b=;
+	{
+		bool[] c;
+		bool[2] a;
+		a<c;
+		b &&g2;
+
+		g--;
+1=2;
+		++g;
+		-c;
+		c[1];
+		a[];
+		-g;
+		a++;
+		c = &a[1];
+		g = &1;
+		//a = c;
+		a[1] = b;
+		//a = b;
+		a = z;
+		a = zx;
+	}
+	a = (0==0);
+	if (1<0) {a+b; what !tht !heck !human} else b = a;
+}
