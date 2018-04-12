@@ -25,7 +25,7 @@ Node* NodeTypeName::parse(CompilerState &cs) {
 		typeName->addNode(new TerminalNode(lex.read()));
 
 	} else {
-		cs.es.reportParseError(cs);
+		cs.es.reportParseError(cs, "expecting valid primitive type");
 	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());

@@ -11,9 +11,8 @@ Node* NodeAsgnExpr::parse(CompilerState &cs) {
 		asgnExpr->addNode(condOrPostfixExpr);
 
 		if (lex.peek().value == TokenTable::TS[TN_equal]) {
-			//check if it's indeed PE
 			if (!condOrPostfixExpr->findPostfixExpr()) {
-				cs.es.reportParseError(cs);
+				cs.es.reportParseError(cs, "expecting '='");
 				delete asgnExpr;
 				return NULL;
 			}

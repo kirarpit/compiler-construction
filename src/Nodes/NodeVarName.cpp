@@ -11,9 +11,9 @@ Node* NodeVarName::parse(CompilerState &cs) {
 		Token id = lex.read();
 		varName->addNode(new TerminalNode(id));
 
-		cs.lastBlock->getST()->insertOrUpdateVar(id);
+		cs.lastBlock->getST()->insertOrUpdateVar(cs, id);
 	} else {
-		cs.es.reportParseError(cs);
+		cs.es.reportParseError(cs, "expecting ID");
 	}
 
 	Logger::logParseExit(__CLASS_NAME__, lex.peek());

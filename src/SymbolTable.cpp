@@ -6,6 +6,7 @@
 #include<OutputStream.h>
 #include<Type.h>
 #include<TypeFactory.h>
+#include<ErrorStream.h>
 
 SymbolTable::SymbolTable() :
 		parent(NULL), isDef(true), varType(NULL), lastVar(NULL) {
@@ -43,9 +44,8 @@ void SymbolTable::updateVarType(CompilerState &cs, int name, int size) {
 	}
 }
 
-void SymbolTable::insertOrUpdateVar(Token id) {
+bool SymbolTable::insertOrUpdateVar(CompilerState &cs, Token id) {
 	Logger::log("Inserting/Updating an ID: " + id.value);
-
 	if (isDef) {
 		if (!localLookup(id)) {
 			VariableInfo newVar(VS_UNUSED, varType);
@@ -54,21 +54,19 @@ void SymbolTable::insertOrUpdateVar(Token id) {
 			lastVar = &variables[id];
 
 		} else {
-			//error
-			//just gotta ignore it and throw std error which will increase the count
-			exit(1);
+			cs.es.reportDeclError(cs, id);
 		}
 	} else {
 		VariableInfo *varPtr = lookup(id);
 		if (varPtr) {
 			varPtr->status = VS_OKAY;
 		} else {
-			//error
-			//this is still parsing, can return bool and throw an error while parsing
-			//which will hopefully roll back and remove the entire statement
-			exit(1);
+			cs.es.reportDeclError(cs, id);
+			return false;
 		}
 	}
+
+	return true;
 }
 
 void SymbolTable::print(CompilerState &cs) {

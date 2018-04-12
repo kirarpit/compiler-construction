@@ -25,6 +25,7 @@ std::string Token::stringify() {
 	}
 
 	output << value;
+
 	return output.str();
 }
 

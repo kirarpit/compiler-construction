@@ -18,12 +18,11 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_clsbrc]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else
-				blockError = true;
-
+				cs.es.reportParseError(cs, "expecting '}'");
 		} else
 			blockError = true;
 
-		if (blockError) {
+		if (cs.es.error) {
 			delete statement;
 			statement = NULL;
 
@@ -33,7 +32,8 @@ Node* NodeStatement::parse(CompilerState &cs) {
 				lex.read();
 				statement = new NodeStatement();
 			} else {
-				cs.es.reportParseError(cs);
+				if (blockError)
+					cs.es.reportParseError(cs, "expecting '}'");
 			}
 		}
 
@@ -59,22 +59,24 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				statement->addNode(new TerminalNode(lex.read()));
 			} else {
-				exprError = true;
+				cs.es.reportParseError(cs, "expecting ';'");
 			}
 		} else
 			exprError = true;
 
-		if (exprError) {
+		if (cs.es.error) {
 			delete statement;
 			statement = NULL;
 
-			cs.es.recover(cs, "recovering expression error @ " + __CLASS_NAME__);
+			cs.es.recover(cs,
+					"recovering expression error @ " + __CLASS_NAME__);
 			if (lex.peek().value == TokenTable::TS[TN_semi]) {
 				Logger::logTerminal(lex.peek());
 				lex.read();
 				statement = new NodeStatement();
 			} else {
-				cs.es.reportParseError(cs);
+				if (exprError)
+					cs.es.reportParseError(cs, "expecting ';'");
 			}
 		}
 	}

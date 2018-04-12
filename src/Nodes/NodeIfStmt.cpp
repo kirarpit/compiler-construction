@@ -29,11 +29,11 @@ Node* NodeIfStmt::parse(CompilerState &cs) {
 						}
 					}
 				} else {
-					cs.es.reportParseError(cs);
+					cs.es.reportParseError(cs, "expecting ')'");
 				}
 			}
 		} else {
-			cs.es.reportParseError(cs);
+			cs.es.reportParseError(cs, "expecting '('");
 		}
 	}
 

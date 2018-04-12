@@ -11,10 +11,15 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		Token id = lex.read();
 		primaryExpr->addNode(new TerminalNode(id));
 
-		if (!cs.lastBlock->getST()->isDef)
-			cs.lastBlock->getST()->insertOrUpdateVar(id);
+		if (!cs.lastBlock->getST()->isDef) {
+			if (!cs.lastBlock->getST()->insertOrUpdateVar(cs, id)) {
+				errorFlag = true;
+			}
+		}
+
 	} else if (lex.peek().type == TT_NUM) {
 		primaryExpr->addNode(new TerminalNode(lex.read()));
+
 	} else if (lex.peek().value == TokenTable::TS[TN_opnpar]) {
 		Logger::logTerminal(lex.peek());
 		lex.read();
@@ -28,14 +33,14 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 				lex.read();
 			} else {
 				errorFlag = true;
-				cs.es.reportParseError(cs);
+				cs.es.reportParseError(cs, "expecting ')'");
 			}
 		} else {
 			errorFlag = true;
 		}
 	} else {
 		errorFlag = true;
-		cs.es.reportParseError(cs);
+		cs.es.reportParseError(cs, "expecting ID or a Num");
 	}
 
 	if (errorFlag) {

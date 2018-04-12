@@ -32,7 +32,7 @@ Node* NodeCondExpr::parse(CompilerState &cs) {
 				}
 
 			} else {
-				cs.es.reportParseError(cs);
+				cs.es.reportParseError(cs, "expecting ':'");
 				errorFlag = true;
 			}
 

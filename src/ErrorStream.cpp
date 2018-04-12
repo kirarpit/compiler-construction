@@ -4,17 +4,44 @@
 #include<Lexer.h>
 #include<SymbolTable.h>
 #include<Node.h>
-#include <Type.h>
+#include<Type.h>
+#include<Token.h>
 
-void ErrorStream::reportParseError(CompilerState &cs) {
+void ErrorStream::printErrorEnd() {
+	es << "\033[0m";
+	es << "\n";
+}
+
+void ErrorStream::printTokenError(Token t) {
+	es << "\033[1m" << t.stringify() << " \033[1;31m" << "error: " << "\033[0m"
+			<< "\033[1m";
+}
+
+void ErrorStream::reportParseError(CompilerState &cs, std::string message) {
 	reportError();
-	es << "\033[1m" << cs.lexer.peek().stringify()
-			<< " \033[1;31merror:\033[0m\033[1m while parsing AST\033[0m"
-			<< "\n";
+	printTokenError(cs.lexer.peek());
+
+	if (message != "") {
+		es << message;
+	}
+
+	printErrorEnd();
+}
+
+void ErrorStream::reportDeclError(CompilerState &cs, Token t) {
+	reportError();
+	printTokenError(t);
+
+	if (cs.lastBlock->getST()->isDef)
+		es << "redefinition of" << " '" << t.value << "'";
+	else
+		es << "use of undeclared identifier" << " '" << t.value << "'";
+
+	printErrorEnd();
 }
 
 void ErrorStream::reportError() {
-	Logger::log("Error Reported, total error count: %d", errorCount + 1);
+	Logger::log("Error Reported: Total error count: %d", errorCount + 1);
 
 	error = true;
 	++errorCount;

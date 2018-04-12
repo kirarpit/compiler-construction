@@ -6,6 +6,7 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 	Logger::logParseEntry(__CLASS_NAME__, lex.peek());
 
 	bool errorFlag = false;
+	std::string em;
 	Node *arraySpec = new NodeArraySpec();
 
 	if (lex.peek().value == TokenTable::TS[TN_opnbrk]) {
@@ -33,21 +34,21 @@ Node* NodeArraySpec::parse(CompilerState &cs) {
 				} else if (arraySpec->getSize() == 2) {
 					cs.lastBlock->getST()->updateVarType(cs, TP_POINTER);
 				} else {
-					//error
-					//well since this is still parsing we can throw and error and roll back
-					//the entire statement
-					exit(1);
+					em = "variable length arrays are not supported";
+					errorFlag = true;
 				}
 			}
 		} else {
 			errorFlag = true;
+			em = "expecting ']'";
 		}
 	} else {
 		errorFlag = true;
+		em = "expecting '['";
 	}
 
 	if (errorFlag) {
-		cs.es.reportParseError(cs);
+		cs.es.reportParseError(cs, em);
 		delete arraySpec;
 		return NULL;
 	}
