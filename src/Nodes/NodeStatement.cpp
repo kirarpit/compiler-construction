@@ -128,3 +128,9 @@ void NodeStatement::print(CompilerState &cs) {
 			cs.os << '\n';
 	}
 }
+
+void NodeStatement::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}

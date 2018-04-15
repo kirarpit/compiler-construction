@@ -28,3 +28,9 @@ void NodeOptArraySize::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+void NodeOptArraySize::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}

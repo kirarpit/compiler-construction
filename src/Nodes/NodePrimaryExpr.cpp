@@ -59,3 +59,9 @@ void NodePrimaryExpr::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+void NodePrimaryExpr::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}

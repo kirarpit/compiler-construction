@@ -41,3 +41,9 @@ void NodeEqExpr::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+void NodeEqExpr::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}

@@ -55,3 +55,9 @@ bool Node::isRemovable() {
 bool Node::isEmpty() {
 	return false;
 }
+
+void Node::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}

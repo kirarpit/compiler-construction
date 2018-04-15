@@ -23,3 +23,9 @@ void NodeSpike5::compile(CompilerState &cs) {
 		}
 	}
 }
+
+void NodeSpike5::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+}
