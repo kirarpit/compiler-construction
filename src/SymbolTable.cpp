@@ -55,6 +55,7 @@ bool SymbolTable::insertOrUpdateVar(CompilerState &cs, Token id) {
 
 		} else {
 			cs.es.reportDeclError(cs, id);
+			return false;
 		}
 	} else {
 		VariableInfo *varPtr = lookup(id);

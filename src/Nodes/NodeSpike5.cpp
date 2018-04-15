@@ -12,6 +12,7 @@ void NodeSpike5::compile(CompilerState &cs) {
 	if (block) {
 		block->walk(cs);
 		block->print(cs);
+		block->genCode(cs);
 		delete block;
 	} else {
 		cs.es.recover(cs);

@@ -38,6 +38,9 @@ void TerminalNode::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
+void TerminalNode::codeGen(CompilerState &cs) {
+}
+
 Token TerminalNode::getToken() {
 	return token;
 }

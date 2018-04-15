@@ -23,6 +23,7 @@ public:
 	~NonTerminalNode();
 
 	void walk(CompilerState &cs) = 0;
+	void genCode(CompilerState &cs) = 0;
 	void print(CompilerState &cs) = 0;
 
 	void addNode(Node *node);

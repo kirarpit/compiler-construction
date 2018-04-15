@@ -31,6 +31,7 @@ Node* NodeVarDef::parse(CompilerState &cs) {
 
 		cs.es.recover(cs);
 		if (lex.peek().value == TokenTable::TS[TN_semi]) {
+            Logger::logTerminal(lex.peek());
 			lex.read();
 			varDef = new NodeVarDef();
 		} else {

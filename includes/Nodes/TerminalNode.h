@@ -12,8 +12,10 @@ public:
 	TerminalNode(Token tkn);
 	~TerminalNode();
 
-	void print(CompilerState &cs);
 	void walk(CompilerState &cs);
+	void codeGen(CompilerState &cs);
+	void print(CompilerState &cs);
+
 	Token getToken();
 
 protected:
