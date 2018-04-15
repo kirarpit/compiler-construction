@@ -23,6 +23,7 @@ public:
 	void printST(CompilerState &cs);
 	static Node* parse(CompilerState &cs);
 	void walk(CompilerState &cs);
+	void genCode(CompilerState &cs);
 	SymbolTable* getST();
 
 	SymbolTable *myST;

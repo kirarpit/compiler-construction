@@ -15,6 +15,7 @@ public:
 	void print(CompilerState &cs) = 0;
 	static void compile(CompilerState &cs);
 	void walk(CompilerState &cs);
+	void genCode(CompilerState &cs);
 };
 
 #endif /* SRC_NODES_NODESPIKE4_H_ */

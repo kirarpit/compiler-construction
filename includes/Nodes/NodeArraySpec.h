@@ -16,6 +16,7 @@ public:
 	}
 	static Node* parse(CompilerState &cs);
 	void walk(CompilerState &cs);
+	void genCode(CompilerState &cs);
 };
 
 #endif
