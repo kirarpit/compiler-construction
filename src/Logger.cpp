@@ -31,21 +31,29 @@ void Logger::logTerminal(Token tkn) {
 }
 
 void Logger::logParseEntry(std::string name, Token tkn) {
-	log("ParseEntry " + name + " @ " + tkn.stringify());
+//	log("ParseEntry " + name + " @ " + tkn.stringify());
 }
 
 void Logger::logParseExit(std::string name, Token tkn) {
-	log("ParseExit " + name + " @ " + tkn.stringify());
+//	log("ParseExit " + name + " @ " + tkn.stringify());
 }
 
 void Logger::logWalkEntry(std::string name, Node *node) {
-	log(
-			"WalkEntry " + name + ", Token:" + node->getToken().stringify()
-					+ ", Size: %d", node->getSize());
+//	log(
+//			"WalkEntry " + name + ", Token:" + node->getToken().stringify()
+//					+ ", Size: %d", node->getSize());
 }
 
 void Logger::logWalkExit(std::string name, Node *node) {
-	log(
-			"WalkExit " + name + ", Token:" + node->getToken().stringify()
-					+ ", Size: %d", node->getSize());
+//	log(
+//			"WalkExit " + name + ", Token:" + node->getToken().stringify()
+//					+ ", Size: %d", node->getSize());
+}
+
+void Logger::logGenCodeEntry(std::string name, Node *node) {
+	log("GenCode Entry " + name);
+}
+
+void Logger::logGenCodeExit(std::string name, Node *node) {
+	log("GenCode Exit " + name);
 }

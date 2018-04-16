@@ -13,7 +13,7 @@ public:
 	~TerminalNode();
 
 	void walk(CompilerState &cs);
-	void codeGen(CompilerState &cs);
+	Register genCode(CompilerState &cs);
 	void print(CompilerState &cs);
 
 	Token getToken();

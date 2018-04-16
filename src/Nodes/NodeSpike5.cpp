@@ -11,8 +11,9 @@ void NodeSpike5::compile(CompilerState &cs) {
 	Node *block = NodeBlock::parse(cs);
 	if (block) {
 		block->walk(cs);
-		block->print(cs);
 		block->genCode(cs);
+		cs.os << "\n";
+		block->print(cs);
 		delete block;
 	} else {
 		cs.es.recover(cs);
@@ -23,10 +24,4 @@ void NodeSpike5::compile(CompilerState &cs) {
 			lex.read();
 		}
 	}
-}
-
-void NodeSpike5::genCode(CompilerState &cs) {
-	Logger::logGenCodeEntry(__CLASS_NAME__, this);
-
-	Logger::logGenCodeExit(__CLASS_NAME__, this);
 }

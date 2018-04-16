@@ -14,7 +14,6 @@ public:
 	static Node* parse(CompilerState &cs);
 	void print(CompilerState &cs);
 	void walk(CompilerState &cs);
-	void genCode(CompilerState &cs);
 };
 
 #endif /* SRC_NODES_NODEIFSTMT_H_ */

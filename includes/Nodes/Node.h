@@ -7,6 +7,7 @@ class CompilerState;
 class SymbolTable;
 class Type;
 class Token;
+class Register;
 
 class Node {
 public:
@@ -15,7 +16,7 @@ public:
 
 	virtual void print(CompilerState &cs) = 0;
 	virtual void walk(CompilerState &cs) = 0;
-	virtual void genCode(CompilerState &cs) = 0;
+	virtual Register genCode(CompilerState &cs);
 
 	virtual void addNode(Node *node);
 	virtual void clearChildren();

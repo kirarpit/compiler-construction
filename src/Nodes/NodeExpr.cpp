@@ -42,8 +42,11 @@ void NodeExpr::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-void NodeExpr::genCode(CompilerState &cs) {
+Register NodeExpr::genCode(CompilerState &cs) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
+	genCodeAll(cs);
+
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return Register(-1);
 }

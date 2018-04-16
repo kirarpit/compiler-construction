@@ -37,6 +37,9 @@ public:
 	static void logWalkEntry(std::string name, Node *node);
 	static void logWalkExit(std::string name, Node *node);
 
+	static void logGenCodeEntry(std::string name, Node *node);
+	static void logGenCodeExit(std::string name, Node *node);
+
 	static bool debug;
 
 private:

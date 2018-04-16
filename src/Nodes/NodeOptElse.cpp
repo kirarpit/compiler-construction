@@ -43,9 +43,3 @@ void NodeOptElse::print(CompilerState &cs) {
 		}
 	}
 }
-
-void NodeOptElse::genCode(CompilerState &cs) {
-	Logger::logGenCodeEntry(__CLASS_NAME__, this);
-
-	Logger::logGenCodeExit(__CLASS_NAME__, this);
-}

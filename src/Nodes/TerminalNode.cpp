@@ -6,6 +6,9 @@
 #include<OutputStream.h>
 #include<Type.h>
 #include<TypeFactory.h>
+#include<CodeGenArgs.h>
+#include<Register.h>
+#include<RegisterFactory.h>
 
 TerminalNode::TerminalNode(Token tkn) :
 		token(tkn) {
@@ -38,7 +41,21 @@ void TerminalNode::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-void TerminalNode::codeGen(CompilerState &cs) {
+Register TerminalNode::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if ((token.type & TT_ID) || (token.type & TT_NUM)) {
+		if (cs.cg.develop == GET_ADDRESS) {
+			r1 = cs.rf.getAddress(cs, token);
+		} else if (cs.cg.develop == GET_VALUE) {
+			r1 = cs.rf.loadValue(cs, token);
+		}
+	}
+
+	return r1;
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
 }
 
 Token TerminalNode::getToken() {

@@ -1,11 +1,17 @@
 #include<Node.h>
 #include<Token.h>
+#include<Register.h>
+#include<CompilerState.h>
 
 Node::Node() :
 		isConstant(false), isTerminal(false), type(NULL) {
 }
 
 Node::~Node() {
+}
+
+Register Node::genCode(CompilerState &cs) {
+	return Register(-1);
 }
 
 void Node::addNode(Node *node) {
@@ -54,10 +60,4 @@ bool Node::isRemovable() {
 
 bool Node::isEmpty() {
 	return false;
-}
-
-void Node::genCode(CompilerState &cs) {
-	Logger::logGenCodeEntry(__CLASS_NAME__, this);
-
-	Logger::logGenCodeExit(__CLASS_NAME__, this);
 }

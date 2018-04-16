@@ -10,11 +10,13 @@ class ErrorStream;
 class SymbolTable;
 class Node;
 class TypeFactory;
+class RegisterFactory;
+class CodeGenArgs;
 
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
-			Lexer &lex, TypeFactory &tf);
+			Lexer &lex, TypeFactory &tf, RegisterFactory &rf, CodeGenArgs &cg);
 	virtual ~CompilerState();
 
 	InputStream &is;
@@ -23,6 +25,8 @@ public:
 	Lexer &lexer;
 
 	TypeFactory &tf;
+	RegisterFactory &rf;
+	CodeGenArgs &cg;
 
 	Node *lastBlock;
 };

@@ -21,8 +21,11 @@ int main(int argc, char **argv) {
 	Lexer lex = Lexer(input);
 	ErrorStream error(std::cerr);
 	TypeFactory typeFactory;
+	RegisterFactory regFactory;
+	CodeGenArgs codeGenArgs;
 
-	CompilerState cs(input, output, error, lex, typeFactory);
+	CompilerState cs(input, output, error, lex, typeFactory, regFactory,
+			codeGenArgs);
 
 	NodeSpike5::compile(cs);
 	exit(cs.es.getErrorCount());

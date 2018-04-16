@@ -11,7 +11,9 @@
 #include<OutputStream.h>
 #include<ErrorStream.h>
 #include<TypeFactory.h>
+#include<RegisterFactory.h>
 #include<Logger.h>
 #include<NodeSpike5.h>
+#include<CodeGenArgs.h>
 
 #endif /* INCLUDES_MAIN_H_ */

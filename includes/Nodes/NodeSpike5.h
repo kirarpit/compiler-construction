@@ -12,10 +12,9 @@ public:
 	}
 	~NodeSpike5() {
 	}
-	void print(CompilerState &cs) = 0;
 	static void compile(CompilerState &cs);
-	void walk(CompilerState &cs);
-	void genCode(CompilerState &cs);
+	void print(CompilerState &cs) = 0;
+	void walk(CompilerState &cs) = 0;
 };
 
 #endif /* SRC_NODES_NODESPIKE4_H_ */

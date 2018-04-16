@@ -101,9 +101,3 @@ void NodeIfStmt::print(CompilerState &cs) {
 		}
 	}
 }
-
-void NodeIfStmt::genCode(CompilerState &cs) {
-	Logger::logGenCodeEntry(__CLASS_NAME__, this);
-
-	Logger::logGenCodeExit(__CLASS_NAME__, this);
-}

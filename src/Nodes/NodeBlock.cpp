@@ -70,8 +70,13 @@ void NodeBlock::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-void NodeBlock::genCode(CompilerState &cs) {
+Register NodeBlock::genCode(CompilerState &cs) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
+	cs.lastBlock = this;
+	genCodeAll(cs);
+	cs.lastBlock = cs.lastBlock->getST()->exitScope();
+
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return Register(-1);
 }

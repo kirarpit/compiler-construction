@@ -98,6 +98,15 @@ void NodeStatement::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
+Register NodeStatement::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	genCodeAll(cs);
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return Register(-1);
+}
+
 void NodeStatement::print(CompilerState &cs) {
 	if (children.size() == 1) { //if or while statements
 		children[0]->print(cs);
@@ -127,10 +136,4 @@ void NodeStatement::print(CompilerState &cs) {
 		if (i == children.size() - 1)
 			cs.os << '\n';
 	}
-}
-
-void NodeStatement::genCode(CompilerState &cs) {
-	Logger::logGenCodeEntry(__CLASS_NAME__, this);
-
-	Logger::logGenCodeExit(__CLASS_NAME__, this);
 }

@@ -3,6 +3,8 @@
 #include<OutputStream.h>
 #include<Logger.h>
 #include<typeinfo>
+#include<RegisterFactory.h>
+#include<Register.h>
 
 NonTerminalNode::NonTerminalNode() {
 }
@@ -15,6 +17,28 @@ NonTerminalNode::~NonTerminalNode() {
 
 void NonTerminalNode::addNode(Node *node) {
 	children.push_back(node);
+}
+
+void NonTerminalNode::genCodeAll(CompilerState &cs) {
+	for (unsigned int i = 0; i < children.size(); i++) {
+		children[i]->genCode(cs);
+	}
+}
+
+Register NonTerminalNode::genCodeArithmetic(CompilerState &cs) {
+	Register r1(-1);
+
+	if (children.size() == 3) {
+		r1 = children[0]->genCode(cs);
+		cs.rf.storeTemp(cs, r1);
+
+		Register r2 = children[2]->genCode(cs);
+		r1 = cs.rf.loadTemp(cs);
+
+		cs.rf.doArithOperation(cs, r1, r2, children[1]);
+	}
+
+	return r1;
 }
 
 void NonTerminalNode::smartWalk(CompilerState &cs) {

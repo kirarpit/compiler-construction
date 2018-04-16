@@ -13,9 +13,12 @@
 #include<SymbolTable.h>
 #include<OutputStream.h>
 #include<Type.h>
+#include<CodeGenArgs.h>
+#include<Register.h>
 
 class Node;
 class CompilerState;
+class Register;
 
 class NonTerminalNode: public Node {
 public:
@@ -23,7 +26,6 @@ public:
 	~NonTerminalNode();
 
 	void walk(CompilerState &cs) = 0;
-	void genCode(CompilerState &cs) = 0;
 	void print(CompilerState &cs) = 0;
 
 	void addNode(Node *node);
@@ -42,6 +44,9 @@ public:
 	std::string getName();
 
 protected:
+	void genCodeAll(CompilerState &cs);
+	Register genCodeArithmetic(CompilerState &cs);
+
 	void smartWalk(CompilerState &cs);
 	void walkAllChildren(CompilerState &cs);
 	Node* reduceBranch(Node *node);
