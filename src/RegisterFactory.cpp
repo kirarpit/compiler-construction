@@ -3,7 +3,6 @@
 #include<SymbolTable.h>
 #include<Node.h>
 #include<VariableInfo.h>
-#include<Register.h>
 #include<Token.h>
 #include<OutputStream.h>
 
@@ -15,66 +14,103 @@ RegisterFactory::RegisterFactory() {
 RegisterFactory::~RegisterFactory() {
 }
 
+std::string RegisterFactory::getOpCode(std::string inst, int imm, int sig) {
+#define XX(a, b, c, d)	\
+	if (a == inst && b == imm && c == sig) {	\
+		return d;	\
+	}
+	OP_CODE_LIST
+#undef XX
+
+	return "";
+}
+
 Register RegisterFactory::getAddress(CompilerState &cs, Token t) {
-
-	int name = getFreeReg();
+	Register r1 = getFreeTempReg();
 	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
-	cs.os << "\tla t" << name << " " << v->offset << "($gp)\n";
 
-	Register r1(name);
+	Register r2(0, RT_GP, v->offset);
+	printInst(cs, "la", r1, r2);
+
 	return r1;
 }
 
 Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
+	Register r1 = getFreeTempReg();
 
-	int name = getFreeReg();
-	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
-	cs.os << "\tlw t" << name << " " << v->offset << "($gp)\n";
+	if (t.type & TT_ID) {
+		VariableInfo *v = cs.lastBlock->getST()->lookup(t);
+		Register r2(0, RT_GP, v->offset);
+		printInst(cs, "lw", r1, r2);
 
-	Register r1(name);
+	} else if (t.type & TT_NUM) {
+		cs.os << "\tli $t" << r1.name << " " << t.value << "\n";
+	}
+
 	return r1;
 }
 
 void RegisterFactory::storeTemp(CompilerState &cs, Register &r) {
-	cs.os << "\tmove $t2 $t" << r.name << "\n";
-	freeReg(r);
+	Register r2(2, RT_TEMP);
+	printInst(cs, "move", r2, r);
+	freeTempReg(r);
 }
 
 Register RegisterFactory::loadTemp(CompilerState &cs) {
-	int name = getFreeReg();
-	cs.os << "\tmove $t" << name << " $t2\n";
+	Register r1 = getFreeTempReg();
+	Register r2(2, RT_TEMP);
 
-	Register r(name);
-	return r;
+	printInst(cs, "move", r1, r2);
+	return r1;
 }
 
 void RegisterFactory::doArithOperation(CompilerState &cs, Register &r1,
 		Register &r2, Node *op) {
 
-	cs.os << "\t" << getInstruction(op) << " $t" << r1.name << " $t" << r1.name
-			<< " $t" << r2.name << "\n";
-	freeReg(r2);
-
-	cs.os << "\tmove $v0 $t" << r1.name << "\n";
-}
-
-std::string RegisterFactory::getInstruction(Node *op) {
-	std::string result = "";
-	if (op->getToken().value == "+") {
-		result = "add";
+	if (op->getToken().type & TT_TERM_OP) {
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r1, r2);
+	} else if (op->getToken().type & TT_FACTOR_OP) {
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r2);
+		printInst(cs, "mflo", r1);
 	}
-	return result;
+
+	freeTempReg(r2);
+
+	Register v0(0, RT_EVAL);
+	printInst(cs, "move", v0, r1);
 }
 
-void RegisterFactory::freeReg(Register &r) {
-	if (r.name == 1) {
-		t1 = false;
-	} else if (r.name == 0) {
-		t0 = false;
+void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
+		Register r1, Register r2, Register r3) {
+
+	cs.os << "\t" << opCode;
+	cs.os << " ";
+	r1.print(cs);
+
+	if (r2.name != -1) {
+		cs.os << " ";
+		r2.print(cs);
+	}
+
+	if (r3.name != -1) {
+		cs.os << " ";
+		r3.print(cs);
+	}
+
+	cs.os << "\n";
+}
+
+void RegisterFactory::freeTempReg(Register &r) {
+	if (r.type == RT_TEMP) {
+		if (r.name == 1) {
+			t1 = false;
+		} else if (r.name == 0) {
+			t0 = false;
+		}
 	}
 }
 
-int RegisterFactory::getFreeReg() {
+Register RegisterFactory::getFreeTempReg() {
 	int name = -1;
 	if (!t0) {
 		t0 = true;
@@ -84,5 +120,5 @@ int RegisterFactory::getFreeReg() {
 		name = 1;
 	}
 
-	return name;
+	return Register(name, RT_TEMP);
 }

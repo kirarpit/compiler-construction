@@ -20,8 +20,6 @@ void NodeSpike5::compile(CompilerState &cs) {
 
 		cs.os << "\tjr $ra\n";
 
-//		cs.os << "\n";
-//		block->print(cs);
 		delete block;
 	} else {
 		cs.es.recover(cs);
