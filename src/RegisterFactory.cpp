@@ -19,7 +19,7 @@ Register RegisterFactory::getAddress(CompilerState &cs, Token t) {
 
 	int name = getFreeReg();
 	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
-	cs.os << "la t" << name << " " << v->offset << "($gp)\n";
+	cs.os << "\tla t" << name << " " << v->offset << "($gp)\n";
 
 	Register r1(name);
 	return r1;
@@ -29,20 +29,20 @@ Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
 
 	int name = getFreeReg();
 	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
-	cs.os << "lw t" << name << " " << v->offset << "($gp)\n";
+	cs.os << "\tlw t" << name << " " << v->offset << "($gp)\n";
 
 	Register r1(name);
 	return r1;
 }
 
 void RegisterFactory::storeTemp(CompilerState &cs, Register &r) {
-	cs.os << "move $t2 $t" << r.name << "\n";
+	cs.os << "\tmove $t2 $t" << r.name << "\n";
 	freeReg(r);
 }
 
 Register RegisterFactory::loadTemp(CompilerState &cs) {
 	int name = getFreeReg();
-	cs.os << "move $t" << name << " $t2\n";
+	cs.os << "\tmove $t" << name << " $t2\n";
 
 	Register r(name);
 	return r;
@@ -51,11 +51,11 @@ Register RegisterFactory::loadTemp(CompilerState &cs) {
 void RegisterFactory::doArithOperation(CompilerState &cs, Register &r1,
 		Register &r2, Node *op) {
 
-	cs.os << getInstruction(op) << " $t" << r1.name << " $t" << r1.name << " $t"
-			<< r2.name << "\n";
+	cs.os << "\t" << getInstruction(op) << " $t" << r1.name << " $t" << r1.name
+			<< " $t" << r2.name << "\n";
 	freeReg(r2);
 
-	cs.os << "move $v0 $t" << r1.name << "\n";
+	cs.os << "\tmove $v0 $t" << r1.name << "\n";
 }
 
 std::string RegisterFactory::getInstruction(Node *op) {

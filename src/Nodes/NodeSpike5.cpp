@@ -11,9 +11,17 @@ void NodeSpike5::compile(CompilerState &cs) {
 	Node *block = NodeBlock::parse(cs);
 	if (block) {
 		block->walk(cs);
+		cs.os << "\t.text\n";
+		cs.os << "\t.align 4\n";
+		cs.os << "\t.globl main\n";
+		cs.os << "main:\n";
+
 		block->genCode(cs);
-		cs.os << "\n";
-		block->print(cs);
+
+		cs.os << "\tjr $ra\n";
+
+//		cs.os << "\n";
+//		block->print(cs);
 		delete block;
 	} else {
 		cs.es.recover(cs);
