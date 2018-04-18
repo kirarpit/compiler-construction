@@ -9,6 +9,8 @@
 RegisterFactory::RegisterFactory() {
 	t0 = false;
 	t1 = false;
+
+	offset = -32768;
 }
 
 RegisterFactory::~RegisterFactory() {
@@ -26,7 +28,7 @@ std::string RegisterFactory::getOpCode(std::string inst, int imm, int sig) {
 }
 
 Register RegisterFactory::getAddress(CompilerState &cs, Token t) {
-	Register r1 = getFreeTempReg();
+	Register r1(0, RT_TEMP);
 	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
 
 	Register r2(0, RT_GP, v->offset);
@@ -36,7 +38,7 @@ Register RegisterFactory::getAddress(CompilerState &cs, Token t) {
 }
 
 Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
-	Register r1 = getFreeTempReg();
+	Register r1(0, RT_TEMP);
 
 	if (t.type & TT_ID) {
 		VariableInfo *v = cs.lastBlock->getST()->lookup(t);
@@ -50,22 +52,24 @@ Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
 	return r1;
 }
 
-void RegisterFactory::storeTemp(CompilerState &cs, Register &r) {
-	Register r2(2, RT_TEMP);
-	printInst(cs, "move", r2, r);
-	freeTempReg(r);
+void RegisterFactory::storeTemp(CompilerState &cs, Register r1) {
+	Register r3(0, RT_GP, offset);
+	printInst(cs, "sw", r1, r3);
+
+	offset += 4;
 }
 
 Register RegisterFactory::loadTemp(CompilerState &cs) {
-	Register r1 = getFreeTempReg();
-	Register r2(2, RT_TEMP);
+	Register r2(1, RT_TEMP);
+	Register r3(0, RT_GP, (offset - 4));
 
-	printInst(cs, "move", r1, r2);
-	return r1;
+	printInst(cs, "lw", r2, r3);
+	offset -= 4;
+	return r2;
 }
 
-void RegisterFactory::doArithOperation(CompilerState &cs, Register &r1,
-		Register &r2, Node *op) {
+void RegisterFactory::doArithOperation(CompilerState &cs, Register r1,
+		Register r2, Node *op) {
 
 	if (op->getToken().type & TT_TERM_OP) {
 		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r1, r2);
@@ -73,8 +77,6 @@ void RegisterFactory::doArithOperation(CompilerState &cs, Register &r1,
 		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r2);
 		printInst(cs, "mflo", r1);
 	}
-
-	freeTempReg(r2);
 
 	Register v0(0, RT_EVAL);
 	printInst(cs, "move", v0, r1);
@@ -100,7 +102,7 @@ void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
 	cs.os << "\n";
 }
 
-void RegisterFactory::freeTempReg(Register &r) {
+void RegisterFactory::freeTempReg(Register r) {
 	if (r.type == RT_TEMP) {
 		if (r.name == 1) {
 			t1 = false;

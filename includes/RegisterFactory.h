@@ -2,10 +2,6 @@
 #define SRC_REGISTERFACTORY_H_
 
 #include<string>
-#include<iostream>
-#include<tuple>
-#include<set>
-#include<map>
 #include<Register.h>
 
 class VariableInfo;
@@ -43,9 +39,9 @@ public:
 
 	Register getAddress(CompilerState &cs, Token t);
 	Register loadValue(CompilerState &cs, Token t);
-	void storeTemp(CompilerState &cs, Register &r);
+	void storeTemp(CompilerState &cs, Register r);
 	Register loadTemp(CompilerState &cs);
-	void doArithOperation(CompilerState &cs, Register &r1, Register &r2,
+	void doArithOperation(CompilerState &cs, Register r1, Register r2,
 			Node *op);
 
 private:
@@ -53,9 +49,11 @@ private:
 	bool t1;
 
 	Register getFreeTempReg();
-	void freeTempReg(Register &r);
+	void freeTempReg(Register r);
 	void printInst(CompilerState &cs, std::string opCode, Register r1,
 			Register r2 = Register(-1), Register r3 = Register(-1));
+
+	int offset;
 };
 
 #endif /* SRC_REGISTERFACTORY_H_ */

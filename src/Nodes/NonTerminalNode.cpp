@@ -32,10 +32,10 @@ Register NonTerminalNode::genCodeArithmetic(CompilerState &cs) {
 		r1 = children[0]->genCode(cs);
 		cs.rf.storeTemp(cs, r1);
 
-		Register r2 = children[2]->genCode(cs);
-		r1 = cs.rf.loadTemp(cs);
+		r1 = children[2]->genCode(cs);
+		Register r2 = cs.rf.loadTemp(cs);
 
-		cs.rf.doArithOperation(cs, r1, r2, children[1]);
+		cs.rf.doArithOperation(cs, r2, r1, children[1]);
 	}
 
 	return r1;
