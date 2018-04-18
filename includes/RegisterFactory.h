@@ -43,6 +43,9 @@ public:
 	Register loadTemp(CompilerState &cs);
 	void doArithOperation(CompilerState &cs, Register r1, Register r2,
 			Node *op);
+	void printInst(CompilerState &cs, std::string opCode, Register r1,
+			Register r2 = Register(-1), Register r3 = Register(-1));
+	void printLIInst(CompilerState &cs, Register r1, int val);
 
 private:
 	bool t0;
@@ -50,8 +53,6 @@ private:
 
 	Register getFreeTempReg();
 	void freeTempReg(Register r);
-	void printInst(CompilerState &cs, std::string opCode, Register r1,
-			Register r2 = Register(-1), Register r3 = Register(-1));
 
 	int offset;
 };

@@ -35,7 +35,7 @@ Register NonTerminalNode::genCodeArithmetic(CompilerState &cs) {
 		r1 = children[2]->genCode(cs);
 		Register r2 = cs.rf.loadTemp(cs);
 
-		cs.rf.doArithOperation(cs, r2, r1, children[1]);
+		cs.rf.doArithOperation(cs, r2, r1, this);
 	}
 
 	return r1;

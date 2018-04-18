@@ -5,6 +5,7 @@
 #include<VariableInfo.h>
 #include<Token.h>
 #include<OutputStream.h>
+#include<Type.h>
 
 RegisterFactory::RegisterFactory() {
 	t0 = false;
@@ -43,10 +44,14 @@ Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
 	if (t.type & TT_ID) {
 		VariableInfo *v = cs.lastBlock->getST()->lookup(t);
 		Register r2(0, RT_GP, v->offset);
-		printInst(cs, "lw", r1, r2);
+
+		if (v->getAlignment() == 4)
+			printInst(cs, "lw", r1, r2);
+		else
+			printInst(cs, "lb", r1, r2);
 
 	} else if (t.type & TT_NUM) {
-		cs.os << "\tli $t" << r1.name << " " << t.value << "\n";
+		printLIInst(cs, r1, t.getIntVal());
 	}
 
 	return r1;
@@ -69,17 +74,27 @@ Register RegisterFactory::loadTemp(CompilerState &cs) {
 }
 
 void RegisterFactory::doArithOperation(CompilerState &cs, Register r1,
-		Register r2, Node *op) {
+		Register r2, Node *root) {
+
+	Node *op = root->getChild(1);
+	Type *t = root->getType();
+
+	int oc_s = -1;
+	if (t->typeName == TP_SIGNED) {
+		oc_s = OC_S;
+	} else {
+		oc_s = OC_US;
+	}
 
 	if (op->getToken().type & TT_TERM_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r1, r2);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r2, r1, r2);
 	} else if (op->getToken().type & TT_FACTOR_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r2);
-		printInst(cs, "mflo", r1);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r1, r2);
+		printInst(cs, "mflo", r2);
 	}
 
 	Register v0(0, RT_EVAL);
-	printInst(cs, "move", v0, r1);
+	printInst(cs, "move", v0, r2);
 }
 
 void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
@@ -100,6 +115,10 @@ void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
 	}
 
 	cs.os << "\n";
+}
+
+void RegisterFactory::printLIInst(CompilerState &cs, Register r1, int val) {
+	cs.os << "\tli $t" << r1.name << " " << val << "\n";
 }
 
 void RegisterFactory::freeTempReg(Register r) {

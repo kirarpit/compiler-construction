@@ -15,6 +15,7 @@
 #include<Type.h>
 #include<CodeGenArgs.h>
 #include<Register.h>
+#include<RegisterFactory.h>
 
 class Node;
 class CompilerState;

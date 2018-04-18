@@ -79,3 +79,23 @@ void NodeFactor::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+Register NodeFactor::genCode(CompilerState &cs) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() == 2) {
+		r1 = children[1]->genCode(cs);
+
+		Register r2 = Register(1, RT_TEMP);
+		cs.rf.printLIInst(cs, r2, -1);
+		cs.rf.printInst(cs, "mult", r2, r1);
+
+		cs.rf.printInst(cs, "mflo", r1);
+	} else {
+		genCodeAll(cs);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
+}
