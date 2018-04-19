@@ -103,10 +103,10 @@ Register NodeStatement::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 	Register r1(-1);
 	if (children.size() == 2) {
-		r1 = children[0]->genCode(cs);
+		r1 = children[0]->genCode(cs, cg);
 		cs.rf.printInst(cs, "move", Register(0, RT_EVAL), r1);
 	} else {
-		genCodeAll(cs);
+		genCodeAll(cs, cg);
 	}
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);

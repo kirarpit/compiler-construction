@@ -78,7 +78,7 @@ Register NodeBlock::genCode(CompilerState &cs, CodeGenArgs cg) {
 	if (children.size() <= 1) {
 
 		if (children.size() == 1)
-			r1 = children[0]->genCode(cs);
+			r1 = children[0]->genCode(cs, cg);
 
 		if (r1.name != -2 || !children.size()) {
 			r1 = Register(0, RT_TEMP);
@@ -86,7 +86,7 @@ Register NodeBlock::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printInst(cs, "move", Register(0, RT_EVAL), r1);
 		}
 	} else {
-		genCodeAll(cs);
+		genCodeAll(cs, cg);
 	}
 	cs.lastBlock = cs.lastBlock->getST()->exitScope();
 

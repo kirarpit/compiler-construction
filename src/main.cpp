@@ -22,10 +22,8 @@ int main(int argc, char **argv) {
 	ErrorStream error(std::cerr);
 	TypeFactory typeFactory;
 	RegisterFactory regFactory;
-	CodeGenArgs codeGenArgs;
 
-	CompilerState cs(input, output, error, lex, typeFactory, regFactory,
-			codeGenArgs);
+	CompilerState cs(input, output, error, lex, typeFactory, regFactory);
 
 	NodeSpike5::compile(cs);
 	exit(cs.es.getErrorCount());

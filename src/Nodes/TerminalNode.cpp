@@ -46,9 +46,9 @@ Register TerminalNode::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 	Register r1(-1);
 	if ((token.type & TT_ID) || (token.type & TT_NUM)) {
-		if (cs.cg.develop == GET_ADDRESS) {
+		if (cg.develop == GET_ADDRESS) {
 			r1 = cs.rf.getAddress(cs, token);
-		} else if (cs.cg.develop == GET_VALUE) {
+		} else if (cg.develop == GET_VALUE) {
 			r1 = cs.rf.loadValue(cs, token);
 		}
 	}

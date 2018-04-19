@@ -40,7 +40,7 @@ void NodeStatements::walk(CompilerState &cs) {
 Register NodeStatements::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
-	genCodeAll(cs);
+	genCodeAll(cs, cg);
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
 	return Register(-2);

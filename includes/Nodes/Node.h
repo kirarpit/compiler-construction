@@ -8,6 +8,7 @@ class SymbolTable;
 class Type;
 class Token;
 class Register;
+class CodeGenArgs;
 
 class Node {
 public:

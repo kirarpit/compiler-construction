@@ -18,7 +18,7 @@ void NodeSpike5::compile(CompilerState &cs) {
 			cs.os << "\t.globl main\n";
 			cs.os << "main:\n";
 
-			block->genCode(cs);
+			block->genCode(cs, CodeGenArgs());
 
 			cs.os << "\tjr $ra\n";
 		} else {

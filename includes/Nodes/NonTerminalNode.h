@@ -45,8 +45,8 @@ public:
 	std::string getName();
 
 protected:
-	void genCodeAll(CompilerState &cs);
-	Register genCodeArithmetic(CompilerState &cs);
+	void genCodeAll(CompilerState &cs, CodeGenArgs cg);
+	Register genCodeArithmetic(CompilerState &cs, CodeGenArgs cg);
 
 	void smartWalk(CompilerState &cs);
 	void walkAllChildren(CompilerState &cs);

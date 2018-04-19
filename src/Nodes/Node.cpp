@@ -2,6 +2,7 @@
 #include<Token.h>
 #include<Register.h>
 #include<CompilerState.h>
+#include<CodeGenArgs.h>
 
 Node::Node() :
 		isConstant(false), isTerminal(false), type(NULL) {

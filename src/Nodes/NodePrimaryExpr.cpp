@@ -64,5 +64,5 @@ Register NodePrimaryExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
-	return children[0]->genCode(cs);
+	return children[0]->genCode(cs, cg);
 }

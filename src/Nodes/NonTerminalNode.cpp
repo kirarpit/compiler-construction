@@ -19,20 +19,20 @@ void NonTerminalNode::addNode(Node *node) {
 	children.push_back(node);
 }
 
-void NonTerminalNode::genCodeAll(CompilerState &cs) {
+void NonTerminalNode::genCodeAll(CompilerState &cs, CodeGenArgs cg) {
 	for (unsigned int i = 0; i < children.size(); i++) {
-		children[i]->genCode(cs);
+		children[i]->genCode(cs, cg);
 	}
 }
 
-Register NonTerminalNode::genCodeArithmetic(CompilerState &cs) {
+Register NonTerminalNode::genCodeArithmetic(CompilerState &cs, CodeGenArgs cg) {
 	Register r1(-1);
 
 	if (children.size() == 3) {
-		r1 = children[0]->genCode(cs);
+		r1 = children[0]->genCode(cs, cg);
 		cs.rf.storeTemp(cs, r1);
 
-		r1 = children[2]->genCode(cs);
+		r1 = children[2]->genCode(cs, cg);
 		Register r2 = cs.rf.loadTemp(cs);
 
 		cs.rf.doArithOperation(cs, r2, r1, this);

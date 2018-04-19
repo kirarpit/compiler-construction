@@ -16,7 +16,7 @@ class CodeGenArgs;
 class CompilerState {
 public:
 	CompilerState(InputStream &in, OutputStream &out, ErrorStream &err,
-			Lexer &lex, TypeFactory &tf, RegisterFactory &rf, CodeGenArgs &cg);
+			Lexer &lex, TypeFactory &tf, RegisterFactory &rf);
 	virtual ~CompilerState();
 
 	InputStream &is;
@@ -26,7 +26,6 @@ public:
 
 	TypeFactory &tf;
 	RegisterFactory &rf;
-	CodeGenArgs &cg;
 
 	Node *lastBlock;
 };
