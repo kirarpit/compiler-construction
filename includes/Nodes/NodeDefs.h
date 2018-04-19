@@ -13,6 +13,9 @@ public:
 
 	void print(CompilerState &cs) {
 	}
+	bool isRemovable() {
+		return false;
+	}
 	static Node* parse(CompilerState &cs);
 	void walk(CompilerState &cs);
 	Register genCode(CompilerState &cs);

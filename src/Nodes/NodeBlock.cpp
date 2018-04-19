@@ -73,10 +73,20 @@ void NodeBlock::walk(CompilerState &cs) {
 Register NodeBlock::genCode(CompilerState &cs) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
+	Register r1(-1);
 	cs.lastBlock = this;
-	genCodeAll(cs);
+	if (children.size() == 1) {
+		r1 = children[0]->genCode(cs);
+
+		if (r1.name != -2) {
+			cs.rf.printInst(cs, "move", Register(0, RT_EVAL),
+					Register(0, RT_TEMP));
+		}
+	} else {
+		genCodeAll(cs);
+	}
 	cs.lastBlock = cs.lastBlock->getST()->exitScope();
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
-	return Register(-1);
+	return r1;
 }

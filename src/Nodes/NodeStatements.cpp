@@ -43,5 +43,5 @@ Register NodeStatements::genCode(CompilerState &cs) {
 	genCodeAll(cs);
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
-	return Register(-1);
+	return Register(-2);
 }

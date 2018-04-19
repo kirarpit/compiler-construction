@@ -88,9 +88,9 @@ void RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	}
 
 	if (op->getToken().type & TT_TERM_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r1, r2);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r2, r1);
 	} else if (op->getToken().type & TT_FACTOR_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r1, r2);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
 		printInst(cs, "mflo", r1);
 	} else if ((op->getToken().type & TT_REL_OP)
 			|| (op->getToken().type & TT_EQ_OP)) {
@@ -101,17 +101,22 @@ void RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 			printInst(cs, "sw", r3, Register(0, RT_GP, -4));
 		}
 
-		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r1, r2);
+		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r2, r1);
 		printInst(cs, "lb", r1, Register(0, RT_GP, -1));
-		printTarget(cs);
-		cs.os << ":\n";
+
+		cs.os << "\tb ";
+		printSkipTarget(cs);
+		cs.os << "\n";
+
+		printTargetLabel(cs);
 		printInst(cs, "lb", r1, Register(0, RT_GP, -4));
+
+		printSkipTargetLabel(cs);
 
 		target++;
 	}
 
 	Register v0(0, RT_EVAL);
-	printInst(cs, "move", v0, r1);
 }
 
 void RegisterFactory::printEQInst(CompilerState &cs, std::string opCode,
@@ -125,11 +130,22 @@ void RegisterFactory::printEQInst(CompilerState &cs, std::string opCode,
 	cs.os << " ";
 	printTarget(cs);
 	cs.os << "\n";
-
 }
 
 void RegisterFactory::printTarget(CompilerState &cs) {
 	cs.os << "target" << target;
+}
+
+void RegisterFactory::printTargetLabel(CompilerState &cs) {
+	cs.os << "target" << target << ":\n";
+}
+
+void RegisterFactory::printSkipTarget(CompilerState &cs) {
+	cs.os << "skiptarget" << target;
+}
+
+void RegisterFactory::printSkipTargetLabel(CompilerState &cs) {
+	cs.os << "skiptarget" << target << ":\n";
 }
 
 void RegisterFactory::printInst(CompilerState &cs, std::string opCode,

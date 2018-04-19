@@ -45,8 +45,14 @@ void NodeExpr::walk(CompilerState &cs) {
 Register NodeExpr::genCode(CompilerState &cs) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
-	genCodeAll(cs);
+	Register r1(-1);
+	if (children.size() == 1) {
+		r1 = children[0]->genCode(cs);
+	} else {
+		r1 = children[0]->genCode(cs);
+		r1 = children[2]->genCode(cs);
+	}
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
-	return Register(-1);
+	return r1;
 }
