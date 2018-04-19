@@ -38,7 +38,7 @@ void NodeDefs::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-Register NodeDefs::genCode(CompilerState &cs) {
+Register NodeDefs::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);

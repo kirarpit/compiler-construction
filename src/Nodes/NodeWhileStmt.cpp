@@ -81,7 +81,7 @@ void NodeWhileStmt::print(CompilerState &cs) {
 	}
 }
 
-//void NodeWhileStmt::genCode(CompilerState &cs) {
+//void NodeWhileStmt::genCode(CompilerState &cs, CodeGenArgs cg) {
 //	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 //
 //	Logger::logGenCodeExit(__CLASS_NAME__, this);

@@ -70,7 +70,7 @@ void NodeBlock::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-Register NodeBlock::genCode(CompilerState &cs) {
+Register NodeBlock::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Register r1(-1);

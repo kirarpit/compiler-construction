@@ -16,7 +16,7 @@ public:
 
 	virtual void print(CompilerState &cs) = 0;
 	virtual void walk(CompilerState &cs) = 0;
-	virtual Register genCode(CompilerState &cs);
+	virtual Register genCode(CompilerState &cs, CodeGenArgs cg);
 
 	virtual void addNode(Node *node);
 	virtual void clearChildren();

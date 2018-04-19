@@ -41,7 +41,7 @@ void TerminalNode::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-Register TerminalNode::genCode(CompilerState &cs) {
+Register TerminalNode::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Register r1(-1);

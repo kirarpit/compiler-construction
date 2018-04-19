@@ -80,7 +80,7 @@ void NodeFactor::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-Register NodeFactor::genCode(CompilerState &cs) {
+Register NodeFactor::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Register r1(-1);

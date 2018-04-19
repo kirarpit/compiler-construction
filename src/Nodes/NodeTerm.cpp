@@ -42,7 +42,7 @@ void NodeTerm::walk(CompilerState &cs) {
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
 
-Register NodeTerm::genCode(CompilerState &cs) {
+Register NodeTerm::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Register r1 = genCodeArithmetic(cs);

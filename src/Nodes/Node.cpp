@@ -10,7 +10,7 @@ Node::Node() :
 Node::~Node() {
 }
 
-Register Node::genCode(CompilerState &cs) {
+Register Node::genCode(CompilerState &cs, CodeGenArgs cg) {
 	return Register(-1);
 }
 
