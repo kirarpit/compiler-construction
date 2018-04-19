@@ -8,7 +8,7 @@ REGISTER_TYPE_LIST };
 #undef XX
 
 void Register::print(CompilerState &cs) {
-	if (offset != -1) {
+	if (offset != 40000) {
 		cs.os << offset << "(";
 	}
 
@@ -16,7 +16,7 @@ void Register::print(CompilerState &cs) {
 	if (name != -1 && type != RT_GP)
 		cs.os << name;
 
-	if (offset != -1) {
+	if (offset != 40000) {
 		cs.os << ")";
 	}
 }

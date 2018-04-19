@@ -21,7 +21,7 @@ class CompilerState;
 
 class Register {
 public:
-	Register(int name, int type = -1, int offset = -1) :
+	Register(int name, int type = -1, int offset = 40000) :
 			name(name), type(type), offset(offset) {
 	}
 	virtual ~Register() {

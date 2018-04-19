@@ -28,6 +28,12 @@ enum {
 		XX("*", OC_NI, OC_US, "multu") \
 		XX("/", OC_NI, OC_S, "div") \
 		XX("/", OC_NI, OC_US, "divu") \
+		XX("==", OC_NI, OC_US, "beq") \
+		XX("!=", OC_NI, OC_US, "bne") \
+		XX("<", OC_NI, OC_US, "blt") \
+		XX(">", OC_NI, OC_US, "bge") \
+		XX("<=", OC_NI, OC_US, "ble") \
+		XX(">=", OC_NI, OC_US, "bge") \
 
 
 class RegisterFactory {
@@ -53,8 +59,11 @@ private:
 
 	Register getFreeTempReg();
 	void freeTempReg(Register r);
+	void printTarget(CompilerState &cs);
+	void printEQInst(CompilerState &cs, std::string opCode, Register r1, Register r2);
 
 	int offset;
+	int target;
 };
 
 #endif /* SRC_REGISTERFACTORY_H_ */
