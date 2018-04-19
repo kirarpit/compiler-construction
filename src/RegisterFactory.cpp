@@ -49,7 +49,7 @@ Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
 		if (v->getAlignment() == 4)
 			printInst(cs, "lw", r1, r2);
 		else
-			printInst(cs, "lb", r1, r2);
+			printInst(cs, "lbu", r1, r2);
 
 	} else if (t.type & TT_NUM) {
 		printLIInst(cs, r1, t.getIntVal());
@@ -95,28 +95,20 @@ void RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	} else if ((op->getToken().type & TT_REL_OP)
 			|| (op->getToken().type & TT_EQ_OP)) {
 
-		if (!target) {
-			Register r3(2, RT_TEMP);
-			printLIInst(cs, r3, 1);
-			printInst(cs, "sw", r3, Register(0, RT_GP, -4));
-		}
-
 		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r2, r1);
-		printInst(cs, "lb", r1, Register(0, RT_GP, -1));
+		printLIInst(cs, r1, 0);
 
 		cs.os << "\tb ";
 		printSkipTarget(cs);
 		cs.os << "\n";
 
 		printTargetLabel(cs);
-		printInst(cs, "lb", r1, Register(0, RT_GP, -4));
+		printLIInst(cs, r1, 1);
 
 		printSkipTargetLabel(cs);
 
 		target++;
 	}
-
-	Register v0(0, RT_EVAL);
 }
 
 void RegisterFactory::printEQInst(CompilerState &cs, std::string opCode,

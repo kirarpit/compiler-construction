@@ -75,12 +75,15 @@ Register NodeBlock::genCode(CompilerState &cs) {
 
 	Register r1(-1);
 	cs.lastBlock = this;
-	if (children.size() == 1) {
-		r1 = children[0]->genCode(cs);
+	if (children.size() <= 1) {
 
-		if (r1.name != -2) {
-			cs.rf.printInst(cs, "move", Register(0, RT_EVAL),
-					Register(0, RT_TEMP));
+		if (children.size() == 1)
+			r1 = children[0]->genCode(cs);
+
+		if (r1.name != -2 || !children.size()) {
+			r1 = Register(0, RT_TEMP);
+			cs.rf.printLIInst(cs, r1, 0);
+			cs.rf.printInst(cs, "move", Register(0, RT_EVAL), r1);
 		}
 	} else {
 		genCodeAll(cs);
