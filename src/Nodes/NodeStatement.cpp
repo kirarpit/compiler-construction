@@ -101,13 +101,9 @@ void NodeStatement::walk(CompilerState &cs) {
 Register NodeStatement::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
-	Register r1(-1);
-	if (children.size() == 2) {
-		r1 = children[0]->genCode(cs, cg);
-		cs.rf.printInst(cs, "move", Register(0, RT_EVAL), r1);
-	} else {
-		genCodeAll(cs, cg);
-	}
+	Register r1(0, RT_TEMP);
+	genCodeAll(cs, cg);
+	cs.rf.printInst(cs, "move", Register(0, RT_EVAL), r1);
 
 	Logger::logGenCodeExit(__CLASS_NAME__, this);
 	return r1;
