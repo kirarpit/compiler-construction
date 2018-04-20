@@ -99,8 +99,6 @@ Register NodeFactor::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 			cs.rf.printInst(cs, "mflo", r1);
 		} else if (children[0]->getToken().type & TT_POSTUN_OP) {
-			int oc_s = children[1]->getType()->isSigned() ? OC_S : OC_US;
-
 			cg.develop = GET_ADDRESS;
 			r1 = children[1]->genCode(cs, cg);
 			cs.rf.storeTemp(cs, r1);
@@ -113,7 +111,7 @@ Register NodeFactor::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printLIInst(cs, r2, 1);
 
 			cs.rf.printInst(cs,
-					cs.rf.getOpCode(children[0]->getToken().value, OC_NI, oc_s),
+					cs.rf.getOpCode(children[0]->getToken().value, OC_NI, OC_US),
 					r1, r1, r2);
 
 			r2 = cs.rf.loadTemp(cs);

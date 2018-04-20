@@ -90,7 +90,7 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	}
 
 	if (op->getToken().type & TT_TERM_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_S), r1, r2, r1);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r1, r2, r1);
 	} else if (op->getToken().type & TT_FACTOR_OP) {
 		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
 		printInst(cs, "mflo", r1);

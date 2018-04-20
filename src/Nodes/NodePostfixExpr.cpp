@@ -93,8 +93,6 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 	if (children.size() == 2) {
 		if (children[1]->isTerminal) {
-			int oc_s = children[0]->getType()->isSigned() ? OC_S : OC_US;
-
 			cg.develop = GET_ADDRESS;
 			r1 = children[0]->genCode(cs, cg);
 			cs.rf.storeTemp(cs, r1);
@@ -108,7 +106,7 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printLIInst(cs, r2, 1);
 
 			cs.rf.printInst(cs,
-					cs.rf.getOpCode(children[1]->getToken().value, OC_NI, oc_s),
+					cs.rf.getOpCode(children[1]->getToken().value, OC_NI, OC_US),
 					r1, r3, r2);
 
 			r2 = cs.rf.loadTemp(cs);
