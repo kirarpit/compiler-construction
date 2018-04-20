@@ -59,6 +59,12 @@ void NodeCondExpr::walk(CompilerState &cs) {
 		if (temp)
 			children[0] = temp;
 
+		if (!children[0]->getType()->isBool()) {
+			cs.es.reportTypeError(cs, children[0]->getToken(),
+					children[0]->getType(),
+					"value of type '%t' is not contextually convertible to 'bool'");
+		}
+
 		if (children[0]->isConstant) {
 			Node *temp = NULL;
 			int index = -1;
@@ -78,6 +84,23 @@ void NodeCondExpr::walk(CompilerState &cs) {
 		}
 	}
 	smartWalk(cs);
+
+	if (children.size() == 5) {
+		if (children[2]->getType() != children[4]->getType()) {
+			cs.es.reportOpTypeError(cs, children[1]->getToken(),
+					children[2]->getType(), children[4]->getType(),
+					"invalid operands to binary expression ('%t1' and '%t2')");
+		} else
+			type = children[2]->getType();
+	}
+
+	if (children.size() == 1) {
+		if (children[0]->isAssignable)
+			assignable();
+	} else {
+		if (children[2]->isAssignable && children[4]->isAssignable)
+			assignable();
+	}
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }

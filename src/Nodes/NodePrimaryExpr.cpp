@@ -10,6 +10,7 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 	if (lex.peek().type == TT_ID) {
 		Token id = lex.read();
 		primaryExpr->addNode(new TerminalNode(id));
+		primaryExpr->assignable();
 
 		if (!cs.lastBlock->getST()->isDef) {
 			if (!cs.lastBlock->getST()->insertOrUpdateVar(cs, id)) {
@@ -27,6 +28,8 @@ Node* NodePrimaryExpr::parse(CompilerState &cs) {
 		Node *expr = NodeExpr::parse(cs);
 		if (expr) {
 			primaryExpr->addNode(expr);
+			if (expr->isAssignable)
+				primaryExpr->assignable();
 
 			if (lex.peek().value == TokenTable::TS[TN_clspar]) {
 				Logger::logTerminal(lex.peek());

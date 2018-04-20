@@ -35,7 +35,7 @@ Register NonTerminalNode::genCodeArithmetic(CompilerState &cs, CodeGenArgs cg) {
 		r1 = children[2]->genCode(cs, cg);
 		Register r2 = cs.rf.loadTemp(cs);
 
-		cs.rf.doArithOperation(cs, r2, r1, this);
+		r1 = cs.rf.doArithOperation(cs, r2, r1, this);
 	}
 
 	return r1;
@@ -76,22 +76,24 @@ Node* NonTerminalNode::reduceBranch(Node *node) {
 }
 
 void NonTerminalNode::typeProp(CompilerState &cs) {
+	Logger::log("Type Propagating");
+
 	if (children.size() == 1) {
 		type = children[0]->getType();
 
 	} else if (children.size() == 3) {
-		Logger::log("Type Propagating");
-
 		if (children[0]->getType() && children[2]->getType())
 			type = Type::getOperatorType(cs, children[1]->getToken(),
 					children[0]->getType(), children[2]->getType());
 	}
+
+	Logger::log("Exit Type Propagating");
 }
 
 void NonTerminalNode::constFold(CompilerState &cs) {
-	if (children.size() == 3) {
-		Logger::log("Constant Folding");
+	Logger::log("Constant Folding");
 
+	if (children.size() == 3) {
 		if (children[0]->isConstant && children[2]->isConstant) {
 			Node* terminalNode = Type::constantFold(cs, children[1]->getToken(),
 					children[0]->getToken(), children[2]->getToken());
@@ -103,6 +105,8 @@ void NonTerminalNode::constFold(CompilerState &cs) {
 			}
 		}
 	}
+
+	Logger::log("Exit Constant Folding");
 }
 
 Node* NonTerminalNode::getChild(int index) {

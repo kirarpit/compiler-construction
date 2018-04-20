@@ -34,6 +34,10 @@ enum {
 		XX(">", OC_NI, OC_US, "bgt") \
 		XX("<=", OC_NI, OC_US, "ble") \
 		XX(">=", OC_NI, OC_US, "bge") \
+		XX("--", OC_NI, OC_US, "subu") \
+		XX("--", OC_NI, OC_S, "sub") \
+		XX("++", OC_NI, OC_US, "addu") \
+		XX("++", OC_NI, OC_S, "add") \
 
 
 class RegisterFactory {
@@ -47,7 +51,7 @@ public:
 	Register loadValue(CompilerState &cs, Token t);
 	void storeTemp(CompilerState &cs, Register r);
 	Register loadTemp(CompilerState &cs);
-	void doArithOperation(CompilerState &cs, Register r1, Register r2,
+	Register doArithOperation(CompilerState &cs, Register r1, Register r2,
 			Node *op);
 	void printInst(CompilerState &cs, std::string opCode, Register r1,
 			Register r2 = Register(-1), Register r3 = Register(-1));

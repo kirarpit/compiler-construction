@@ -35,8 +35,11 @@ public:
 	virtual SymbolTable* getST();
 	virtual bool findPostfixExpr();
 
+	void assignable();
+
 	bool isConstant;
 	bool isTerminal;
+	bool isAssignable;
 
 protected:
 	Type *type;

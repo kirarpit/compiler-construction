@@ -17,6 +17,9 @@ TerminalNode::TerminalNode(Token tkn) :
 	if (tkn.type & TT_NUM) {
 		isConstant = true;
 	}
+	if (tkn.type & TT_ID) {
+		isAssignable = true;
+	}
 
 	Logger::logTerminal(tkn);
 }

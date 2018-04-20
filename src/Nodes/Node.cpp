@@ -5,10 +5,14 @@
 #include<CodeGenArgs.h>
 
 Node::Node() :
-		isConstant(false), isTerminal(false), type(NULL) {
+		isConstant(false), isTerminal(false), isAssignable(false), type(NULL) {
 }
 
 Node::~Node() {
+}
+
+void Node::assignable() {
+	isAssignable = true;
 }
 
 Register Node::genCode(CompilerState &cs, CodeGenArgs cg) {

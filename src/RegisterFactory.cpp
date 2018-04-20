@@ -74,7 +74,7 @@ Register RegisterFactory::loadTemp(CompilerState &cs) {
 	return r2;
 }
 
-void RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
+Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 		Register r1, Node *root) {
 
 	Node *op = root->getChild(1);
@@ -109,6 +109,8 @@ void RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 
 		target++;
 	}
+
+	return r1;
 }
 
 void RegisterFactory::printEQInst(CompilerState &cs, std::string opCode,

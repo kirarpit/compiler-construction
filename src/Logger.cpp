@@ -39,15 +39,15 @@ void Logger::logParseExit(std::string name, Token tkn) {
 }
 
 void Logger::logWalkEntry(std::string name, Node *node) {
-//	log(
-//			"WalkEntry " + name + ", Token:" + node->getToken().stringify()
-//					+ ", Size: %d", node->getSize());
+	log(
+			"WalkEntry " + name + ", Token:" + node->getToken().stringify()
+					+ ", Size: %d", node->getSize());
 }
 
 void Logger::logWalkExit(std::string name, Node *node) {
-//	log(
-//			"WalkExit " + name + ", Token:" + node->getToken().stringify()
-//					+ ", Size: %d", node->getSize());
+	log(
+			"WalkExit " + name + ", Token:" + node->getToken().stringify()
+					+ ", Size: %d", node->getSize());
 }
 
 void Logger::logGenCodeEntry(std::string name, Node *node) {

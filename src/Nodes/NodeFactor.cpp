@@ -34,6 +34,7 @@ void NodeFactor::walk(CompilerState &cs) {
 
 	smartWalk(cs);
 
+	bool addressableCheck = false;
 	std::string val = children[0]->getToken().value;
 	if (children.size() == 2) {
 		Type *tp = children[1]->getType();
@@ -47,6 +48,7 @@ void NodeFactor::walk(CompilerState &cs) {
 				cs.es.reportTypeError(cs, children[0]->getToken(), tp,
 						"cannot pre increment/decrement value of type '%t'");
 			}
+			addressableCheck = true;
 
 		} else if (val == TokenTable::TS[TN_minus]) {
 			if (tp->isSigned() || tp->isUnsigned()) {
@@ -68,9 +70,12 @@ void NodeFactor::walk(CompilerState &cs) {
 			}
 
 		} else if (val == TokenTable::TS[TN_and]) {
-			if (!children[1]->isConstant) { //or maybe this should be ID only
-				type = cs.tf.getAddressType(tp);
-			} else {
+			type = cs.tf.getAddressType(tp);
+			addressableCheck = true;
+		}
+
+		if (addressableCheck) {
+			if (!children[1]->isAssignable) {
 				cs.es.reportTypeError(cs, children[0]->getToken(), tp,
 						"cannot take the address of an rvalue of type '%t'");
 			}

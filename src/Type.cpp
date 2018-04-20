@@ -89,8 +89,7 @@ Type* Type::deref(CompilerState &cs, Token tn, int tp) {
 	if (typeOf == NULL) {
 		cs.es.reportTypeError(cs, tn, this,
 				"indirection requires pointer operand");
-	}
-	if (typeName != tp) {
+	} else if (typeName != tp) {
 		cs.es.reportTypeError(cs, tn, this, "type array and pointer mismatch");
 	}
 
