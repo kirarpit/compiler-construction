@@ -1,57 +1,51 @@
-                 CS554 Spike4 - LOBO-C TYPE PROPAGATION AND 
-		 		CONSTANT FOLDING
+                 CS554 Spike5 - LOBO-C MIPS CODE GENERATION
 
   CONTACT INFORMATION
 
      Author:          Arpit Garg
      Email(s):        iarpitgarg@gmail.com, kiralobo@cs.unm.edu
-     Date:            Tue March 27 12:05:15 2018 
+     Date:            Fri April 20 16:55:15 2018 
                                                
   CONTENT DESCRIPTION                          
                                                
-    Spike4 is a standalone program -- written in C, C++, or Java
-    -- that reads a legal LOBO-C block from a filename supplied on the
-    command line, or from standard input, then prints, to standard
-    output, a variety of information about the LOBO-C code. The output
-    format for spike4 is called 'BOTLPIF', which stands for 'block-oriented
-    type-labeled parenthesized infix form'. See spike4.txt in spikes
-    folder in the root directory for a complete description.
+    Spike5 is a standalone program -- written in C++ -- that reads
+    a legal LOBO-C block from a filename supplied on the command 
+    line, or from standard input, then prints, to standard output, 
+    MIPS assembly code. Spike5 will be tested using the 'tlc' testing
+    framework which can be found under spike5 folder. See spike5.txt in
+    spikes folder in the root directory for a complete description.
 
   SPECIFICATION ISSUES
 
-    The following discussion is with respect to the spike4.txt
+    The following discussion is with respect to the spike5.txt
     specification. The following issues were noted during project
     development, presented along with the chosen resolutions:
                                                              
-    - ISSUE #1: The program does have some memory leakages majorly because
-      of not well defined ownership of the type objects.
-    - RESOLUTION: Should be resolved after flyweight design pattern
-      is implemented before the next spike.
+    - ISSUE #1: The spec doesn't say much about comma operator type
+    rules and usage.
+    - RESOLUTION: Comma operator, doesn't preserve the lvalue and is
+    neither assignable according to the implementation. Check 
+    'tests/t10.loboc' for more info.
 
   IMPLEMENTATION SPECIFICS           
 
-    The enclosed spike4 is a fully-conforming implementation of the
-    spike4.txt specification, passing all supplied tests.
+    The enclosed spike5 is a fully-conforming implementation of the
+    spike5.txt specification, passing all supplied tests.
     
-    - SPECIFIC #1: Error recovery while parsing AST is being done in the
-      same way as spike3 but no error recovery is performed if an error
-      occurs during type propogation and constant folding, and the program
-      exits with status 1
+    - SPECIFIC #1: In case any errors apart from runtime errors are 
+    encountered, the assembly code is not printed, instead Spike4 output
+    with error messages are shown to help understand the errors.
 
   BUILD AND MAKE SPECIFICS           
 
     How to build and test?
      - `make` 		- compiles and builds the source code
-     - `make test` 	- for automatically checking all the *.s4i test
-			  cases with their corresponding outputs in
-			  *.s4o files in 'tests' directory without the
-			  whitespace differences 
      - `make realclean` - removes the object files and executables
 
     How to use?
-     - ./spike4 <filename> 	- reads the supplied file and returns 
+     - ./spike5 <filename> 	- reads the supplied file and returns 
      				  output as standard output
-     - cat <filename> | ./spike4 - takes file contents as standard input
+     - cat <filename> | ./spike5 - takes file contents as standard input
 				  and returns output as standard output
 
   ACKNOWLEDGMENTS:
@@ -60,4 +54,7 @@
                                               
   KNOWN BUGS:
 
-     No known bugs. Please email in case any bugs are found.
+     - Might encounter Segment fault in case when type propagation fails 
+     and the compiler tries to find more errors.
+     - ISEQ4 pointer dereference might not output correct assembly code in
+     case there multiple types involved.
