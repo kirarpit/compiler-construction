@@ -34,28 +34,7 @@ void VariableInfo::print(CompilerState &cs) {
 }
 
 int VariableInfo::getSize() {
-	int size = 1;
-	Type *temp = type;
-	while (temp) {
-
-		if (temp->typeName == TP_POINTER) {
-			size *= 4;
-			break;
-
-		} else if (temp->typeName == TP_ARRAY) {
-			size *= temp->size;
-
-		} else if (temp->typeName == TP_BOOL) {
-			size *= 1;
-
-		} else if (temp->typeName == TP_SIGNED
-				|| temp->typeName == TP_UNSIGNED) {
-			size *= 4;
-		}
-
-		temp = temp->typeOf;
-	}
-	return size;
+	return type->getFullSize();
 }
 
 int VariableInfo::getAlignment() {

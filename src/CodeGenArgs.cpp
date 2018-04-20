@@ -1,7 +1,7 @@
 #include <CodeGenArgs.h>
 
 CodeGenArgs::CodeGenArgs() {
-	develop = 0;
+	develop = GET_VALUE;
 }
 
 CodeGenArgs::~CodeGenArgs() {

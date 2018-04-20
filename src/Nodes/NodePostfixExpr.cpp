@@ -88,6 +88,7 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 	Logger::logGenCodeEntry(__CLASS_NAME__, this);
 
 	Register r1(-1);
+	int develop = cg.develop;
 
 	if (children.size() == 2) {
 		if (children[1]->isTerminal) {
@@ -99,6 +100,27 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printInst(cs,
 					cs.rf.getOpCode(children[1]->getToken().value, OC_NI, oc_s),
 					r1, r1, r2);
+		} else {
+			cg.develop = GET_ADDRESS;
+			r1 = children[0]->genCode(cs, cg);
+			cs.rf.storeTemp(cs, r1);
+
+			cg.develop = GET_VALUE;
+			r1 = children[1]->genCode(cs, cg);
+
+			Register r2(1, RT_TEMP);
+			cs.rf.printLIInst(cs, r2, type->getFullSize());
+			cs.rf.printInst(cs, "multu", r1, r2);
+			cs.rf.printInst(cs, "mflo", r1);
+
+			r2 = cs.rf.loadTemp(cs);
+			cs.rf.printInst(cs, "addu", r1, r1, r2);
+
+			if (develop == GET_VALUE) {
+				r2 = r1;
+				r2.offset = 0;
+				cs.rf.printInst(cs, "lw", r1, r2);
+			}
 		}
 	} else {
 		genCodeAll(cs, cg);

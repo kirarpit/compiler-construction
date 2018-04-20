@@ -42,6 +42,8 @@ public:
 	bool isPointer();
 	bool isNumericType();
 
+	int getFullSize();
+
 	static Type* getOperatorType(CompilerState &cs, Token tkn, Type *t1,
 			Type *t2);
 	static Node* constantFold(CompilerState &cs, Token tkn, Token t1, Token t2);

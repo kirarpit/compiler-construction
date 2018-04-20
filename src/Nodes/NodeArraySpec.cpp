@@ -64,3 +64,15 @@ void NodeArraySpec::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+Register NodeArraySpec::genCode(CompilerState &cs, CodeGenArgs cg) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() == 3) {
+		r1 = children[1]->genCode(cs, cg);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
+}
