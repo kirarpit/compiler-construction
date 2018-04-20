@@ -145,9 +145,19 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 						cs.rf.printInst(cs, "lbu", r1, r2);
 				}
 			} else {
-				r1 = children[0]->genCode(cs, cg);
-
 				if (develop == GET_VALUE) {
+					r1 = children[0]->genCode(cs, cg);
+
+					Register r2 = r1;
+					r2.offset = 0;
+					if (!type->isBool()) {
+						cs.rf.printInst(cs, "lw", r1, r2);
+					} else {
+						cs.rf.printInst(cs, "lbu", r1, r2);
+					}
+				} else {
+					r1 = children[0]->genCode(cs, cg);
+
 					Register r2 = r1;
 					r2.offset = 0;
 					cs.rf.printInst(cs, "lw", r1, r2);
