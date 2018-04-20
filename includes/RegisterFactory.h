@@ -50,7 +50,7 @@ public:
 	Register getAddress(CompilerState &cs, Token t);
 	Register loadValue(CompilerState &cs, Token t);
 	void storeTemp(CompilerState &cs, Register r);
-	Register loadTemp(CompilerState &cs);
+	Register loadTemp(CompilerState &cs, Register r = Register(1, RT_TEMP));
 	Register doArithOperation(CompilerState &cs, Register r1, Register r2,
 			Node *op);
 	void printInst(CompilerState &cs, std::string opCode, Register r1,
@@ -69,7 +69,8 @@ private:
 	void printTargetLabel(CompilerState &cs);
 	void printSkipTargetLabel(CompilerState &cs);
 
-	void printEQInst(CompilerState &cs, std::string opCode, Register r1, Register r2);
+	void printEQInst(CompilerState &cs, std::string opCode, Register r1,
+			Register r2);
 
 	int offset;
 	int target;

@@ -9,8 +9,9 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 	Node *primaryExpr = NodePrimaryExpr::parse(cs);
 	if (primaryExpr) {
 		postfixExpr->addNode(primaryExpr);
-		if (primaryExpr->isAssignable)
+		if (primaryExpr->isAssignable) {
 			postfixExpr->assignable();
+		}
 	} else {
 		delete postfixExpr;
 		return NULL;
@@ -28,9 +29,8 @@ Node* NodePostfixExpr::parse(CompilerState &cs) {
 			Node *arraySpec = NodeArraySpec::parse(cs);
 
 			if (arraySpec) {
-				postfixExpr->assignable();
 				Node *tempPostfixExpr = new NodePostfixExpr();
-
+				tempPostfixExpr->assignable();
 				tempPostfixExpr->addNode(postfixExpr);
 				tempPostfixExpr->addNode(arraySpec);
 
@@ -56,13 +56,14 @@ void NodePostfixExpr::walk(CompilerState &cs) {
 	if (children.size() == 2) {
 		if (children[1]->isTerminal) {
 			Type *tp = children[0]->getType();
-			if (tp->isSigned() || tp->isUnsigned() || tp->isPointer()) {
-				type = tp;
-			} else {
-				cs.es.reportTypeError(cs, children[1]->getToken(), tp,
-						"cannot post increment/decrement value of type '%t'");
+			if (tp) {
+				if (tp->isSigned() || tp->isUnsigned() || tp->isPointer()) {
+					type = tp;
+				} else {
+					cs.es.reportTypeError(cs, children[1]->getToken(), tp,
+							"cannot post increment/decrement value of type '%t'");
+				}
 			}
-
 			if (!children[0]->isAssignable) {
 				cs.es.reportTypeError(cs, children[1]->getToken(), tp,
 						"cannot take the address of an rvalue of type '%t'");
@@ -94,12 +95,27 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 		if (children[1]->isTerminal) {
 			int oc_s = children[0]->getType()->isSigned() ? OC_S : OC_US;
 
+			cg.develop = GET_ADDRESS;
 			r1 = children[0]->genCode(cs, cg);
+			cs.rf.storeTemp(cs, r1);
+
+			Register r3(2, RT_TEMP);
+			Register temp = r1;
+			temp.offset = 0;
+			cs.rf.printInst(cs, "lw", r3, temp);
+
 			Register r2(1, RT_TEMP);
 			cs.rf.printLIInst(cs, r2, 1);
+
 			cs.rf.printInst(cs,
 					cs.rf.getOpCode(children[1]->getToken().value, OC_NI, oc_s),
-					r1, r1, r2);
+					r1, r3, r2);
+
+			r2 = cs.rf.loadTemp(cs);
+			r2.offset = 0;
+			cs.rf.printInst(cs, "sw", r1, r2);
+			cs.rf.printInst(cs, "mv", r1, r3);
+
 		} else {
 			cg.develop = GET_ADDRESS;
 			r1 = children[0]->genCode(cs, cg);

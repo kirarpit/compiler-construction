@@ -65,8 +65,7 @@ void RegisterFactory::storeTemp(CompilerState &cs, Register r1) {
 	offset += 4;
 }
 
-Register RegisterFactory::loadTemp(CompilerState &cs) {
-	Register r2(1, RT_TEMP);
+Register RegisterFactory::loadTemp(CompilerState &cs, Register r2) {
 	Register r3(0, RT_GP, (offset - 4));
 
 	printInst(cs, "lw", r2, r3);

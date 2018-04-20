@@ -20,3 +20,7 @@ void Register::print(CompilerState &cs) {
 		cs.os << ")";
 	}
 }
+
+void Register::removeOffset() {
+	offset = 40000;
+}

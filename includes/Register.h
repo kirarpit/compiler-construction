@@ -34,6 +34,7 @@ public:
 	const static std::string RT[];
 
 	void print(CompilerState &cs);
+	void removeOffset();
 };
 
 #endif /* SRC_REGISTER_H_ */
