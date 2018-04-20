@@ -41,5 +41,38 @@ void NodeAsgnExpr::walk(CompilerState &cs) {
 
 	smartWalk(cs);
 
+	if (children.size() == 3) {
+		if (!children[0]->isAssignable) {
+			cs.es.reportTypeError(cs, children[1]->getToken(),
+					children[2]->getType(), "expression is not assignable");
+		}
+	}
+
 	Logger::logWalkExit(__CLASS_NAME__, this);
+}
+
+Register NodeAsgnExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() == 3) {
+		cg.develop = GET_ADDRESS;
+		r1 = children[0]->genCode(cs, cg);
+		cs.rf.storeTemp(cs, r1);
+
+		cg.develop = GET_VALUE;
+		r1 = children[2]->genCode(cs, cg);
+		Register r2 = cs.rf.loadTemp(cs);
+
+		r2.offset = 0;
+		if (type->getAlignment() == 4)
+			cs.rf.printInst(cs, "sw", r1, r2);
+		else
+			cs.rf.printInst(cs, "sb", r1, r2);
+	} else {
+		genCodeAll(cs, cg);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
 }
