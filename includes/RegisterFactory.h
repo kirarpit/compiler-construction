@@ -57,6 +57,15 @@ public:
 			Register r2 = Register(-1), Register r3 = Register(-1));
 	void printLIInst(CompilerState &cs, Register r1, int val);
 
+	int getLabelNo();
+	std::string getLabel(int label, int labelNo);
+	void printBranchInst(CompilerState &cs, std::string opCode, Register r1,
+			Register r2, std::string label);
+	void printBranchInst(CompilerState &cs, std::string opCode,
+			std::string label);
+	void printLabel(CompilerState &cs, std::string label);
+
+
 private:
 	bool t0;
 	bool t1;
@@ -74,6 +83,7 @@ private:
 
 	int offset;
 	int target;
+	int label;
 };
 
 #endif /* SRC_REGISTERFACTORY_H_ */

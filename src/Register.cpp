@@ -13,7 +13,7 @@ void Register::print(CompilerState &cs) {
 	}
 
 	cs.os << "$" << RT[type];
-	if (name != -1 && type != RT_GP)
+	if (name != -1 && type != RT_GP && type != RT_ZERO)
 		cs.os << name;
 
 	if (offset != 40000) {

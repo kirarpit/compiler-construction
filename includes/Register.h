@@ -4,6 +4,7 @@
 #include<string>
 
 #define REGISTER_TYPE_LIST \
+	XX(ZERO, "zero") \
 	XX(EVAL, "v") \
 	XX(ARG, "a") \
 	XX(TEMP, "t") \

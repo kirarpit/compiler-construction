@@ -47,6 +47,7 @@ public:
 protected:
 	void genCodeAll(CompilerState &cs, CodeGenArgs cg);
 	Register genCodeArithmetic(CompilerState &cs, CodeGenArgs cg);
+	Register genFallThroughCode(CompilerState &cs, CodeGenArgs cg);
 
 	void smartWalk(CompilerState &cs);
 	void walkAllChildren(CompilerState &cs);

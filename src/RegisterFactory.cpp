@@ -7,6 +7,7 @@
 #include<OutputStream.h>
 #include<Type.h>
 #include<Logger.h>
+#include<sstream>
 
 RegisterFactory::RegisterFactory() {
 	t0 = false;
@@ -14,6 +15,7 @@ RegisterFactory::RegisterFactory() {
 
 	offset = -32768;
 	target = 0;
+	label = 0;
 }
 
 RegisterFactory::~RegisterFactory() {
@@ -90,7 +92,8 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	}
 
 	if (op->getToken().type & TT_TERM_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r1, r2, r1);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r1, r2,
+				r1);
 	} else if (op->getToken().type & TT_FACTOR_OP) {
 		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
 		printInst(cs, "mflo", r1);
@@ -189,4 +192,43 @@ Register RegisterFactory::getFreeTempReg() {
 	}
 
 	return Register(name, RT_TEMP);
+}
+
+int RegisterFactory::getLabelNo() {
+	label++;
+	return label;
+}
+std::string RegisterFactory::getLabel(int label, int labelNo) {
+	std::ostringstream oss;
+
+	if (label)
+		oss << "FalseL";
+	else
+		oss << "TrueL";
+
+	oss << labelNo;
+	return oss.str();
+}
+
+void RegisterFactory::printBranchInst(CompilerState &cs, std::string opCode,
+		Register r1, Register r2, std::string label) {
+
+	cs.os << "\t" << opCode;
+	cs.os << " ";
+	r1.print(cs);
+	cs.os << " ";
+	r2.print(cs);
+	cs.os << " " << label << "\n";
+}
+
+void RegisterFactory::printBranchInst(CompilerState &cs, std::string opCode,
+		std::string label) {
+	cs.os << "\t" << opCode;
+	cs.os << " ";
+	cs.os << label;
+	cs.os << "\n";
+}
+
+void RegisterFactory::printLabel(CompilerState &cs, std::string label) {
+	cs.os << label << ":\n";
 }

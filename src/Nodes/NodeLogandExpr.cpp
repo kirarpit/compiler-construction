@@ -41,3 +41,21 @@ void NodeLogandExpr::walk(CompilerState &cs) {
 
 	Logger::logWalkExit(__CLASS_NAME__, this);
 }
+
+Register NodeLogandExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() == 3) {
+		cg.fall = FALL_TRUE;
+		cg.l1 = FalseL;
+		cg.l2 = TrueL;
+
+		r1 = genFallThroughCode(cs, cg);
+	} else {
+		genCodeAll(cs, cg);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
+}

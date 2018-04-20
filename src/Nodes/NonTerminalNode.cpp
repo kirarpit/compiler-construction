@@ -41,6 +41,39 @@ Register NonTerminalNode::genCodeArithmetic(CompilerState &cs, CodeGenArgs cg) {
 	return r1;
 }
 
+Register NonTerminalNode::genFallThroughCode(CompilerState &cs,
+		CodeGenArgs cg) {
+	Register r1(-1);
+	int labelNo = cs.rf.getLabelNo();
+
+	std::string opCode = "";
+	int immVal = 0;
+	if (cg.fall == FALL_TRUE) {
+		opCode = "be";
+		immVal = 1;
+	} else if (cg.fall == FALL_FALSE) {
+		opCode = "bne";
+		immVal = 0;
+	}
+
+	std::string label = cs.rf.getLabel(cg.l1, labelNo);
+
+	r1 = children[0]->genCode(cs, cg);
+	cs.rf.printBranchInst(cs, opCode, r1, Register(0, RT_ZERO), label);
+	r1 = children[2]->genCode(cs, cg);
+	cs.rf.printBranchInst(cs, opCode, r1, Register(0, RT_ZERO), label);
+
+	cs.rf.printLIInst(cs, r1, immVal);
+	cs.rf.printBranchInst(cs, "b", cs.rf.getLabel(cg.l2, labelNo));
+
+	cs.rf.printLabel(cs, label);
+	cs.rf.printLIInst(cs, r1, !immVal);
+
+	cs.rf.printLabel(cs, cs.rf.getLabel(cg.l2, labelNo));
+
+	return r1;
+}
+
 void NonTerminalNode::smartWalk(CompilerState &cs) {
 	walkAllChildren(cs);
 	typeProp(cs);
