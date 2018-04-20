@@ -114,7 +114,7 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			r2 = cs.rf.loadTemp(cs);
 			r2.offset = 0;
 			cs.rf.printInst(cs, "sw", r1, r2);
-			cs.rf.printInst(cs, "mv", r1, r3);
+			cs.rf.printInst(cs, "move", r1, r3);
 
 		} else {
 			cg.develop = GET_ADDRESS;
@@ -135,7 +135,11 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			if (develop == GET_VALUE) {
 				r2 = r1;
 				r2.offset = 0;
-				cs.rf.printInst(cs, "lw", r1, r2);
+
+				if (children[0]->getType()->getAlignment() == 4)
+					cs.rf.printInst(cs, "lw", r1, r2);
+				else
+					cs.rf.printInst(cs, "lbu", r1, r2);
 			}
 		}
 	} else {

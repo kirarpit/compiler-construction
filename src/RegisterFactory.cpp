@@ -6,6 +6,7 @@
 #include<Token.h>
 #include<OutputStream.h>
 #include<Type.h>
+#include<Logger.h>
 
 RegisterFactory::RegisterFactory() {
 	t0 = false;
@@ -30,6 +31,8 @@ std::string RegisterFactory::getOpCode(std::string inst, int imm, int sig) {
 }
 
 Register RegisterFactory::getAddress(CompilerState &cs, Token t) {
+	Logger::log("Loading Address");
+
 	Register r1(0, RT_TEMP);
 	VariableInfo *v = cs.lastBlock->getST()->lookup(t);
 

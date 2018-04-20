@@ -38,22 +38,5 @@ int VariableInfo::getSize() {
 }
 
 int VariableInfo::getAlignment() {
-	int alig = 1;
-	Type *temp = type;
-	while (temp) {
-
-		if (temp->typeName == TP_POINTER) {
-			alig = 4;
-			break;
-
-		} else if (temp->typeName == TP_BOOL) {
-			alig = 1;
-
-		} else if (temp->typeName == TP_SIGNED
-				|| temp->typeName == TP_UNSIGNED) {
-			alig = 4;
-		}
-		temp = temp->typeOf;
-	}
-	return alig;
+	return type->getAlignment();
 }

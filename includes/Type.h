@@ -43,6 +43,7 @@ public:
 	bool isNumericType();
 
 	int getFullSize();
+	int getAlignment();
 
 	static Type* getOperatorType(CompilerState &cs, Token tkn, Type *t1,
 			Type *t2);

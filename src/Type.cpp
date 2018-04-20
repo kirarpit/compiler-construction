@@ -20,6 +20,27 @@ Type::~Type() {
 	Logger::logDest(__CLASS_NAME__);
 }
 
+int Type::getAlignment() {
+	int alig = 1;
+	Type *temp = this;
+	while (temp) {
+
+		if (temp->typeName == TP_POINTER) {
+			alig = 4;
+			break;
+
+		} else if (temp->typeName == TP_BOOL) {
+			alig = 1;
+
+		} else if (temp->typeName == TP_SIGNED
+				|| temp->typeName == TP_UNSIGNED) {
+			alig = 4;
+		}
+		temp = temp->typeOf;
+	}
+	return alig;
+}
+
 int Type::getFullSize() {
 	int size = 1;
 	Type *temp = this;
