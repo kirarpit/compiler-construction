@@ -71,10 +71,15 @@ void RegisterFactory::storeTemp(CompilerState &cs, Register r1) {
 	offset += 4;
 }
 
-Register RegisterFactory::loadTemp(CompilerState &cs, Register r2) {
+Register RegisterFactory::loadTemp(CompilerState &cs, Type *type) {
+	Register r2 = Register(1, RT_TEMP);
 	Register r3(0, RT_GP, (offset - 4));
 
-	printInst(cs, "lw", r2, r3);
+	if (type == NULL || type->getAlignment() == 4)
+		printInst(cs, "lw", r2, r3);
+	else
+		printInst(cs, "lbu", r2, r3);
+
 	offset -= 4;
 	return r2;
 }

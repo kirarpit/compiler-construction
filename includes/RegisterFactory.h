@@ -8,6 +8,7 @@ class VariableInfo;
 class CompilerState;
 class Token;
 class Node;
+class Type;
 
 enum {
 	OC_NI, OC_I
@@ -50,7 +51,7 @@ public:
 	Register getAddress(CompilerState &cs, Token t);
 	Register loadValue(CompilerState &cs, Token t);
 	void storeTemp(CompilerState &cs, Register r);
-	Register loadTemp(CompilerState &cs, Register r = Register(1, RT_TEMP));
+	Register loadTemp(CompilerState &cs, Type *type = NULL);
 	Register doArithOperation(CompilerState &cs, Register r1, Register r2,
 			Node *op);
 	void printInst(CompilerState &cs, std::string opCode, Register r1,
