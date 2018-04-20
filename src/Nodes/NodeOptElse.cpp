@@ -43,3 +43,17 @@ void NodeOptElse::print(CompilerState &cs) {
 		}
 	}
 }
+
+Register NodeOptElse::genCode(CompilerState &cs, CodeGenArgs cg) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() == 2) {
+		r1 = children[1]->genCode(cs, cg);
+	} else {
+		genCodeAll(cs, cg);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
+}

@@ -8,6 +8,7 @@
 #include<Type.h>
 #include<Logger.h>
 #include<sstream>
+#include<CodeGenArgs.h>
 
 RegisterFactory::RegisterFactory() {
 	t0 = false;
@@ -201,9 +202,9 @@ int RegisterFactory::getLabelNo() {
 std::string RegisterFactory::getLabel(int label, int labelNo) {
 	std::ostringstream oss;
 
-	if (label)
+	if (label == FalseL)
 		oss << "FalseL";
-	else
+	else if (label == TrueL)
 		oss << "TrueL";
 
 	oss << labelNo;

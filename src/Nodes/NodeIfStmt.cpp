@@ -101,3 +101,31 @@ void NodeIfStmt::print(CompilerState &cs) {
 		}
 	}
 }
+
+Register NodeIfStmt::genCode(CompilerState &cs, CodeGenArgs cg) {
+	Logger::logGenCodeEntry(__CLASS_NAME__, this);
+
+	Register r1(-1);
+	if (children.size() >= 5) {
+
+		int labelNo = cs.rf.getLabelNo();
+		std::string label = cs.rf.getLabel(FalseL, labelNo);
+
+		r1 = children[2]->genCode(cs, cg);
+		cs.rf.printBranchInst(cs, "beq", r1, Register(0, RT_ZERO), label);
+		r1 = children[4]->genCode(cs, cg);
+		cs.rf.printBranchInst(cs, "b", cs.rf.getLabel(TrueL, labelNo));
+
+		cs.rf.printLabel(cs, label);
+		if (children.size() == 6)
+			r1 = children[5]->genCode(cs, cg);
+
+		cs.rf.printLabel(cs, cs.rf.getLabel(TrueL, labelNo));
+
+	} else {
+		genCodeAll(cs, cg);
+	}
+
+	Logger::logGenCodeExit(__CLASS_NAME__, this);
+	return r1;
+}

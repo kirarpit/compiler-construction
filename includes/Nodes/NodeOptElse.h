@@ -14,6 +14,7 @@ public:
 	static Node* parse(CompilerState &cs);
 	void print(CompilerState &cs);
 	void walk(CompilerState &cs);
+	Register genCode(CompilerState &cs, CodeGenArgs cg);
 };
 
 #endif /* SRC_NODES_NODEOPTELSE_H_ */

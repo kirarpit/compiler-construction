@@ -49,7 +49,7 @@ Register NonTerminalNode::genFallThroughCode(CompilerState &cs,
 	std::string opCode = "";
 	int immVal = 0;
 	if (cg.fall == FALL_TRUE) {
-		opCode = "be";
+		opCode = "beq";
 		immVal = 1;
 	} else if (cg.fall == FALL_FALSE) {
 		opCode = "bne";
