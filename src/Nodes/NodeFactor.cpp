@@ -107,12 +107,16 @@ Register NodeFactor::genCode(CompilerState &cs, CodeGenArgs cg) {
 			temp.offset = 0;
 			cs.rf.printInst(cs, "lw", r1, temp);
 
+			int incrBy = 1;
+			if (children[1]->getType()->isPointer()) {
+				incrBy = children[1]->getType()->getAlignment();
+			}
 			Register r2(1, RT_TEMP);
-			cs.rf.printLIInst(cs, r2, 1);
+			cs.rf.printLIInst(cs, r2, incrBy);
 
 			cs.rf.printInst(cs,
-					cs.rf.getOpCode(children[0]->getToken().value, OC_NI, OC_US),
-					r1, r1, r2);
+					cs.rf.getOpCode(children[0]->getToken().value, OC_NI,
+							OC_US), r1, r1, r2);
 
 			r2 = cs.rf.loadTemp(cs);
 			r2.offset = 0;

@@ -69,6 +69,10 @@ Register NodeAsgnExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printInst(cs, "sw", r1, r2);
 		else
 			cs.rf.printInst(cs, "sb", r1, r2);
+
+		if (type->getAlignment() == 1)
+			cs.rf.printInst(cs, "lbu", r1, r2);
+
 	} else {
 		genCodeAll(cs, cg);
 	}

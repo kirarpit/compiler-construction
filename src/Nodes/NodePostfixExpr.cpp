@@ -102,12 +102,16 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			temp.offset = 0;
 			cs.rf.printInst(cs, "lw", r3, temp);
 
+			int incrBy = 1;
+			if (children[0]->getType()->isPointer()) {
+				incrBy = children[0]->getType()->getAlignment();
+			}
 			Register r2(1, RT_TEMP);
-			cs.rf.printLIInst(cs, r2, 1);
+			cs.rf.printLIInst(cs, r2, incrBy);
 
 			cs.rf.printInst(cs,
-					cs.rf.getOpCode(children[1]->getToken().value, OC_NI, OC_US),
-					r1, r3, r2);
+					cs.rf.getOpCode(children[1]->getToken().value, OC_NI,
+							OC_US), r1, r3, r2);
 
 			r2 = cs.rf.loadTemp(cs);
 			r2.offset = 0;
@@ -115,29 +119,39 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printInst(cs, "move", r1, r3);
 
 		} else {
-			cg.develop = GET_ADDRESS;
-			r1 = children[0]->genCode(cs, cg);
-			cs.rf.storeTemp(cs, r1);
+			if (children[1]->getSize() == 3) {
+				cg.develop = GET_ADDRESS;
+				r1 = children[0]->genCode(cs, cg);
+				cs.rf.storeTemp(cs, r1);
 
-			cg.develop = GET_VALUE;
-			r1 = children[1]->genCode(cs, cg);
+				cg.develop = GET_VALUE;
+				r1 = children[1]->genCode(cs, cg);
 
-			Register r2(1, RT_TEMP);
-			cs.rf.printLIInst(cs, r2, type->getFullSize());
-			cs.rf.printInst(cs, "multu", r1, r2);
-			cs.rf.printInst(cs, "mflo", r1);
+				Register r2(1, RT_TEMP);
+				cs.rf.printLIInst(cs, r2, type->getFullSize());
+				cs.rf.printInst(cs, "multu", r1, r2);
+				cs.rf.printInst(cs, "mflo", r1);
 
-			r2 = cs.rf.loadTemp(cs);
-			cs.rf.printInst(cs, "addu", r1, r1, r2);
+				r2 = cs.rf.loadTemp(cs);
+				cs.rf.printInst(cs, "addu", r1, r1, r2);
 
-			if (develop == GET_VALUE) {
-				r2 = r1;
-				r2.offset = 0;
+				if (develop == GET_VALUE) {
+					r2 = r1;
+					r2.offset = 0;
 
-				if (children[0]->getType()->getAlignment() == 4)
+					if (children[0]->getType()->getAlignment() == 4)
+						cs.rf.printInst(cs, "lw", r1, r2);
+					else
+						cs.rf.printInst(cs, "lbu", r1, r2);
+				}
+			} else {
+				r1 = children[0]->genCode(cs, cg);
+
+				if (develop == GET_VALUE) {
+					Register r2 = r1;
+					r2.offset = 0;
 					cs.rf.printInst(cs, "lw", r1, r2);
-				else
-					cs.rf.printInst(cs, "lbu", r1, r2);
+				}
 			}
 		}
 	} else {
