@@ -49,6 +49,12 @@ Node* NodeStatement::parse(CompilerState &cs) {
 			statement->addNode(whileStmt);
 		}
 
+	} else if (lex.peek().value == TokenTable::TS[TN_loboc]) {
+		Node *ioStmt = NodeIOStmt::parse(cs);
+		if (ioStmt) {
+			statement->addNode(ioStmt);
+		}
+
 	} else {
 		bool exprError = false;
 		Node *expr = NodeExpr::parse(cs);
@@ -110,8 +116,12 @@ Register NodeStatement::genCode(CompilerState &cs, CodeGenArgs cg) {
 }
 
 void NodeStatement::print(CompilerState &cs) {
-	if (children.size() == 1) { //if or while statements
+	if (children.size() == 1) { //if or while or IO statements
 		children[0]->print(cs);
+
+		if (children[0]->getChild(0)->getToken().value == "loboc")
+			cs.os << '\n';
+
 		return;
 	}
 	cs.os.printWhiteSpaces();

@@ -82,8 +82,8 @@ void ErrorStream::incrErrorCnt() {
 	error = true;
 	++errorCount;
 	if (errorCount == 100) {
-		es << "\n\n\t\tI'll have what you're having!\n\n";
-		exit(10);
+		es << "\n\t\tI'll have what you're having! ¯\\_(ツ)_/¯ \n\n";
+		exit(100);
 	}
 }
 

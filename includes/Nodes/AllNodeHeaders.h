@@ -7,6 +7,7 @@
 #include "NodeBlock.h"
 #include "NodeStatement.h"
 #include "NodeStatements.h"
+#include "NodeIOStmt.h"
 #include "NodeIfStmt.h"
 #include "NodeOptElse.h"
 #include "NodeWhileStmt.h"

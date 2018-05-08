@@ -20,8 +20,8 @@
 		XX(equal, "=", TT_LIT)  \
 		XX(equalequal, "==", (TT_LIT | TT_EQ_OP))  \
 		XX(notequal, "!=", (TT_LIT | TT_EQ_OP))  \
-		XX(leftshift, "<<", TT_LIT) \
-		XX(rightshift, ">>", TT_LIT)  \
+		XX(leftshift, "<<", (TT_LIT | TT_SHIFT_OP)) \
+		XX(rightshift, ">>", (TT_LIT | TT_SHIFT_OP))  \
 		XX(gtr, ">", (TT_LIT | TT_REL_OP))  \
 		XX(lss, "<", (TT_LIT | TT_REL_OP))  \
 		XX(gtrequal, ">=", (TT_LIT | TT_REL_OP))  \
@@ -59,6 +59,7 @@
 		XX(var, "var", TT_KEY)  \
 		XX(void, "void", TT_KEY)  \
 		XX(while, "while", TT_KEY)  \
+		XX(loboc, "loboc", TT_KEY)  \
 		\
 		XX(underscore, "_", TT_OTHER)	\
 		XX(null, "\0", TT_OTHER)  \
@@ -85,7 +86,8 @@ enum {
 		XX(REL_OP, "REL_OP", 0x0200) \
 		XX(PREUN_OP, "PREUN_OP", 0x0400) \
 		XX(POSTUN_OP, "POSTUN_OP", 0x0800) \
-		XX(OTHER, "OTHER", 0x1000) \
+		XX(SHIFT_OP, "SHIFT_OP", 0x1000) \
+		XX(OTHER, "OTHER", 0x2000) \
 
 enum {
 #define XX(a, b, c) TT_##a = c,

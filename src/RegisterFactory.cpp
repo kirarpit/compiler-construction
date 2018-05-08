@@ -174,7 +174,11 @@ void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
 }
 
 void RegisterFactory::printLIInst(CompilerState &cs, Register r1, int val) {
-	cs.os << "\tli $t" << r1.name << " " << val << "\n";
+	cs.os << "\tli";
+	cs.os << " ";
+	r1.print(cs);
+
+	cs.os << " " << val << "\n";
 }
 
 void RegisterFactory::freeTempReg(Register r) {
