@@ -104,7 +104,14 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 			int incrBy = 1;
 			if (children[0]->getType()->isPointer()) {
-				incrBy = children[0]->getType()->getAlignment();
+				Type *ptrTo = children[0]->getType()->typeOf;
+
+				if (ptrTo->typeName == TP_SIGNED
+						|| ptrTo->typeName == TP_UNSIGNED) {
+					incrBy = 4;
+				} else if (ptrTo->typeName == TP_BOOL) {
+					incrBy = 1;
+				}
 			}
 			Register r2(1, RT_TEMP);
 			cs.rf.printLIInst(cs, r2, incrBy);

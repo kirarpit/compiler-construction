@@ -29,16 +29,22 @@ enum {
 		XX("*", OC_NI, OC_US, "multu") \
 		XX("/", OC_NI, OC_S, "div") \
 		XX("/", OC_NI, OC_US, "divu") \
+		XX("==", OC_NI, OC_S, "beq") \
 		XX("==", OC_NI, OC_US, "beq") \
+		XX("!=", OC_NI, OC_S, "bne") \
 		XX("!=", OC_NI, OC_US, "bne") \
-		XX("<", OC_NI, OC_US, "blt") \
-		XX(">", OC_NI, OC_US, "bgt") \
-		XX("<=", OC_NI, OC_US, "ble") \
-		XX(">=", OC_NI, OC_US, "bge") \
-		XX("--", OC_NI, OC_US, "subu") \
+		XX("<", OC_NI, OC_S, "blt") \
+		XX("<", OC_NI, OC_US, "bltu") \
+		XX(">", OC_NI, OC_S, "bgt") \
+		XX(">", OC_NI, OC_US, "bgtu") \
+		XX("<=", OC_NI, OC_S, "ble") \
+		XX("<=", OC_NI, OC_US, "bleu") \
+		XX(">=", OC_NI, OC_S, "bge") \
+		XX(">=", OC_NI, OC_US, "bgeu") \
 		XX("--", OC_NI, OC_S, "sub") \
-		XX("++", OC_NI, OC_US, "addu") \
+		XX("--", OC_NI, OC_US, "subu") \
 		XX("++", OC_NI, OC_S, "add") \
+		XX("++", OC_NI, OC_US, "addu") \
 
 
 class RegisterFactory {

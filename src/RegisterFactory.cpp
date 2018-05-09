@@ -93,7 +93,7 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	int oc_s = -1;
 	if (t->typeName == TP_SIGNED) {
 		oc_s = OC_S;
-	} else {
+	} else if (t->typeName == TP_UNSIGNED) {
 		oc_s = OC_US;
 	}
 
@@ -106,7 +106,12 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	} else if ((op->getToken().type & TT_REL_OP)
 			|| (op->getToken().type & TT_EQ_OP)) {
 
-		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r2, r1);
+		if (root->getChild(0)->getType()->typeName == TP_SIGNED)
+			oc_s = OC_S;
+		else
+			oc_s = OC_US;
+
+		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
 		printLIInst(cs, r1, 0);
 
 		cs.os << "\tb ";

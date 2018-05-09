@@ -109,8 +109,16 @@ Register NodeFactor::genCode(CompilerState &cs, CodeGenArgs cg) {
 
 			int incrBy = 1;
 			if (children[1]->getType()->isPointer()) {
-				incrBy = children[1]->getType()->getAlignment();
+				Type *ptrTo = children[1]->getType()->typeOf;
+
+				if (ptrTo->typeName == TP_SIGNED
+						|| ptrTo->typeName == TP_UNSIGNED) {
+					incrBy = 4;
+				} else if (ptrTo->typeName == TP_BOOL) {
+					incrBy = 1;
+				}
 			}
+
 			Register r2(1, RT_TEMP);
 			cs.rf.printLIInst(cs, r2, incrBy);
 
