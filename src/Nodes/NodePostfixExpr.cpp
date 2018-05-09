@@ -126,7 +126,7 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 			cs.rf.printInst(cs, "move", r1, r3);
 
 		} else {
-			if (children[1]->getSize() == 3) {
+			if (children[1]->getSize() == 3) {//array
 				cg.develop = GET_ADDRESS;
 				r1 = children[0]->genCode(cs, cg);
 				cs.rf.storeTemp(cs, r1);
@@ -151,7 +151,7 @@ Register NodePostfixExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 					else
 						cs.rf.printInst(cs, "lbu", r1, r2);
 				}
-			} else {
+			} else {//pointer
 				if (develop == GET_VALUE) {
 					r1 = children[0]->genCode(cs, cg);
 

@@ -1,13 +1,15 @@
 #ifndef ALL_NODE_HEADERS_H_
 #define ALL_NODE_HEADERS_H_
 
+#include <NodeIOExpr.h>
+#include <NodeOptIOExpr.h>
+#include <NodeIOVar.h>
 #include <NodeOptArraySize.h>
 #include <NodeOptArraySpecs.h>
 #include "NodeDefs.h"
 #include "NodeBlock.h"
 #include "NodeStatement.h"
 #include "NodeStatements.h"
-#include "NodeIOStmt.h"
 #include "NodeIfStmt.h"
 #include "NodeOptElse.h"
 #include "NodeWhileStmt.h"

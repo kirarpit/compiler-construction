@@ -1,14 +1,14 @@
-#ifndef SRC_NODES_NODEIOSTMT_H_
-#define SRC_NODES_NODEIOSTMT_H_
+#ifndef SRC_NODES_NODEOPTIOEXPR_H_
+#define SRC_NODES_NODEOPTIOEXPR_H_
 
 #include<NonTerminalNode.h>
 class CompilerState;
 
-class NodeIOStmt: public NonTerminalNode {
+class NodeOptIOExpr: public NonTerminalNode {
 public:
-	NodeIOStmt() {
+	NodeOptIOExpr() {
 	}
-	~NodeIOStmt() {
+	~NodeOptIOExpr() {
 	}
 
 	static Node* parse(CompilerState &cs);
@@ -17,4 +17,4 @@ public:
 	Register genCode(CompilerState &cs, CodeGenArgs cg);
 };
 
-#endif /* SRC_NODES_NODEIOSTMT_H_ */
+#endif /* SRC_NODES_NODEOPTIOEXPR_H_ */
