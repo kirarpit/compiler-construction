@@ -13,14 +13,18 @@ void NodeSpike5::compile(CompilerState &cs) {
 		block->walk(cs);
 
 		if (!cs.es.getErrorCount()) {
-			cs.os << "\t.text\n";
-			cs.os << "\t.align 4\n";
-			cs.os << "\t.globl main\n";
-			cs.os << "main:\n";
+			cs.rf.printTextInst(cs, ".data");
+			cs.rf.printLabel(cs, "newline");
+			cs.rf.printTextInst(cs, ".asciiz \"\\n\"");
+
+			cs.rf.printTextInst(cs, ".text");
+			cs.rf.printTextInst(cs, ".align 4");
+			cs.rf.printTextInst(cs, ".globl main");
+			cs.rf.printLabel(cs, "main");
 
 			block->genCode(cs, CodeGenArgs());
 
-			cs.os << "\tjr $ra\n";
+			cs.rf.printTextInst(cs, "jr $ra");
 		} else {
 			block->print(cs);
 		}

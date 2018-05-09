@@ -247,3 +247,7 @@ void RegisterFactory::printBranchInst(CompilerState &cs, std::string opCode,
 void RegisterFactory::printLabel(CompilerState &cs, std::string label) {
 	cs.os << label << ":\n";
 }
+
+void RegisterFactory::printTextInst(CompilerState &cs, std::string text) {
+	cs.os << "\t" << text << "\n";
+}

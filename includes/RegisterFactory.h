@@ -71,6 +71,7 @@ public:
 	void printBranchInst(CompilerState &cs, std::string opCode,
 			std::string label);
 	void printLabel(CompilerState &cs, std::string label);
+	void printTextInst(CompilerState &cs, std::string text);
 
 
 private:
