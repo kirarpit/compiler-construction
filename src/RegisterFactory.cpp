@@ -11,12 +11,8 @@
 #include<CodeGenArgs.h>
 
 RegisterFactory::RegisterFactory() {
-	t0 = false;
-	t1 = false;
-
-	offset = -32768;
-	target = 0;
-	label = 0;
+	gpOffset = -32768;
+	labelCnt = 0;
 }
 
 RegisterFactory::~RegisterFactory() {
@@ -65,22 +61,22 @@ Register RegisterFactory::loadValue(CompilerState &cs, Token t) {
 }
 
 void RegisterFactory::storeTemp(CompilerState &cs, Register r1) {
-	Register r3(0, RT_GP, offset);
+	Register r3(0, RT_GP, gpOffset);
 	printInst(cs, "sw", r1, r3);
 
-	offset += 4;
+	gpOffset += 4;
 }
 
 Register RegisterFactory::loadTemp(CompilerState &cs, Type *type) {
 	Register r2 = Register(1, RT_TEMP);
-	Register r3(0, RT_GP, (offset - 4));
+	Register r3(0, RT_GP, (gpOffset - 4));
 
 	if (type == NULL || type->getAlignment() == 4)
 		printInst(cs, "lw", r2, r3);
 	else
 		printInst(cs, "lbu", r2, r3);
 
-	offset -= 4;
+	gpOffset -= 4;
 	return r2;
 }
 
@@ -90,72 +86,43 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 	Node *op = root->getChild(1);
 	Type *t = root->getType();
 
-	int oc_s = -1;
+	int ocSign = -1;
 	if (t->typeName == TP_SIGNED) {
-		oc_s = OC_S;
+		ocSign = OC_S;
 	} else if (t->typeName == TP_UNSIGNED) {
-		oc_s = OC_US;
+		ocSign = OC_US;
 	}
 
 	if (op->getToken().type & TT_TERM_OP) {
 		printInst(cs, getOpCode(op->getToken().value, OC_NI, OC_US), r1, r2,
 				r1);
 	} else if (op->getToken().type & TT_FACTOR_OP) {
-		printInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
+		printInst(cs, getOpCode(op->getToken().value, OC_NI, ocSign), r2, r1);
 		printInst(cs, "mflo", r1);
 	} else if ((op->getToken().type & TT_REL_OP)
 			|| (op->getToken().type & TT_EQ_OP)) {
 
 		if (root->getChild(0)->getType()->typeName == TP_SIGNED)
-			oc_s = OC_S;
+			ocSign = OC_S;
 		else
-			oc_s = OC_US;
+			ocSign = OC_US;
 
-		printEQInst(cs, getOpCode(op->getToken().value, OC_NI, oc_s), r2, r1);
+		int labelNo = cs.rf.getLabelNo();
+		std::string tLabel = cs.rf.getLabel(TrueL, labelNo);
+		std::string fLabel = cs.rf.getLabel(FalseL, labelNo);
+
+		printBranchInst(cs, getOpCode(op->getToken().value, OC_NI, ocSign), r2,
+				r1, tLabel);
 		printLIInst(cs, r1, 0);
 
-		cs.os << "\tb ";
-		printSkipTarget(cs);
-		cs.os << "\n";
-
-		printTargetLabel(cs);
+		cs.rf.printBranchInst(cs, "b", fLabel);
+		cs.rf.printLabel(cs, tLabel);
 		printLIInst(cs, r1, 1);
 
-		printSkipTargetLabel(cs);
-
-		target++;
+		cs.rf.printLabel(cs, fLabel);
 	}
 
 	return r1;
-}
-
-void RegisterFactory::printEQInst(CompilerState &cs, std::string opCode,
-		Register r1, Register r2) {
-	cs.os << "\t" << opCode;
-	cs.os << " ";
-
-	r1.print(cs);
-	cs.os << " ";
-	r2.print(cs);
-	cs.os << " ";
-	printTarget(cs);
-	cs.os << "\n";
-}
-
-void RegisterFactory::printTarget(CompilerState &cs) {
-	cs.os << "target" << target;
-}
-
-void RegisterFactory::printTargetLabel(CompilerState &cs) {
-	cs.os << "target" << target << ":\n";
-}
-
-void RegisterFactory::printSkipTarget(CompilerState &cs) {
-	cs.os << "skiptarget" << target;
-}
-
-void RegisterFactory::printSkipTargetLabel(CompilerState &cs) {
-	cs.os << "skiptarget" << target << ":\n";
 }
 
 void RegisterFactory::printInst(CompilerState &cs, std::string opCode,
@@ -186,32 +153,9 @@ void RegisterFactory::printLIInst(CompilerState &cs, Register r1, int val) {
 	cs.os << " " << val << "\n";
 }
 
-void RegisterFactory::freeTempReg(Register r) {
-	if (r.type == RT_TEMP) {
-		if (r.name == 1) {
-			t1 = false;
-		} else if (r.name == 0) {
-			t0 = false;
-		}
-	}
-}
-
-Register RegisterFactory::getFreeTempReg() {
-	int name = -1;
-	if (!t0) {
-		t0 = true;
-		name = 0;
-	} else if (!t1) {
-		t1 = true;
-		name = 1;
-	}
-
-	return Register(name, RT_TEMP);
-}
-
 int RegisterFactory::getLabelNo() {
-	label++;
-	return label;
+	labelCnt++;
+	return labelCnt;
 }
 std::string RegisterFactory::getLabel(int label, int labelNo) {
 	std::ostringstream oss;

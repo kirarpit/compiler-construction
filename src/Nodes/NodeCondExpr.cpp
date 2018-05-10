@@ -112,17 +112,18 @@ Register NodeCondExpr::genCode(CompilerState &cs, CodeGenArgs cg) {
 	if (children.size() == 5) {
 
 		int labelNo = cs.rf.getLabelNo();
-		std::string label = cs.rf.getLabel(FalseL, labelNo);
+		std::string fLabel = cs.rf.getLabel(FalseL, labelNo);
+		std::string tLabel = cs.rf.getLabel(TrueL, labelNo);
 
 		r1 = children[0]->genCode(cs, cg);
-		cs.rf.printBranchInst(cs, "beq", r1, Register(0, RT_ZERO), label);
+		cs.rf.printBranchInst(cs, "beq", r1, Register(0, RT_ZERO), fLabel);
 		r1 = children[2]->genCode(cs, cg);
-		cs.rf.printBranchInst(cs, "b", cs.rf.getLabel(TrueL, labelNo));
+		cs.rf.printBranchInst(cs, "b", tLabel);
 
-		cs.rf.printLabel(cs, label);
+		cs.rf.printLabel(cs, fLabel);
 		r1 = children[4]->genCode(cs, cg);
 
-		cs.rf.printLabel(cs, cs.rf.getLabel(TrueL, labelNo));
+		cs.rf.printLabel(cs, tLabel);
 
 	} else {
 		genCodeAll(cs, cg);

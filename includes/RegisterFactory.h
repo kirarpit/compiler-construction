@@ -73,25 +73,9 @@ public:
 	void printLabel(CompilerState &cs, std::string label);
 	void printTextInst(CompilerState &cs, std::string text);
 
-
 private:
-	bool t0;
-	bool t1;
-
-	Register getFreeTempReg();
-	void freeTempReg(Register r);
-
-	void printTarget(CompilerState &cs);
-	void printSkipTarget(CompilerState &cs);
-	void printTargetLabel(CompilerState &cs);
-	void printSkipTargetLabel(CompilerState &cs);
-
-	void printEQInst(CompilerState &cs, std::string opCode, Register r1,
-			Register r2);
-
-	int offset;
-	int target;
-	int label;
+	int gpOffset;
+	int labelCnt;
 };
 
 #endif /* SRC_REGISTERFACTORY_H_ */
