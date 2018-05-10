@@ -122,7 +122,7 @@ void NodeStatement::print(CompilerState &cs) {
 	}
 	cs.os.printWhiteSpaces();
 
-	if (children.size() == 2 && children[1]->getToken().value == ";") { //expression
+	if (children.size() == 2 && children[1]->getToken().value == ";") { //expressions
 		printAllChildren(cs);
 		cs.os << '\n';
 		return;

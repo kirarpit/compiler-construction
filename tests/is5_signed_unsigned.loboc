@@ -1,0 +1,20 @@
+//Input Suggestions
+//4294967295
+//1
+
+unsigned a, b;
+signed c, d;
+bool e;
+
+loboc >> a >> b;
+
+c = a;
+d = b;
+
+if (a > b) e = 1;
+else e = 0;
+loboc << e;
+
+if (c > d) e = 1;
+else e = 0;
+loboc << e;

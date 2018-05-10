@@ -1,0 +1,12 @@
+//Input Suggestions
+//256
+//256
+//
+//1
+//0
+
+unsigned a;
+bool b;
+
+loboc >> a << a;
+loboc >> b << b;

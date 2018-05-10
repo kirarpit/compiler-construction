@@ -115,11 +115,11 @@ Register RegisterFactory::doArithOperation(CompilerState &cs, Register r2,
 				r1, tLabel);
 		printLIInst(cs, r1, 0);
 
-		cs.rf.printBranchInst(cs, "b", fLabel);
-		cs.rf.printLabel(cs, tLabel);
+		printBranchInst(cs, "b", fLabel);
+		printLabel(cs, tLabel);
 		printLIInst(cs, r1, 1);
 
-		cs.rf.printLabel(cs, fLabel);
+		printLabel(cs, fLabel);
 	}
 
 	return r1;
@@ -157,6 +157,7 @@ int RegisterFactory::getLabelNo() {
 	labelCnt++;
 	return labelCnt;
 }
+
 std::string RegisterFactory::getLabel(int label, int labelNo) {
 	std::ostringstream oss;
 

@@ -1,0 +1,12 @@
+signed[5] b;
+signed cnt;
+
+cnt = 0;
+
+while(cnt < 5){
+	loboc >> b[cnt++];
+}
+
+while(cnt > 0){
+	loboc << b[--cnt];
+}
