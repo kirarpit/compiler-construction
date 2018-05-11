@@ -4,7 +4,7 @@
 
      Author:          Arpit Garg
      Email(s):        iarpitgarg@gmail.com, kiralobo@cs.unm.edu
-     Date:            Wed May 09 20:512:45 2018 
+     Date:            Wed May 10 22:47:45 2018 
                                                
   CONTENT DESCRIPTION                          
                                                
@@ -47,14 +47,30 @@
 
     ISEQ5 is an extended feature using which the program can now 
     accept input and produce output. This is made possible with the 
-    help of a special keyword "loboc". Check grammar.txt under spike5
+    help of a special keyword "loboc". Below are the main use cases 
+    along with the description. Check grammar.txt under spike5 
     folder for the complete usage. 
 
+    --------------------------------------------------------------
+    | Command                   Description                      |
+    --------------------------------------------------------------
+    | loboc >> a;		Takes the input and stores it in |
+    |				the variable 'a'.		 |
+    |								 |
+    | loboc << a;		Prints the value of a.		 |
+    |								 |
+    --------------------------------------------------------------
+
+    Some key points to note here:-
+    - the type of the variable 'a' has to be either signed, unsigned
+    or bool.
+    - variable 'a' could be an element of an array as well.
+
     - SPECIFIC #1: ISEQ5 is backwards-compatible. Hence, no separate
-    mechanism is required to run it. To test ISEQ5, the programmer
+    mechanism is required to build it. To test ISEQ5, the programmer
     first has to run ./loboc compiler to generate the assembly code 
     and then run this assembly code through spim without using the 
-    TLC. Consider the following example for better understanding.
+    TLC. Consider the following example for a better understanding.
 
     $> make
     $> ./loboc tests/is5_bool.loboc > is5_bool.s
@@ -65,21 +81,23 @@
 
     - SPECIFIC #2: Although the defined grammar for IO_EXPR allows a
     wide variety of usage of the keyword "loboc", not everything
-    is valid and the program might return an error to help understand
-    the limitations. Semantic analysis as well narrows down the usage.
-    Check is5*.loboc under tests folder for some valid usages.
+    is valid and the program might return an error to help programmer
+    understand the limitations. Semantic check narrows down the usage
+    as well. Check is5*.loboc under tests folder for some valid test 
+    cases.
 
-    - SPECIFIC #3: When a bool type variable input is taken from the 
-    user, the input is converted to either 0 or 1. In the case of a
-    non-zero input, the input is converted to 1, otherwise it stays 0.
-    Check is5_bool.loboc under tests folder and run it for a demo.
+    - SPECIFIC #3: When input for a bool type variable is taken from 
+    the user, the input is converted to either 0 or 1. In the case of
+    a non-zero input, the input is converted to 1, otherwise it stays 
+    as it is i.e. 0. Check is5_bool.loboc under tests folder and run 
+    it for a demonstration.
 
     - SPECIFIC #4: Unsigned integer can take signed input but it will
     still be treated as unsigned integer throughout the program except
     when it's printed because MIPS doesn't support a system call to 
     print an unsigned integer. Therefore, all integers are printed as
-    signed integers. Check 'is5_signed_unsigned.loboc' under
-    tests folder for more info.
+    signed integers. Check 'is5_signed_unsigned.loboc' under tests 
+    folder for more info.
 
     - SPECIFIC #5: For better console readability, a new line is
     printed every time the program produces any output.
