@@ -1,20 +1,17 @@
 //Input Suggestions
-//4294967295
-//1
+//-1
+//-1
 
-unsigned a, b;
-signed c, d;
-bool e;
+signed a;
+unsigned b;
 
-loboc >> a >> b;
+loboc >> a >> b << a << b;
 
-c = a;
-d = b;
+{
+	unsigned c;
+	c = 1;
 
-if (a > b) e = 1;
-else e = 0;
-loboc << e;
-
-if (c > d) e = 1;
-else e = 0;
-loboc << e;
+	if (b > c) {
+	  loboc << c;
+	}
+}

@@ -1,4 +1,4 @@
-              CS554 Spike5 - LOBO-C MIPS CODE GENERATION
+              CS554 LOBO-C MIPS CODE GENERATION
 
   CONTACT INFORMATION
 
@@ -18,7 +18,7 @@
 
   SPECIFICATION ISSUES
 
-    The following discussion is with respect to the spike5.txt
+    The following discussion is with respect to the spike5*.txt
     specification. The following issues were noted during project
     development, presented along with the chosen resolutions:
                                                              
@@ -30,8 +30,8 @@
 
   IMPLEMENTATION SPECIFICS           
 
-    The enclosed spike5 is a fully-conforming implementation of the
-    spike5.txt specification, passing all supplied tests.
+    The enclosed loboc program is a fully-conforming implementation 
+    of the spike5*.txt specification, passing all supplied tests.
     
     - SPECIFIC #1: In case any errors apart from runtime errors are 
     encountered, the assembly code is not printed, instead 
@@ -40,31 +40,49 @@
 
     - SPECIFIC #2: Pointer increment doesn't always increment the
     pointer by 1 but by the size of the type it's pointing at. Same 
-    is the case with pointer decrement. Check 'tests/is5_pointer.loboc'
-    for more info.
+    thing happens in the case of pointer decrement. Check 
+    'tests/is5_pointer.loboc' for more info.
 
   ISEQ5 IMPLEMENTATION SPECIFICS           
 
-    ISEQ5 is an extended feature using which, the program accepts input
-    and can produce output too. This is made possible with the help of 
-    a special keyword "loboc". Check spike5 grammar.txt for the 
-    complete usage. 
+    ISEQ5 is an extended feature using which the program can now 
+    accept input and produce output. This is made possible with the 
+    help of a special keyword "loboc". Check grammar.txt under spike5
+    folder for the complete usage. 
 
-    - SPECIFIC #1: ISEQ5 is backward compatible. Hence, no separate
-    mechanism is required to run spike5. To test ISEQ5, the programmer
-    has to take the generated assembly code and run it through spim
-    without using the TLC. Check 'Build, Make & Test' section in the
-    README file for more info.
+    - SPECIFIC #1: ISEQ5 is backwards-compatible. Hence, no separate
+    mechanism is required to run it. To test ISEQ5, the programmer
+    first has to run ./loboc compiler to generate the assembly code 
+    and then run this assembly code through spim without using the 
+    TLC. Consider the following example for better understanding.
+
+    $> make
+    $> ./loboc tests/is5_bool.loboc > is5_bool.s
+    $> spim -file is5_bool.s
+
+    Since, the ISEQ5 is about IO, progammer might have to provide
+    input in some provided test cases to successfully run them.
 
     - SPECIFIC #2: Although the defined grammar for IO_EXPR allows a
-    wide variety of the usage of the keyword "loboc", not everything
-    is valid and the program might return an error. Semantic analysis 
-    narrows down the usage. Check is5*.loboc under tests folder for 
-    some valid usages.
+    wide variety of usage of the keyword "loboc", not everything
+    is valid and the program might return an error to help understand
+    the limitations. Semantic analysis as well narrows down the usage.
+    Check is5*.loboc under tests folder for some valid usages.
 
     - SPECIFIC #3: When a bool type variable input is taken from the 
     user, the input is converted to either 0 or 1. In the case of a
     non-zero input, the input is converted to 1, otherwise it stays 0.
+    Check is5_bool.loboc under tests folder and run it for a demo.
+
+    - SPECIFIC #4: Unsigned integer can take signed input but it will
+    still be treated as unsigned integer throughout the program except
+    when it's printed because MIPS doesn't support a system call to 
+    print an unsigned integer. Therefore, all integers are printed as
+    signed integers. Check 'is5_signed_unsigned.loboc' under
+    tests folder for more info.
+
+    - SPECIFIC #5: For better console readability, a new line is
+    printed every time the program produces any output.
 
   BUILD, MAKE & TEST SPECIFICS           
 
@@ -73,15 +91,15 @@
      - `make realclean` - removes the object files and the executable
 
     How to use?
-     - ./spike5 <filename>   - reads the supplied loboc code and
+     - ./loboc <filename>   - reads the supplied loboc code and
      			      returns assembly code as standard output
 
      - spim -file <filename> - reads assembly code and runs it on a
      			      simulation of MIPS architecture
 
     Example:
-    $> ./spike5 tests/is5_bool.loboc > assemblyCode.s
-    $> spim -file assemblyCode.s
+    $> ./loboc tests/is5_bool.loboc > is5_bool.s
+    $> spim -file is5_bool.s
 
   ACKNOWLEDGMENTS:
 

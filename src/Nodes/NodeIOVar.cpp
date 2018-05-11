@@ -71,13 +71,12 @@ Register NodeIOVar::genCode(CompilerState &cs, CodeGenArgs cg) {
 		std::string opCode = "";
 
 		if (children[0]->getToken().value == "<<") {
-			cs.rf.printLIInst(cs, v0, 1);
-
 			if (children[1]->getType()->isBool()) {
 				opCode = "lb";
 			} else {
 				opCode = "lw";
 			}
+			cs.rf.printLIInst(cs, v0, 1);
 
 			cs.rf.printInst(cs, opCode, a0, r1);
 			cs.rf.printTextInst(cs, "syscall");
