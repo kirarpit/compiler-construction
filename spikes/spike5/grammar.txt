@@ -1,4 +1,4 @@
-   SPIKE4         <- BLOCK EOF
+   START          <- BLOCK EOF
 
    BLOCK          <- DEFS STATEMENTS
    DEFS           <- | DEF DEFS
