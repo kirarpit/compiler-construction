@@ -9,8 +9,7 @@ MIPS assembly code.
 
 Is a custom C like language which is defined by a set of recursive 
 rewriting rules (or _productions_) called _Grammar_. (This simpler C like language is created to
-reduce the complexity and make it feasible to construct a compiler
- from scratch.)
+reduce the complexity and facilitate construction of compiler from scratch.)
 
 Grammar consists of the following components:
 - a set of _terminal_ symbols, which are the characters of the alphabet
@@ -70,12 +69,12 @@ loboc << matchIndex;
 ```
 As it can be seen, the defined grammar allows us to have 'while', 
 'if', 'else' statements and even pointers in the LOBO-C language. 
-See folder 'tests' for more test cases.
+See the folder 'tests' for more test cases.
 
 
 ### HOW IT WORKS
 Given a filename or code from standard input, the program performs
-all of the following operations.
+all of the following operations sequentially.
 
 - Lexical Analysis
   - Initialises a string buffer to read input.
